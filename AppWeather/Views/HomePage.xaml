@@ -11,9 +11,12 @@
     xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+xmlns:media="using:Microsoft.UI.Xaml.Media"
     mc:Ignorable="d"
     Background="Transparent"
-    Unloaded="Page_Unloaded">
+    Unloaded="Page_Unloaded"
+    d:DesignHeight="4000"
+    >
     <interactivity:Interaction.Behaviors>
         <core:EventTriggerBehavior EventName="Loaded">
             <core:InvokeCommandAction Command="{x:Bind ViewModel.RefreshCommand}" />
@@ -22,10 +25,12 @@
     
     <Page.Resources>
         <ResourceDictionary>
-            <FontFamily x:Key="WeatherIconFont">Fonts/WeatherColorIcons.ttf#Weather Color</FontFamily>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="./Styles/ChartStyleDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <FontFamily x:Key="WeatherIconFont">Fonts/WeatherColorIcons.ttf#Weather Color</FontFamily>
+            <local:ValueConverter x:Key="ValueConverter"/>
         </ResourceDictionary>
     </Page.Resources>
 
@@ -272,9 +277,18 @@
                             </StackPanel>
 
                             <Grid Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20,0,0,20">
-                                <Grid.Resources>
-                                    <local:ValueConverter x:Key="ValueConverter"/>
-                                </Grid.Resources>
+                                <!--风向-->
+                                <Ellipse Width="200" Height="200">
+                                    <Ellipse.Fill>
+                                        <media:RadialGradientBrush>
+                                            <GradientStop Color="#00FFFFFF" Offset="0.8" />
+                                            <GradientStop Color="#10FFFFFF" Offset="1" />
+                                        </media:RadialGradientBrush>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <Ellipse Width="180" Height="180" Fill="{ThemeResource SystemControlAcrylicWindowBrush}">
+                                </Ellipse>
+
                                 <gauge:SfCircularGauge x:Name="gauge" Height="200" Width="200"
                                         HeaderAlignment="Custom"
                                         GaugeHeaderPosition="0.5,0.1">
@@ -312,32 +326,41 @@
                                      SmallTickStroke="#BEBEBE">
                                             <gauge:CircularScale.Pointers>
                                                 <gauge:CircularPointer x:Name="arrowPointer"
-                                               PointerType="NeedlePointer"
-                                               Value="{Binding WindDegree, Mode=TwoWay}"
-                                               NeedleLengthFactor="1"
-                                               NeedlePointerType="Arrow"
-                                               PointerCapDiameter="20"
-                                               PointerCapStroke="Transparent"
-                                               NeedlePointerStroke="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}" 
-                                               EnableAnimation="False"
-                                               EnableDragging="False"                                               
-                                               NeedlePointerStrokeThickness="30"/>
+                                                   PointerType="NeedlePointer"
+                                                   Value="{Binding WindDegree, Mode=TwoWay}"
+                                                   NeedleLengthFactor="1"
+                                                   NeedlePointerType="Arrow"
+                                                   PointerCapDiameter="20"
+                                                   PointerCapStroke="Transparent"
+                                                   NeedlePointerStroke="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}" 
+                                                   EnableAnimation="False"
+                                                   EnableDragging="False"                                               
+                                                   NeedlePointerStrokeThickness="30"/>
                                                 <gauge:CircularPointer PointerType="NeedlePointer"
-                                               Value="{Binding WindDegree,Mode=TwoWay, Converter={StaticResource ValueConverter}}"
                                                EnableAnimation="False"
                                                EnableDragging="False"
                                                NeedleLengthFactor="1"
                                                PointerCapDiameter="20"
                                                PointerCapStroke="Transparent"
                                                NeedlePointerStroke="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}"
-                                               NeedlePointerStrokeThickness="10"/>
+                                               NeedlePointerStrokeThickness="10">
+                                                    <gauge:CircularPointer.Value>
+                                                        <Binding Path="WindDegree" Mode="TwoWay">
+                                                            <Binding.Converter>
+                                                                <local:ValueConverter/>
+                                                            </Binding.Converter>
+                                                        </Binding>
+                                                    </gauge:CircularPointer.Value>
+                                                </gauge:CircularPointer>
                                             </gauge:CircularScale.Pointers>
                                         </gauge:CircularScale>
                                     </gauge:SfCircularGauge.Scales>
                                 </gauge:SfCircularGauge>
                             </Grid>
 
-                            <!--<Grid Grid.Row="2" Grid.Column="1" Margin="20,0,0,20">
+
+                           
+                            <Grid Grid.Row="2" Grid.Column="1" Margin="20,0,0,20">
                                 <gauge:SfCircularGauge Height="200" Width="200">
                                     <gauge:SfCircularGauge.Scales>
                                         <gauge:CircularScale RimStrokeThickness="0" RimStroke="Transparent" TickStroke="Transparent" SmallTickStroke="Transparent"  LabelStroke="Transparent" StartAngle="90" SweepAngle="2000" StartValue="0" EndValue="2000" RangePointerPosition="Custom" RangePointerOffset="0.05">
@@ -363,7 +386,7 @@
                                         </gauge:CircularScale>
                                     </gauge:SfCircularGauge.Scales>
                                 </gauge:SfCircularGauge>
-                            </Grid>-->
+                            </Grid>
                             <!--<Frame Grid.Row="2"  Grid.Column="2" x:Name="AgaueFrame4" Margin="20,0,0,20">
                             </Frame>-->
                         </Grid>
@@ -391,7 +414,15 @@
                             </Grid>
 
                             <Grid Grid.Row="2" Grid.Column="0" Margin="20,0,0,20">
-                                <Image Source="{x:Bind ViewModel.Ellipse2, Mode=TwoWay}" Stretch="UniformToFill" Width="200" Height="200"/>
+                       
+                                <Image Source="{x:Bind ViewModel.Ellipse2, Mode=TwoWay}" Stretch="UniformToFill" Width="200" Height="200">
+                                    <Image.FocusVisualPrimaryBrush>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="Black"/>
+                                            <GradientStop Color="White" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Image.FocusVisualPrimaryBrush>
+                                </Image>
                             </Grid>
 
                             <Grid Grid.Row="2" Grid.Column="1" Margin="20,0,0,20">
