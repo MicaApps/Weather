@@ -11,7 +11,7 @@
     <AssemblyName>AppWeather</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.19041.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -151,6 +151,8 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Ellipse 16.png" />
+    <Content Include="Assets\Ellipse 15.png" />
     <Content Include="Assets\noise_high.png" />
     <Content Include="Assets\Vector 3.svg" />
     <Content Include="Assets\Vector 3_white.svg" />
@@ -162,8 +164,12 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
-    <Content Include="Views\Images\Ellipse 15_Dark.png" />
-    <Content Include="Views\Images\Ellipse 16_Dark.png" />
+    <Content Include="Views\Images\Ellipse 15_Dark.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Images\Ellipse 16_Dark.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\Images\geogebra-export %285%29.svg" />
   </ItemGroup>
   <ItemGroup>
