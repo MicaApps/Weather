@@ -1,4 +1,4 @@
-﻿<Page
+<Page
     x:Class="AppWeather.Views.HomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -337,19 +337,32 @@
                                 </gauge:SfCircularGauge>
                             </Grid>
 
-                            <!--<Grid Grid.Row="2" Grid.Column="1" Margin="20,0,0,20">
-                                <gauge:SfCircularGauge Height="200" Width="200">
+                            <Grid Grid.Row="2" Grid.Column="1" Margin="20,0,0,20">
+                                <gauge:SfCircularGauge x:Name="stroke" Height="200" Width="200">
                                     <gauge:SfCircularGauge.Scales>
-                                        <gauge:CircularScale RimStrokeThickness="0" RimStroke="Transparent" TickStroke="Transparent" SmallTickStroke="Transparent"  LabelStroke="Transparent" StartAngle="90" SweepAngle="2000" StartValue="0" EndValue="2000" RangePointerPosition="Custom" RangePointerOffset="0.05">
+                                        
+                                        <!--<gauge:CircularScale RimStrokeThickness="0" RimStroke="Transparent"  TickStroke="Transparent" SmallTickStroke="Transparent"  LabelStroke="Transparent" StartAngle="90" SweepAngle="2000" StartValue="0" EndValue="2000" RangePointerPosition="Custom" RangePointerOffset="0.05">
                                             <gauge:CircularScale.Pointers>
                                                 <gauge:CircularPointer PointerType="RangePointer" RangePointerStrokeThickness="20" RangePointerStroke="#66FFFFFF" Value="{Binding Pressure}" >
                                                 </gauge:CircularPointer>
                                             </gauge:CircularScale.Pointers>
-                                        </gauge:CircularScale>
-                                        <gauge:CircularScale RimStrokeThickness="00" RimStroke="Transparent" TickStroke="Transparent" SmallTickStroke="Transparent"  LabelStroke="Transparent" RangePointerPosition="Cross" StartAngle="90" SweepAngle="2000" StartValue="0" EndValue="2000">
+                                        </gauge:CircularScale>-->
+                                        <gauge:CircularScale RimStrokeThickness="20" RimStroke="Transparent" TickStroke="Transparent" SmallTickStroke="Transparent"  LabelStroke="Transparent" RangePointerPosition="Cross" StartAngle="90" SweepAngle="2000" StartValue="0" EndValue="2000">
+                                            <gauge:CircularScale.Ranges>
+                                                <gauge:CircularRange StartValue="0" EndValue="{Binding Pressure}"  Opacity="0.5" StrokeThickness="40" Stroke="White">
+                                                <!--<gauge:CircularRange.Stroke>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="Transparent"/>
+                                                        <GradientStop Color="#7FFFFFFF" Offset="0.5"/>
+                                                        <GradientStop Color="Transparent" Offset="0.51"/>
+                                                        <GradientStop Color="Transparent" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </gauge:CircularRange.Stroke>-->
+                                                </gauge:CircularRange>
+                                            </gauge:CircularScale.Ranges>
                                             <gauge:CircularScale.Pointers>
-                                                <gauge:CircularPointer KeyTipHorizontalOffset="3"  PointerType="SymbolPointer" Symbol="Rectangle" Value="{Binding Pressure}" SymbolPointerStroke="White" SymbolPointerWidth="7" SymbolPointerHeight="30" />
-                                                <gauge:CircularPointer KeyTipHorizontalOffset="3"  PointerType="SymbolPointer" Symbol="Rectangle" Value="{Binding Pressure}" SymbolPointerWidth="27" SymbolPointerHeight="30" >
+                                                <gauge:CircularPointer KeyTipHorizontalOffset="3"  PointerType="SymbolPointer" Symbol="Rectangle"  Value="{Binding Pressure}" SymbolPointerStroke="White" SymbolPointerWidth="20" SymbolPointerHeight="30" />
+                                                <gauge:CircularPointer KeyTipHorizontalOffset="3"  PointerType="SymbolPointer"  Symbol="Rectangle" SymbolPointerBorderBrush="Transparent"  SymbolPointerBorderThickness="0"  Value="{Binding Pressure}" SymbolPointerWidth="27" SymbolPointerHeight="30" >
                                                     <gauge:CircularPointer.SymbolPointerStroke>
                                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                             <GradientStop Color="Transparent"/>
@@ -363,7 +376,7 @@
                                         </gauge:CircularScale>
                                     </gauge:SfCircularGauge.Scales>
                                 </gauge:SfCircularGauge>
-                            </Grid>-->
+                            </Grid>
                             <!--<Frame Grid.Row="2"  Grid.Column="2" x:Name="AgaueFrame4" Margin="20,0,0,20">
                             </Frame>-->
                         </Grid>
