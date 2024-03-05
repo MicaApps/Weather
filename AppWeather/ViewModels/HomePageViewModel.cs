@@ -144,12 +144,23 @@ namespace AppWeather.ViewModels
         }
 
         private double _windDegree;
-
+        private double _windDegree1;
         public double WindDegree
         {
             get => _windDegree;
-            set => SetProperty(ref _windDegree, value);
+            set { SetProperty(ref _windDegree, value);
+                WindDegree1=value+40;
+            }
+            
         }
+
+        public double WindDegree1
+        {
+            get => _windDegree1;
+            set => SetProperty(ref _windDegree1, value);
+
+        }
+
 
         private string _rainfall;
 
@@ -324,7 +335,9 @@ namespace AppWeather.ViewModels
                     Pressure = currentWeather.Pressure.ToString();
                     Vsibility = currentWeather.Vsibility.ToString("0.0") + "km";
                     WindSpeed = currentWeather.WindSpeed.ToString();
-                    WindDegree = currentWeather.WindDegree;
+                    //WindDegree = currentWeather.WindDegree;
+                    WindDegree = 0;
+
                     Rainfall = currentWeather.Rainfall.ToString("0.0") + "%";
                     System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));//当地时区
                     Sunrise = startTime.AddSeconds(currentWeather.Sunrise).ToLongTimeString().ToString();
