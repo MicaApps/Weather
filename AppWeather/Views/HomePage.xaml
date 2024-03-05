@@ -23,9 +23,13 @@
     <Page.Resources>
         <ResourceDictionary>
             <FontFamily x:Key="WeatherIconFont">Fonts/WeatherColorIcons.ttf#Weather Color</FontFamily>
+            <SolidColorBrush x:Key="DarkTheme"
+                             Color="White" />
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="./Styles/ChartStyleDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
         </ResourceDictionary>
     </Page.Resources>
 
@@ -258,7 +262,11 @@
                             <StackPanel Grid.Row="1" Grid.Column="0" Margin="0 10 0 0">
                                 <TextBlock>
                                     <Run Text="Fills Like" FontWeight="Bold"/>
+                                    
                                 </TextBlock>
+                                <!--调节用-->
+                                <!--<Slider Minimum="0"   Maximum="80"  Value="{Binding WindDegree, Mode=TwoWay}"/>-->
+
                             </StackPanel>
 
                             <StackPanel Grid.Row="1" Grid.Column="1" Margin="0 10 0 0">
@@ -314,6 +322,43 @@
                                      LabelStroke="#9E9E9E"
                                      SmallTickStroke="#BEBEBE">
                                             <gauge:CircularScale.Pointers>
+                                                <gauge:CircularPointer PointerType="NeedlePointer"
+                                               Value="{Binding WindDegree, Mode=TwoWay}"
+                                               NeedlePointerType="Rectangle"
+                                               EnableAnimation="True"
+                                               EnableDragging="False"
+                                               NeedleLengthFactor="0.8"
+                                               NeedlePointerStroke="{StaticResource DarkTheme}"
+                                               NeedlePointerStrokeThickness="5" />
+                                                <gauge:CircularPointer PointerType="NeedlePointer"
+                                               Value="{Binding WindDegree1, Mode=TwoWay}"
+                                               NeedlePointerType="Rectangle"
+                                               EnableAnimation="True"
+                                               EnableDragging="False"
+                                               NeedleLengthFactor="0.8"
+                                               NeedlePointerStroke="{StaticResource DarkTheme}"
+                                               NeedlePointerStrokeThickness="5" />
+                                                <gauge:CircularPointer PointerType="SymbolPointer"
+                                               Symbol="Triangle"
+                                               SymbolPointerWidth="20"
+                                               SymbolPointerHeight="20"
+                                               SymbolPointerStroke="{StaticResource DarkTheme}"
+                                               SymbolPointerBorderThickness="0"
+                                               Value="{Binding WindDegree, Mode=TwoWay}"
+                                               EnableAnimation="True"
+                                               EnableDragging="False" />
+                                                <gauge:CircularPointer PointerType="SymbolPointer"
+                                               Symbol="Ellipse"
+                                               SymbolPointerWidth="20"
+                                               SymbolPointerHeight="20"
+                                               SymbolPointerStroke="{StaticResource DarkTheme}"
+                                               SymbolPointerBorderThickness="0"
+                                               Value="{Binding WindDegree1, Mode=TwoWay}"
+                                               EnableAnimation="True"
+                                               EnableDragging="False" />
+                                            </gauge:CircularScale.Pointers>
+
+                                            <!--<gauge:CircularScale.Pointers>
                                                 <gauge:CircularPointer x:Name="arrowPointer"
                                                PointerType="NeedlePointer"
                                                Value="{Binding WindDegree, Mode=TwoWay}"
@@ -334,7 +379,7 @@
                                                PointerCapStroke="Transparent"
                                                NeedlePointerStroke="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}"
                                                NeedlePointerStrokeThickness="10"/>
-                                            </gauge:CircularScale.Pointers>
+                                            </gauge:CircularScale.Pointers>-->
                                         </gauge:CircularScale>
                                     </gauge:SfCircularGauge.Scales>
                                 </gauge:SfCircularGauge>
@@ -504,8 +549,6 @@
                                                                        Symbol="Rectangle" 
                                                                        Value="{Binding Pressure}" />
                                             </gauge:CircularScale.Pointers>
-
-
                                         </gauge:CircularScale>
                                     </gauge:SfCircularGauge.Scales>
                                 </gauge:SfCircularGauge>
