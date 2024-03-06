@@ -1,4 +1,4 @@
-﻿using AppWeather.ViewModels;
+using AppWeather.ViewModels;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Graphics.Canvas.Geometry;
 using System;
@@ -79,23 +79,32 @@ namespace AppWeather.Views
             {
                 // 这里可以画出 Path 或写出文字 lindexi.github.io
                 //canvasPathBuilder.BeginFigure(100, 100);
+                //int dx = 1, dy = 30;
                 //canvasPathBuilder.AddLine(200, 100);
+                double scaleX = sender.ActualWidth / (2 * Math.PI); // X轴的缩放因子
+                double scaleY = sender.ActualHeight / 2; // Y轴的缩放因子
+                canvasPathBuilder.BeginFigure((float)-Math.PI, 0);
 
-                int dx = 1, dy = 30;
-                int x0 = 360;
-                double y0 = Math.Sin(-x0 * Math.PI / 180.0);
-                canvasPathBuilder.BeginFigure(new Vector2(-x0, (float)(dy * y0)));
-                //canvasPathBuilder.BeginFigure(100, 100);
-                for (int x = -x0; x < x0; x += dx)
+                for (double x = -Math.PI; x <= Math.PI; x += 0.01)
                 {
-                    double y = Math.Sin(x * Math.PI / 180.0);
-                    canvasPathBuilder.AddLine(new Vector2(x, (float)(dy * y)));
+                    double y = Math.Cos(x);
+                    canvasPathBuilder.AddLine(new Vector2(float.Parse((scaleX * (x + Math.PI)).ToString()), float.Parse((scaleY * (1 - y)).ToString())));
                 }
+                //int x0 = 360;
+                //double y0 = Math.Sin(-x0 * Math.PI / 180.0);
+                //canvasPathBuilder.BeginFigure(new Vector2(-x0, (float)(dy * y0)));
+                //canvasPathBuilder.BeginFigure(100, 100);
+                //for (int x = -x0; x < x0; x += dx)
+                //{
+                //    double y = Math.Sin(x * Math.PI / 180.0);
+                //    canvasPathBuilder.AddLine(new Vector2(x, (float)(dy * y)));
+                //}
 
                 canvasPathBuilder.EndFigure(CanvasFigureLoop.Open);
 
                 args.DrawingSession.DrawGeometry(CanvasGeometry.CreatePath(canvasPathBuilder), Colors.Gray, 2);
             }
+
 
         }
 
@@ -119,6 +128,22 @@ namespace AppWeather.Views
         //    Canvas.SetTop(Point, y * 300);
         //}
     }
+
+    public class PercentageConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            double actualHeight = (double)value;
+            double percentage = System.Convert.ToDouble(parameter);
+            return actualHeight * percentage;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 
     public class ValueConverter : IValueConverter
     {
