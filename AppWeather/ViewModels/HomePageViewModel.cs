@@ -1,4 +1,4 @@
-﻿using AppWeather.Models;
+using AppWeather.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -22,6 +22,9 @@ namespace AppWeather.ViewModels
         public List<WeatherClass> weathers;
         public BackgroundWorker bgWorker = null;
         public ObservableCollection<EveryDayWeather> everyDayWeathers = new ObservableCollection<EveryDayWeather>();
+        public bool IsInitialized { get; set; }
+
+
 
         //Light or Dark
         private string _theme;
@@ -288,6 +291,13 @@ namespace AppWeather.ViewModels
             ProgressRingVisbility = Visibility.Visible;
             IsBusy = true;
             bgWorker.RunWorkerAsync();
+        }
+
+        public void Initialize()
+        {
+            // Initialization code...
+            Refresh();
+            IsInitialized = true;
         }
 
         private void refreshWeatherBW_DoWork(object sender, DoWorkEventArgs e)
