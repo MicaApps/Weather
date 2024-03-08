@@ -1,12 +1,17 @@
 using AppWeather.ViewModels;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Geometry;
+using Microsoft.Graphics.Canvas.UI.Xaml;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -27,12 +32,15 @@ namespace AppWeather.Views
     public sealed partial class HomePage : Page
     {
         public HomePageViewModel ViewModel => (HomePageViewModel)DataContext;
-
         public HomePage()
         {
             this.InitializeComponent();
 
             DataContext = Ioc.Default.GetRequiredService<HomePageViewModel>();
+            //ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+            ViewModel.Initialize();
+            Canvas.Invalidate();
+
 
             var DefaultTheme = new Windows.UI.ViewManagement.UISettings();
             var uiTheme = DefaultTheme.GetColorValue(Windows.UI.ViewManagement.UIColorType.Background).ToString();
@@ -64,9 +72,31 @@ namespace AppWeather.Views
             }
 
             //SunriseFrame.Navigate(typeof(Sunrise));
-
         }
 
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Sunrise" || e.PropertyName == "Sunset")
+            {
+                // Redraw the graph
+                OnDraw();
+            }
+        }
+        private CanvasRenderTarget renderTarget;
+        void OnDraw()
+        {
+        }
+
+        public TimeSpan ParseTimeSpan(string timeString)
+        {
+            TimeSpan timeSpan;
+            if (!TimeSpan.TryParse(timeString, out timeSpan))
+            {
+                throw new FormatException($"Invalid time format: {timeString}");
+            }
+            return timeSpan;
+        }
         private void Canvas_Draw(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl sender, Microsoft.Graphics.Canvas.UI.Xaml.CanvasDrawEventArgs args)
         {
             //using (var canvasDrawingSession = args.DrawingSession)
@@ -74,15 +104,25 @@ namespace AppWeather.Views
             //    //canvasDrawingSession.DrawGeometry
             //    canvasDrawingSession.DrawText("lindexi", new Vector2(100, 100), Color.FromArgb(0xFF, 100, 100, 100));
             //}
+            // 这里可以画出 Path 或写出文字 lindexi.github.io
+            //canvasPathBuilder.BeginFigure(100, 100);
+            //int dx = 1, dy = 30;
+            //canvasPathBuilder.AddLine(200, 100);
 
+            //int x0 = 360;
+            //double y0 = Math.Sin(-x0 * Math.PI / 180.0);
+            //canvasPathBuilder.BeginFigure(new Vector2(-x0, (float)(dy * y0)));
+            //canvasPathBuilder.BeginFigure(100, 100);
+            //for (int x = -x0; x < x0; x += dx)
+            //{
+            //    double y = Math.Sin(x * Math.PI / 180.0);
+            //    canvasPathBuilder.AddLine(new Vector2(x, (float)(dy * y)));
+            //}
+            Thread.Sleep(100);
+            double scaleX = sender.ActualWidth / (2 * Math.PI); // X轴的缩放因子
+            double scaleY = sender.ActualHeight / 2; // Y轴的缩放因子
             using (var canvasPathBuilder = new CanvasPathBuilder(args.DrawingSession))
             {
-                // 这里可以画出 Path 或写出文字 lindexi.github.io
-                //canvasPathBuilder.BeginFigure(100, 100);
-                //int dx = 1, dy = 30;
-                //canvasPathBuilder.AddLine(200, 100);
-                double scaleX = sender.ActualWidth / (2 * Math.PI); // X轴的缩放因子
-                double scaleY = sender.ActualHeight / 2; // Y轴的缩放因子
                 canvasPathBuilder.BeginFigure((float)-Math.PI, 0);
 
                 for (double x = -Math.PI; x <= Math.PI; x += 0.01)
@@ -90,22 +130,40 @@ namespace AppWeather.Views
                     double y = Math.Cos(x);
                     canvasPathBuilder.AddLine(new Vector2(float.Parse((scaleX * (x + Math.PI)).ToString()), float.Parse((scaleY * (1 - y)).ToString())));
                 }
-                //int x0 = 360;
-                //double y0 = Math.Sin(-x0 * Math.PI / 180.0);
-                //canvasPathBuilder.BeginFigure(new Vector2(-x0, (float)(dy * y0)));
-                //canvasPathBuilder.BeginFigure(100, 100);
-                //for (int x = -x0; x < x0; x += dx)
-                //{
-                //    double y = Math.Sin(x * Math.PI / 180.0);
-                //    canvasPathBuilder.AddLine(new Vector2(x, (float)(dy * y)));
-                //}
 
+                //canvasPathBuilder.BeginFigure(0, (float)scaleY);
+                //canvasPathBuilder.AddLine(new Vector2((float)sender.ActualWidth, (float)scaleY));
                 canvasPathBuilder.EndFigure(CanvasFigureLoop.Open);
-
                 args.DrawingSession.DrawGeometry(CanvasGeometry.CreatePath(canvasPathBuilder), Colors.Gray, 2);
             }
+            using (var axisPathBuilder = new CanvasPathBuilder(args.DrawingSession))
+            {
+                // Draw the X-axis
+                axisPathBuilder.BeginFigure(0, (float)scaleY);
+                axisPathBuilder.AddLine(new Vector2((float)sender.ActualWidth, (float)scaleY));
+                axisPathBuilder.EndFigure(CanvasFigureLoop.Open);
 
+                args.DrawingSession.DrawGeometry(CanvasGeometry.CreatePath(axisPathBuilder), Colors.Gray, 2);
+            }
+            var viewModel = this.DataContext as HomePageViewModel;
+            TimeSpan time1 = string.IsNullOrEmpty(viewModel.Sunrise) ? TimeSpan.Zero : ParseTimeSpan(viewModel.Sunrise);
+            TimeSpan time2 = string.IsNullOrEmpty(viewModel.Sunset) ? TimeSpan.Zero : ParseTimeSpan(viewModel.Sunset);
+            double hours1 = time1.TotalMinutes / 60.0;
+            double hours2 = time2.TotalMinutes / 60.0;
+            // Convert the times to radians
+            double radian1 = (hours1 / 24) * 2 * Math.PI - Math.PI;
+            double radian2 = (hours2 / 24) * 2 * Math.PI - Math.PI;
 
+            // Calculate the y values
+            double y1 = Math.Cos(radian1);
+            double y2 = Math.Cos(radian2);
+
+            // Calculate the screen positions
+            Vector2 pos1 = new Vector2((float)(scaleX * (radian1 + Math.PI)), (float)(scaleY * (1 - y1)));
+            Vector2 pos2 = new Vector2((float)(scaleX * (radian2 + Math.PI)), (float)(scaleY * (1 - y2)));
+            CanvasRenderTarget renderTarget = new CanvasRenderTarget(Canvas, (float)Canvas.ActualWidth, (float)Canvas.ActualHeight, 96);
+            args.DrawingSession.FillCircle(pos1, 5, Colors.White);
+            args.DrawingSession.FillCircle(pos2, 5, Colors.White);
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
