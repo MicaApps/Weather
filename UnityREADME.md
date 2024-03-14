@@ -1,6 +1,7 @@
 ## 关于嵌入unity组件
-- `Unity Editor` -> `File` -> `Build Settings` -> `Universal Windows Platform` -> `SwitchPlatform`  
-  ![image](https://github.com/MicaGames/InkBall/assets/68675068/4014a3a8-afec-41d2-b434-5709d854b9f7)  
+`Unity Editor` -> `File` -> `Build Settings` -> `Universal Windows Platform` -> `SwitchPlatform`  
+按下图进行构建  
+![image](https://github.com/MicaGames/InkBall/assets/68675068/4014a3a8-afec-41d2-b434-5709d854b9f7)  
 
 随便你构建到哪个文件夹
 
@@ -21,7 +22,3 @@
 
 就能直接跑了
 
-
-
-### 关于启动动画
-File → BuildSetting → PlayerSettings → Splash Image → Show Splash Screen 取消勾选即可

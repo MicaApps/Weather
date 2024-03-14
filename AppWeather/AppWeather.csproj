@@ -137,9 +137,6 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\PlayPage.xaml.cs">
-      <DependentUpon>PlayPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Sunrise.xaml.cs">
       <DependentUpon>Sunrise.xaml</DependentUpon>
     </Compile>
@@ -189,10 +186,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\PlayPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
