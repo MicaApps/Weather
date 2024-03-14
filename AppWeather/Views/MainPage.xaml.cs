@@ -109,7 +109,16 @@ namespace AppWeather
 
             navigationView.MenuItems.Add(homeItem);
             navigationView.MenuItems.Add(locationItem);
-
+            navigationView.MenuItems.Add(new NavigationViewItem()
+            {
+                Content = "Unity测试",
+                Icon = new FontIcon()
+                {
+                    FontFamily = segoeFontFamily,
+                    Glyph = "\uE707",
+                },
+                Tag = "Unity",
+            });
             navigationView.SelectedItem = homeItem;
 
             frame = new Frame();
@@ -138,6 +147,9 @@ namespace AppWeather
                             break;
                         case "Settings":
                             frame.Content = new SettingsPage();
+                            break;
+                        case "Unity":
+                            frame.Content = new PlayPage();
                             break;
                         default:                           
                             frame.Content = new SettingsPage();
