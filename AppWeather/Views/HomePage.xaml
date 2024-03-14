@@ -35,29 +35,32 @@
     <Grid x:Name="ContentArea" Margin="0,0,0,0">
         <ScrollViewer x:Name="PageScrollViewer">
             <Grid Background="Transparent">
+                <Grid Height="1800">
+                    <Grid Width="700" Height="500" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 60 -220 0">
+                        <SwapChainPanel x:Name="m_DXSwapChainPanel">
+                            <Grid x:Name="m_ExtendedSplashGrid" Background="Transparent">
+                                <Image
+x:Name="m_ExtendedSplashImage"
+HorizontalAlignment="Center"
+VerticalAlignment="Center"
+Source="Assets/SplashScreen.png" />
+                            </Grid>
+                        </SwapChainPanel>
+                    </Grid>
 
+                </Grid>
                 <Grid Margin="110,0,-30,-30">
                     <Image
                         Grid.Column="1"
                         Source="{Binding ViewModel.CurrentWeatherImg}"
                         Stretch="UniformToFill" />
                 </Grid>
-                <Grid>
-                    <SwapChainPanel x:Name="m_DXSwapChainPanel">
-                        <Grid x:Name="m_ExtendedSplashGrid" Background="Transparent">
-                            <Image
-                                x:Name="m_ExtendedSplashImage"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Source="Assets/SplashScreen.png" />
-                        </Grid>
-                    </SwapChainPanel>
-                </Grid>
+                
                 <Grid Margin="60,30,60,0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="200" />
-                        <RowDefinition Height="40" />
-                        <RowDefinition Height="220" />
+                        <RowDefinition Height="150" />
+                        <RowDefinition Height="0" />
+                        <RowDefinition Height="320" />
                         <RowDefinition Height="120" />
                         <RowDefinition Height="2*" />
                         <RowDefinition Height="7.5*" />
@@ -86,6 +89,7 @@
                             TextWrapping="Wrap" />
                     </StackPanel>
 
+                   
                     <Grid Grid.Row="2">
                         <TextBlock
                             x:Name="CurrentTempTb"
@@ -918,6 +922,7 @@
                         </Grid>
                     </Grid>
                 </Grid>
+                
             </Grid>
         </ScrollViewer>
         <ProgressRing
