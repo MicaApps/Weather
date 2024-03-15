@@ -361,9 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-# Unity²¿·Ö
-Players/
-IL2CppOutputProject
+# Unityï¿½ï¿½ï¿½ï¿½
 build/
-AppWeather/Data/
-UnityCommon.props

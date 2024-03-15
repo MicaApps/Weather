@@ -1,0 +1,107 @@
+﻿#include "pch-c.h"
+#ifndef _MSC_VER
+# include <alloca.h>
+#else
+# include <malloc.h>
+#endif
+
+
+#include "codegen/il2cpp-codegen-metadata.h"
+
+
+
+
+
+extern void BurstCompileAttribute_set_FloatMode_mFC4C13A636FAF57510757D42EA1017C1A3FA6580 (void);
+extern void BurstCompileAttribute_set_DisableSafetyChecks_m69160424C71631B9E3A7C2334B64527E91662A9E (void);
+extern void BurstCompileAttribute_set_OptimizeFor_mE87B58F69F2AAB69DF48FBC70B4D7348BCCDEE28 (void);
+extern void BurstCompileAttribute__ctor_mFCB7FEAFCE1A2CE6A5268A4EA062E33E5472ABBE (void);
+extern void BurstCompiler_DummyMethod_m44E6D413356022A0F6BA962A31026BA4EE5FE95F (void);
+extern void BurstCompiler__cctor_mA29CF2918E31D89BB314B5CC1AF842BE93E9EE6B (void);
+extern void FakeDelegate_get_Method_m36F3C3DAC1377B07AF18BAC6EDF28F3FAE5BA828 (void);
+extern void BurstCompilerOptions__ctor_m644EA41CAFD4F89CE36074DBD77BAC761C122285 (void);
+extern void BurstCompilerOptions_get_IsGlobal_m8500610C2E650CFE58411EAD12DEE4F5F49C30B4 (void);
+extern void BurstCompilerOptions_set_EnableBurstCompilation_mEDD4E93926B3E03A8E38CA9D483D4E4FD649D849 (void);
+extern void BurstCompilerOptions_set_EnableBurstSafetyChecks_m2AB857BC80AE1546031305C47F88ADB147A8BB83 (void);
+extern void BurstCompilerOptions_get_OptionsChanged_m073BEAA6F0BA3EA5F42853CE2BB33681D6274C69 (void);
+extern void BurstCompilerOptions_OnOptionsChanged_m20C25705A1D7B2A9C6265D3D5FE2A10A42AAABB7 (void);
+extern void BurstCompilerOptions_MaybeTriggerRecompilation_mBE68BE4083665B2DE194184223A6BF14CA7F3821 (void);
+extern void BurstCompilerOptions_MaybePreventChangingOption_m7667FD7B8FDBEB8F037F682525B43238504D15A6 (void);
+extern void BurstCompilerOptions__cctor_m00F05309A6D0721099EBAF2FB553AD1A409815F6 (void);
+extern void BurstCompilerOptions_CheckIsSecondaryUnityProcess_mAA7A85682C937E5FF55B6B9ADCF0F1789F889E67 (void);
+extern void BurstRuntime_RuntimeLog_m01D9192CF1CE1F0113F51431413D5F002C82E12A (void);
+extern void BurstRuntime_Log_mACD9C0A258B393532ED8AE9DB127D494C14D0E88 (void);
+extern void PreserveAttribute__ctor_m73E16FAB2119900D63EE60E6A868357D44E175F5 (void);
+extern void SharedStatic_GetOrCreateSharedStaticInternal_m9850783202F2E2DCA43597CD97C129C683D6FEBD (void);
+extern void PreserveAttribute__ctor_m5C7C403F74E9EAEB24409A43B4EB60B4A161AB0F (void);
+static Il2CppMethodPointer s_methodPointers[22] = 
+{
+	BurstCompileAttribute_set_FloatMode_mFC4C13A636FAF57510757D42EA1017C1A3FA6580,
+	BurstCompileAttribute_set_DisableSafetyChecks_m69160424C71631B9E3A7C2334B64527E91662A9E,
+	BurstCompileAttribute_set_OptimizeFor_mE87B58F69F2AAB69DF48FBC70B4D7348BCCDEE28,
+	BurstCompileAttribute__ctor_mFCB7FEAFCE1A2CE6A5268A4EA062E33E5472ABBE,
+	BurstCompiler_DummyMethod_m44E6D413356022A0F6BA962A31026BA4EE5FE95F,
+	BurstCompiler__cctor_mA29CF2918E31D89BB314B5CC1AF842BE93E9EE6B,
+	FakeDelegate_get_Method_m36F3C3DAC1377B07AF18BAC6EDF28F3FAE5BA828,
+	BurstCompilerOptions__ctor_m644EA41CAFD4F89CE36074DBD77BAC761C122285,
+	BurstCompilerOptions_get_IsGlobal_m8500610C2E650CFE58411EAD12DEE4F5F49C30B4,
+	BurstCompilerOptions_set_EnableBurstCompilation_mEDD4E93926B3E03A8E38CA9D483D4E4FD649D849,
+	BurstCompilerOptions_set_EnableBurstSafetyChecks_m2AB857BC80AE1546031305C47F88ADB147A8BB83,
+	BurstCompilerOptions_get_OptionsChanged_m073BEAA6F0BA3EA5F42853CE2BB33681D6274C69,
+	BurstCompilerOptions_OnOptionsChanged_m20C25705A1D7B2A9C6265D3D5FE2A10A42AAABB7,
+	BurstCompilerOptions_MaybeTriggerRecompilation_mBE68BE4083665B2DE194184223A6BF14CA7F3821,
+	BurstCompilerOptions_MaybePreventChangingOption_m7667FD7B8FDBEB8F037F682525B43238504D15A6,
+	BurstCompilerOptions__cctor_m00F05309A6D0721099EBAF2FB553AD1A409815F6,
+	BurstCompilerOptions_CheckIsSecondaryUnityProcess_mAA7A85682C937E5FF55B6B9ADCF0F1789F889E67,
+	BurstRuntime_RuntimeLog_m01D9192CF1CE1F0113F51431413D5F002C82E12A,
+	BurstRuntime_Log_mACD9C0A258B393532ED8AE9DB127D494C14D0E88,
+	PreserveAttribute__ctor_m73E16FAB2119900D63EE60E6A868357D44E175F5,
+	SharedStatic_GetOrCreateSharedStaticInternal_m9850783202F2E2DCA43597CD97C129C683D6FEBD,
+	PreserveAttribute__ctor_m5C7C403F74E9EAEB24409A43B4EB60B4A161AB0F,
+};
+static const int32_t s_InvokerIndices[22] = 
+{
+	4827,
+	4765,
+	4827,
+	6129,
+	9423,
+	9423,
+	6016,
+	4765,
+	5924,
+	4765,
+	4765,
+	6016,
+	6129,
+	6129,
+	6129,
+	9423,
+	9354,
+	7255,
+	7255,
+	6129,
+	6956,
+	6129,
+};
+IL2CPP_EXTERN_C const Il2CppCodeGenModule g_Unity_Burst_CodeGenModule;
+const Il2CppCodeGenModule g_Unity_Burst_CodeGenModule = 
+{
+	"Unity.Burst.dll",
+	22,
+	s_methodPointers,
+	0,
+	NULL,
+	s_InvokerIndices,
+	0,
+	NULL,
+	0,
+	NULL,
+	0,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+};
