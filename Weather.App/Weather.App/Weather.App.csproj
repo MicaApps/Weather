@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Weather.Adapters\Weather.Adapter.QWeather\Weather.Adapter.QWeather.csproj" />
         <ProjectReference Include="..\..\Weather.Core\Weather.Core.csproj" />
     </ItemGroup>
 </Project>
