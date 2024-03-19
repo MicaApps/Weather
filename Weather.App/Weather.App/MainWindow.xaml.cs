@@ -10,6 +10,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Weather.App.Views.Pages;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -36,4 +37,17 @@ public sealed partial class MainWindow : Window
 
         InitializeComponent();
     }
+
+    private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+    {
+        var selectedItem = args.SelectedItem as NavigationViewItem;
+
+        MainFrame.Navigate(GetPageTypeFromName(selectedItem.Tag as string));
+    }
+
+    private static Type GetPageTypeFromName(string name) => name switch
+    {
+        "HomePage" => typeof(HomePage),
+        _ => typeof(NotFoundPage),
+    };
 }

@@ -10,6 +10,10 @@
         <UseWinUI>true</UseWinUI>
         <LangVersion>preview</LangVersion>
     </PropertyGroup>
+    <ItemGroup>
+        <None Remove="Views\Pages\HomePage.xaml" />
+        <None Remove="Views\Pages\NotFoundPage.xaml" />
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.230913002" />
@@ -20,5 +24,17 @@
     <ItemGroup>
         <ProjectReference Include="..\..\Weather.Adapters\Weather.Adapter.QWeather\Weather.Adapter.QWeather.csproj" />
         <ProjectReference Include="..\..\Weather.Core\Weather.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Page Update="Views\Pages\NotFoundPage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </Page>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Page Update="Views\Pages\HomePage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </Page>
     </ItemGroup>
 </Project>
