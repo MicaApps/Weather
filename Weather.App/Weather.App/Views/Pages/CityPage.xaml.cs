@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,26 +10,28 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI.Xaml.Shapes;
-using Weather.App.Services;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
-namespace Weather.App;
+namespace Weather.App.Views.Pages;
 
-public partial class App : Application
+public sealed partial class CityPage : Page
 {
-    public App()
-    {
-        InitializeComponent();
+    private static object _instance = new();
 
-        PluginsService.Instance.Initialize();
+    public static CityPage Instance
+    {
+        get
+        {
+            if (_instance is not CityPage)
+                _instance = new CityPage();
+
+            return _instance as CityPage;
+        }
     }
 
-    protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+    public CityPage()
     {
-        MainWindow.Instance.Activate();
+        InitializeComponent();
     }
 }

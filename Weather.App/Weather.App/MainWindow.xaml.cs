@@ -48,6 +48,8 @@ public sealed partial class MainWindow : Window
     private static Type GetPageTypeFromName(string name) => name switch
     {
         "HomePage" => typeof(HomePage),
+        "CityPage" => typeof(CityPage),
+        "TestPage" => typeof(TestPage),
         _ => typeof(NotFoundPage),
     };
 }

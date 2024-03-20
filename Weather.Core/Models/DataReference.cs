@@ -2,9 +2,9 @@
 
 public class DataReference
 {
-    public string? Link { get; set; }
+    public IEnumerable<string?>? Link { get; set; }
 
-    public string? Sources { get; set; }
+    public IEnumerable<string?>? Sources { get; set; }
 
-    public string? License { get; set; }
+    public IEnumerable<string?>? License { get; set; }
 }

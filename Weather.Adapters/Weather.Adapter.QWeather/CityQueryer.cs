@@ -38,9 +38,15 @@ public class CityQueryer : ICityQueryer
 
         dynamic json = JObject.Parse(body);
 
-        var refer_sources = json.refer.sources;
+        var refer_sources = new List<string>();
 
-        var refer_license = json.refer.license;
+        foreach (var item in json.refer.sources)
+            refer_sources.Add(item as string ?? "Converting failed.");
+
+        var refer_license = new List<string>();
+
+        foreach (var item in json.refer.license)
+            refer_license.Add(item as string ?? "Converting failed.");
 
         var result = new List<CityInfo>();
 
@@ -65,7 +71,7 @@ public class CityQueryer : ICityQueryer
                 {
                     Sources = refer_sources,
                     License = refer_license,
-                    Link = jsonCity.fxLink,
+                    Link = [jsonCity.fxLink],
                 }
             };
 

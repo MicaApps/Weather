@@ -10,7 +10,7 @@ public class CityLocation
 
     public string? TimeZone { get; set; }
 
-    public int UtcOffset { get; set; }
+    public string? UtcOffset { get; set; }
 
     public bool? IsDst { get; set; } = null;
 }

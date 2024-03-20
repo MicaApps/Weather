@@ -48,4 +48,11 @@ public interface IApiArgumentsProvider
 
         return this;
     }
+
+    public static readonly DefaultApiArgumentsProvider Default = new();
+}
+
+public class DefaultApiArgumentsProvider : IApiArgumentsProvider
+{
+    public IDictionary<string, string> Arguments { get; set; } = new Dictionary<string, string>();
 }
