@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
+using Weather.Core.Standards;
 
 namespace Weather.App.Services;
 
@@ -23,7 +24,7 @@ public class PluginsService
 
     private string WorkBase { get; set; } = Path.GetDirectoryName(Environment.ProcessPath);
 
-    private string SearchPattern { get; set; } = "*.dll";
+    private string SearchPattern { get; set; } = "Weather.Adapter.*.dll";
 
     private CompositionContainer Container { get; set; }
 
@@ -52,7 +53,7 @@ public class PluginsService
         return this;
     }
 
-    public IEnumerable<T> RequestPlugins<T>()
+    public IEnumerable<T> RequestPlugins<T>() where T : IAdapter
     {
         var sub = Container.GetExportedValues<T>();
 
