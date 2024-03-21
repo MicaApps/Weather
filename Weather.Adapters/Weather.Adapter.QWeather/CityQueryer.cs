@@ -10,6 +10,8 @@ namespace Weather.Adapter.QWeather;
 
 public class CityQueryer : ICityQueryer
 {
+    public string GetAdapterIdentity() => ConstantTable.AdapterIdentity;
+
     public async Task<IEnumerable<CityInfo>> FuzzyQuery(string location, IApiConfigProvider apiConfig)
     {
         using var http = new HttpClient();
@@ -37,6 +39,9 @@ public class CityQueryer : ICityQueryer
         var body = await reader.ReadToEndAsync();
 
         dynamic json = JObject.Parse(body);
+
+        if ((json.code as string)?.Equals("200") == false)
+            return [];
 
         var refer_sources = new List<string>();
 
