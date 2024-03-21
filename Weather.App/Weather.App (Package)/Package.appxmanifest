@@ -47,5 +47,7 @@
 
   <Capabilities>
     <rescap:Capability Name="runFullTrust" />
+    <Capability Name="internetClient"/>
+    <DeviceCapability Name="location"/>
   </Capabilities>
 </Package>
