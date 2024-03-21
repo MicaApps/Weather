@@ -15,6 +15,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Weather.App.Services;
+using Weather.App.ViewModels.Pages;
 using Weather.Core.Standards.Query;
 using Weather.Core.Standards.WebApi;
 using Windows.Foundation;
@@ -40,34 +41,5 @@ public sealed partial class TestPage : Page
     public TestPage()
     {
         InitializeComponent();
-    }
-
-    private async void Button_Click(object sender, RoutedEventArgs e)
-    {
-        var key = TbKey.Text;
-
-        var location = TbLocation.Text;
-
-        var queryers = PluginsService.Instance.RequestPlugins<ICityQueryer>();
-
-        if (queryers.Any() == false)
-            throw new InvalidOperationException();
-
-        var queryer = queryers.First();
-
-        var apiConfig = IApiConfigProvider.Default;
-
-        apiConfig.Key = key;
-
-        var cities = await queryer.FuzzyQuery(location, apiConfig);
-
-        var text = JsonSerializer.Serialize(cities.ToList(), new JsonSerializerOptions()
-        {
-            WriteIndented = true,
-            IncludeFields = true,
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-        });
-
-        TbResult.Text = text;
     }
 }

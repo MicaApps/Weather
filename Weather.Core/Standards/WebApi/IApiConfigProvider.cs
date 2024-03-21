@@ -4,7 +4,7 @@ using System.Text;
 namespace Weather.Core.Standards.WebApi;
 
 [InheritedExport]
-public interface IApiConfigProvider
+public interface IApiConfigProvider : IAdapter
 {
     public string Key { get; set; }
 
@@ -28,6 +28,8 @@ public interface IApiConfigProvider
 
 public class DefaultApiConfigProvider : IApiConfigProvider
 {
+    public string GetAdapterIdentity() => "Weather.Core.Default";
+
     public string Key { get; set; } = string.Empty;
 
     public string Host { get; set; } = string.Empty;

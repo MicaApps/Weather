@@ -5,7 +5,7 @@ using Weather.Core.Standards.WebApi;
 namespace Weather.Core.Standards.Query;
 
 [InheritedExport]
-public interface ICityQueryer
+public interface ICityQueryer : IAdapter
 {
     public Task<IEnumerable<CityInfo>> FuzzyQuery(string location, IApiConfigProvider apiConfig);
 

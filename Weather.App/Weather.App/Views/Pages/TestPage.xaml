@@ -5,18 +5,23 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:Weather.App.Views.Pages"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:vm="using:Weather.App.ViewModels.Pages"
       Background="Transparent"
       mc:Ignorable="d">
 
+    <Page.DataContext>
+        <vm:TestPageViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
+
     <StackPanel Margin="30" Spacing="20">
         <TextBlock Text="Key"/>
-        <TextBox x:Name="TbKey"/>
+        <TextBox Text="{x:Bind ViewModel.Key, Mode=TwoWay}"/>
         <TextBlock Text="Location"/>
-        <TextBox x:Name="TbLocation" Text=""/>
-        <Button Click="Button_Click" Content="Query"/>
+        <TextBox Text="{x:Bind ViewModel.Location, Mode=TwoWay}"/>
+        <Button Command="{x:Bind ViewModel.QueryCityCommand}" Content="Query"/>
         <ScrollViewer Height="500">
-            <TextBox x:Name="TbResult"
-                     IsReadOnly="True"
+            <TextBox IsReadOnly="True"
+                     Text="{x:Bind ViewModel.CityQueryResult, Mode=OneWay}"
                      TextWrapping="Wrap"/>
         </ScrollViewer>
     </StackPanel>

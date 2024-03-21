@@ -4,7 +4,7 @@ using System.Text;
 namespace Weather.Core.Standards.WebApi;
 
 [InheritedExport]
-public interface IApiArgumentsProvider
+public interface IApiArgumentsProvider : IAdapter
 {
     public IDictionary<string, string> Arguments { get; set; }
 
@@ -54,5 +54,7 @@ public interface IApiArgumentsProvider
 
 public class DefaultApiArgumentsProvider : IApiArgumentsProvider
 {
+    public string GetAdapterIdentity() => "Weather.Core.Default";
+
     public IDictionary<string, string> Arguments { get; set; } = new Dictionary<string, string>();
 }
