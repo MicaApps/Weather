@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page x:Class="Weather.App.Views.Pages.SelectCityPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:Weather.App.Views.Pages"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:models="using:Weather.Core.Models"
+      xmlns:vm="using:Weather.App.ViewModels.Pages"
+      Background="Transparent"
+      mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:SelectCityPageViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
+
+    <StackPanel>
+        <TextBlock Margin="5,10"
+                   FontSize="24"
+                   Text="Select your location: "/>
+
+        <StackPanel Margin="5,10"
+                    Orientation="Horizontal"
+                    Spacing="10">
+            <TextBox Width="240"
+                     KeyDown="SearchTextBox_KeyDown"
+                     PlaceholderText="City Name"
+                     Text="{x:Bind ViewModel.Location, Mode=TwoWay}"/>
+            <Button Command="{x:Bind ViewModel.QueryCityCommand}">
+                <FontIcon Glyph="&#xE721;"/>
+            </Button>
+        </StackPanel>
+
+        <ListView Margin="0,10"
+                  ItemsSource="{x:Bind ViewModel.CityInfos}"
+                  SelectedIndex="{x:Bind ViewModel.SelectedIndex}"
+                  SelectionChanged="ListView_SelectionChanged">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:CityInfo">
+                    <Grid>
+                        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                            <TextBlock Text="{x:Bind Name}"/>
+                            <TextBlock Text=" ("/>
+                            <TextBlock Text="{x:Bind Country}"/>
+                            <TextBlock Text=")"/>
+                        </StackPanel>
+                        <TextBlock HorizontalAlignment="Right"
+                                   Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                   Text="{x:Bind Id}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackPanel>
+</Page>

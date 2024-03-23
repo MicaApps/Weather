@@ -40,7 +40,7 @@ public class CityQueryer : ICityQueryer
 
         dynamic json = JObject.Parse(body);
 
-        if ((json.code as string)?.Equals("200") == false)
+        if ((json.code as string)?.Equals("200") == false || json.location is null)
             return [];
 
         var refer_sources = new List<string>();

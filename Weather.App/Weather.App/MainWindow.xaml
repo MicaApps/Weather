@@ -5,7 +5,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="using:Weather.App"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:media="using:Microsoft.UI.Xaml.Media"
         xmlns:pages="using:Weather.App.Views.Pages"
+        xmlns:vm="using:Weather.App.ViewModels"
         mc:Ignorable="d">
 
     <Window.SystemBackdrop>
@@ -13,27 +15,42 @@
         <DesktopAcrylicBackdrop/>
     </Window.SystemBackdrop>
 
-    <NavigationView SelectionChanged="NavigationView_SelectionChanged">
-        <NavigationView.MenuItems>
-            <NavigationViewItem Content="主页"
-                                IsSelected="True"
-                                Tag="HomePage">
-                <NavigationViewItem.Icon>
-                    <FontIcon Glyph="&#xE80F;"/>
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-            <NavigationViewItem Content="城市" Tag="CityPage">
-                <NavigationViewItem.Icon>
-                    <FontIcon Glyph="&#xEC06;"/>
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-            <NavigationViewItem Content="测试" Tag="TestPage">
-                <NavigationViewItem.Icon>
-                    <FontIcon Glyph="&#xEBE8;"/>
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-        </NavigationView.MenuItems>
+    <Grid>
+        <Grid.DataContext>
+            <vm:MainWindowViewModel x:Name="ViewModel"/>
+        </Grid.DataContext>
 
-        <Frame x:Name="MainFrame"/>
-    </NavigationView>
+        <NavigationView SelectionChanged="NavigationView_SelectionChanged">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="主页"
+                                    IsSelected="True"
+                                    Tag="HomePage">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE80F;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="城市" Tag="CityPage">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEC06;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="测试" Tag="TestPage">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEBE8;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+
+            <Frame x:Name="MainFrame"/>
+        </NavigationView>
+
+        <Rectangle Visibility="{x:Bind ViewModel.MaskVisibility, Mode=TwoWay}">
+            <Rectangle.Fill>
+                <media:AcrylicBrush FallbackColor="Blue"
+                                    TintColor="Black"
+                                    TintLuminosityOpacity="0.15"
+                                    TintOpacity="0.85"/>
+            </Rectangle.Fill>
+        </Rectangle>
+    </Grid>
 </Window>

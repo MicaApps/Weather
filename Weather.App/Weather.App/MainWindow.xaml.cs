@@ -10,6 +10,9 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Weather.App.Configuration;
+using Weather.App.Services;
+using Weather.App.Views;
 using Weather.App.Views.Pages;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -31,11 +34,16 @@ public sealed partial class MainWindow : Window
         }
     }
 
-    public MainWindow()
+    private MainWindow()
     {
         ExtendsContentIntoTitleBar = true;
 
         InitializeComponent();
+
+        Closed += (_, _) =>
+        {
+            AppConfig.Instance.Save();
+        };
     }
 
     private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
