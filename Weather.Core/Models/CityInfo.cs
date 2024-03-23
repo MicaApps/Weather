@@ -14,5 +14,5 @@ public class CityInfo
 
     public CityLocation Location { get; set; } = new();
 
-    public DataReference? Reference { get; set; }
+    public DataReference Reference { get; set; } = new DataReference().InitializeDefault();
 }

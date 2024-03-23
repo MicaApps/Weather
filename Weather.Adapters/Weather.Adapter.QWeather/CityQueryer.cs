@@ -16,9 +16,9 @@ public class CityQueryer : ICityQueryer
     {
         using var http = new HttpClient();
 
-        apiConfig.Initialize().Path = "/city/lookup";
+        apiConfig.InitializeGeoApi().Path = "/city/lookup";
 
-        apiConfig.ApiArguments.InitializeArguments<Dictionary<string, string>>()
+        apiConfig.ApiArguments.InitializeDefaultArguments()
             .AppendArgument("key", apiConfig.Key)
             .AppendArgument("location", location)
             ;
@@ -45,13 +45,18 @@ public class CityQueryer : ICityQueryer
 
         var refer_sources = new List<string>();
 
-        foreach (var item in json.refer.sources)
-            refer_sources.Add(item as string ?? "Converting failed.");
-
         var refer_license = new List<string>();
 
-        foreach (var item in json.refer.license)
-            refer_license.Add(item as string ?? "Converting failed.");
+        if (json.refer is not null)
+        {
+            if (json.refer.sources is not null)
+                foreach (var item in json.refer.sources)
+                    refer_sources.Add(item as string ?? "Converting failed.");
+
+            if (json.refer.license is not null)
+                foreach (var item in json.refer.license)
+                    refer_license.Add(item as string ?? "Converting failed.");
+        }
 
         var result = new List<CityInfo>();
 
@@ -71,14 +76,12 @@ public class CityQueryer : ICityQueryer
                     Latitude = jsonCity.lat,
                     TimeZone = jsonCity.tz,
                     UtcOffset = jsonCity.utcOffset,
-                },
-                Reference = new DataReference()
-                {
-                    Sources = refer_sources,
-                    License = refer_license,
-                    Link = [jsonCity.fxLink],
                 }
             };
+
+            city.Reference.Sources = refer_sources;
+            city.Reference.License = refer_license;
+            city.Reference.Link = [jsonCity.fxLink];
 
             result.Add(city);
         }

@@ -4,8 +4,7 @@ namespace Weather.Adapter.QWeather.Utils;
 
 internal static class GeoApiUtil
 {
-
-    public static IApiConfigProvider Initialize(this IApiConfigProvider apiConfig)
+    public static IApiConfigProvider InitializeGeoApi(this IApiConfigProvider apiConfig)
     {
         apiConfig.Protocol = ApiProtocols.Https;
 

@@ -17,6 +17,8 @@ public interface IApiArgumentsProvider : IAdapter
         return this;
     }
 
+    public IApiArgumentsProvider InitializeDefaultArguments() => InitializeArguments<Dictionary<string, string>>();
+
     public IApiArgumentsProvider AppendArgument(string key, string value)
     {
         if (Arguments.ContainsKey(key))
