@@ -41,5 +41,20 @@ public sealed partial class TestPage : Page
     public TestPage()
     {
         InitializeComponent();
+
+        (DataContext as TestPageViewModel).ShowDialog = async (content) =>
+        {
+            var dialog = new ContentDialog
+            {
+                XamlRoot = XamlRoot,
+                Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
+                Title = "Requested Result",
+                CloseButtonText = "OK",
+                DefaultButton = ContentDialogButton.Close,
+                Content = content
+            };
+
+            _ = await dialog.ShowAsync();
+        };
     }
 }

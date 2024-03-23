@@ -17,7 +17,11 @@ public class TestPageViewModel : ObservableObject
     public TestPageViewModel()
     {
         QueryCityCommand = new RelayCommand(QueryCity);
+
+        QueryWeatherCommand = new RelayCommand(QueryWeather);
     }
+
+    public Action<string> ShowDialog;
 
     private string key;
 
@@ -35,15 +39,9 @@ public class TestPageViewModel : ObservableObject
         set => SetProperty(ref location, value);
     }
 
-    private string cityQueryResult;
-
-    public string CityQueryResult
-    {
-        get => cityQueryResult;
-        set => SetProperty(ref cityQueryResult, value);
-    }
-
     public ICommand QueryCityCommand { get; }
+
+    public ICommand QueryWeatherCommand { get; }
 
     private async void QueryCity()
     {
@@ -67,6 +65,31 @@ public class TestPageViewModel : ObservableObject
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
         });
 
-        CityQueryResult = text;
+        ShowDialog?.Invoke(text);
+    }
+
+    private async void QueryWeather()
+    {
+        var queryers = PluginsService.Instance.RequestPlugins<IWeatherQueryer>();
+
+        if (queryers.Any() == false)
+            throw new InvalidOperationException();
+
+        var queryer = queryers.First();
+
+        var apiConfig = IApiConfigProvider.Default;
+
+        apiConfig.Key = Key;
+
+        var weather = await queryer.QueryCurrentWeather(Location, apiConfig);
+
+        var text = JsonSerializer.Serialize(weather, new JsonSerializerOptions()
+        {
+            WriteIndented = true,
+            IncludeFields = true,
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+        });
+
+        ShowDialog?.Invoke(text);
     }
 }

@@ -18,11 +18,7 @@
         <TextBox Text="{x:Bind ViewModel.Key, Mode=TwoWay}"/>
         <TextBlock Text="Location"/>
         <TextBox Text="{x:Bind ViewModel.Location, Mode=TwoWay}"/>
-        <Button Command="{x:Bind ViewModel.QueryCityCommand}" Content="Query"/>
-        <ScrollViewer Height="500">
-            <TextBox IsReadOnly="True"
-                     Text="{x:Bind ViewModel.CityQueryResult, Mode=OneWay}"
-                     TextWrapping="Wrap"/>
-        </ScrollViewer>
+        <Button Command="{x:Bind ViewModel.QueryCityCommand}" Content="Query Cities"/>
+        <Button Command="{x:Bind ViewModel.QueryWeatherCommand}" Content="Query Weather"/>
     </StackPanel>
 </Page>
