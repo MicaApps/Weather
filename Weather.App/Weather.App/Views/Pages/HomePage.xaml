@@ -31,7 +31,7 @@
                     Orientation="Horizontal"
                     Spacing="20">
             <Button VerticalAlignment="Top">
-                <StackPanel>
+                <StackPanel Spacing="5">
                     <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                Style="{ThemeResource CaptionTextBlockStyle}"
                                Text="Feels like"/>
@@ -39,31 +39,39 @@
                 </StackPanel>
             </Button>
             <Button VerticalAlignment="Top">
-                <StackPanel>
+                <StackPanel Spacing="5">
                     <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                Style="{ThemeResource CaptionTextBlockStyle}"
-                               Text="Pressure (Hpa)"/>
-                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.PressureHpa, Mode=OneWay}"/>
+                               Text="Pressure"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.PressureHpaText, Mode=OneWay}"/>
                 </StackPanel>
             </Button>
             <Button VerticalAlignment="Top">
-                <StackPanel>
+                <StackPanel Spacing="5">
                     <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                Style="{ThemeResource CaptionTextBlockStyle}"
                                Text="Humidity"/>
-                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.Humidity, Mode=OneWay}"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.HumidityText, Mode=OneWay}"/>
                 </StackPanel>
             </Button>
             <Button VerticalAlignment="Top">
-                <StackPanel>
+                <StackPanel Spacing="5">
                     <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                Style="{ThemeResource CaptionTextBlockStyle}"
-                               Text="Visibility (KM)"/>
-                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.VisibilityKm, Mode=OneWay}"/>
+                               Text="Precip"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.PrecipMillimeterText, Mode=OneWay}"/>
                 </StackPanel>
             </Button>
             <Button VerticalAlignment="Top">
-                <StackPanel>
+                <StackPanel Spacing="5">
+                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                               Style="{ThemeResource CaptionTextBlockStyle}"
+                               Text="Visibility"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.VisibilityKmText, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+            <Button VerticalAlignment="Top">
+                <StackPanel Spacing="5">
                     <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                Style="{ThemeResource CaptionTextBlockStyle}"
                                Text="Cloud"/>
@@ -71,15 +79,64 @@
                 </StackPanel>
             </Button>
             <Button VerticalAlignment="Top">
-                <StackPanel>
+                <StackPanel Spacing="5">
                     <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                Style="{ThemeResource CaptionTextBlockStyle}"
                                Text="Dew"/>
                     <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.Dew, Mode=OneWay}"/>
                 </StackPanel>
             </Button>
+        </StackPanel>
+
+        <StackPanel Margin="0,20,0,0"
+                    Orientation="Horizontal"
+                    Spacing="20">
             <Button VerticalAlignment="Top" Command="{x:Bind ViewModel.RefreshCommand}">
-                <FontIcon Margin="7.5" Glyph="&#xE72C;"/>
+                <StackPanel Spacing="5">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <FontIcon VerticalAlignment="Center"
+                                  FontSize="10"
+                                  Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                  Glyph="&#xE72C;"/>
+                        <TextBlock VerticalAlignment="Center"
+                                   Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                   Style="{ThemeResource CaptionTextBlockStyle}"
+                                   Text="Update Date"/>
+                    </StackPanel>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.UpdateTime, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+            <Button VerticalAlignment="Top">
+                <StackPanel Spacing="5">
+                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                               Style="{ThemeResource CaptionTextBlockStyle}"
+                               Text="Wind 360"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.Wind360, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+            <Button VerticalAlignment="Top">
+                <StackPanel Spacing="5">
+                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                               Style="{ThemeResource CaptionTextBlockStyle}"
+                               Text="Wind Direction"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.WindDirection, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+            <Button VerticalAlignment="Top">
+                <StackPanel Spacing="5">
+                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                               Style="{ThemeResource CaptionTextBlockStyle}"
+                               Text="Wind Scale"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.WindScale, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+            <Button VerticalAlignment="Top">
+                <StackPanel Spacing="5">
+                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                               Style="{ThemeResource CaptionTextBlockStyle}"
+                               Text="Wind Speed"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.WindSpeedKmPerHourText, Mode=OneWay}"/>
+                </StackPanel>
             </Button>
         </StackPanel>
     </StackPanel>

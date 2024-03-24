@@ -18,11 +18,11 @@ public class HomePageViewModel : ObservableObject
         RefreshCommand = new RelayCommand(() => Refresh());
     }
 
-    public HomePageViewModel Refresh()
+    public HomePageViewModel Refresh(bool updateCity = false, bool updateWeather = true)
     {
         var location = AppConfig.Instance.SelectedLocation;
 
-        if (CacheService.Instance.TryQueryCity(location, out var city))
+        if (!updateCity && CacheService.Instance.TryQueryCity(location, out var city))
             CityInfo = city;
         else
         {
@@ -44,13 +44,13 @@ public class HomePageViewModel : ObservableObject
                     if (cities.Any())
                         CacheService.Instance.AddCity(location, cities.First());
 
-                    Refresh();
+                    Refresh(updateCity: false, updateWeather: false);
                 });
 
             return this;
         }
 
-        if (CacheService.Instance.TryQueryWeather(CityInfo.Id, out var info))
+        if (!updateWeather && CacheService.Instance.TryQueryWeather(CityInfo.Id, out var info))
             WeatherInfo = info;
         else
         {
@@ -72,7 +72,7 @@ public class HomePageViewModel : ObservableObject
                     if (weather is not null)
                         CacheService.Instance.AddWeather(CityInfo.Id, weather);
 
-                    Refresh();
+                    Refresh(updateCity: false, updateWeather: false);
                 });
 
             return this;
