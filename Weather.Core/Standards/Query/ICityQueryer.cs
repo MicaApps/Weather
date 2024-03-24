@@ -7,7 +7,7 @@ namespace Weather.Core.Standards.Query;
 [InheritedExport]
 public interface ICityQueryer : IAdapter
 {
-    public Task<IEnumerable<CityInfo>> FuzzyQuery(string location, IApiConfigProvider apiConfig);
+    public Task<IEnumerable<CityInfo>?> FuzzyQuery(string location, IApiConfigProvider apiConfig);
 
-    public Task<IEnumerable<CityInfo>> QueryTopCities(int count, IApiConfigProvider apiConfig);
+    public Task<IEnumerable<CityInfo>?> QueryTopCities(int count, IApiConfigProvider apiConfig);
 }

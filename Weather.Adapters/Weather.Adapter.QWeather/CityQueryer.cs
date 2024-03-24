@@ -14,7 +14,7 @@ public class CityQueryer : ICityQueryer
 
     public string GetAdapterDiscription() => ConstantTable.AdapterDiscription;
 
-    public async Task<IEnumerable<CityInfo>> FuzzyQuery(string location, IApiConfigProvider apiConfig)
+    public async Task<IEnumerable<CityInfo>?> FuzzyQuery(string location, IApiConfigProvider apiConfig)
     {
         using var http = new HttpClient();
 
@@ -29,8 +29,7 @@ public class CityQueryer : ICityQueryer
 
         var response = await http.GetAsync(url);
 
-        if (response.IsSuccessStatusCode == false)
-            throw new HttpRequestException($"The request to {url} failed with status code {response.StatusCode}.");
+        if (response.IsSuccessStatusCode == false) return null;
 
         using var stream = await response.Content.ReadAsStreamAsync();
 
@@ -42,8 +41,7 @@ public class CityQueryer : ICityQueryer
 
         dynamic json = JObject.Parse(body);
 
-        if ((json.code as string)?.Equals("200") == false || json.location is null)
-            return [];
+        if ((json.code as string)?.Equals("200") == false || json.location is null) return null;
 
         var refer_sources = new List<string>();
 
@@ -91,7 +89,7 @@ public class CityQueryer : ICityQueryer
         return result;
     }
 
-    public Task<IEnumerable<CityInfo>> QueryTopCities(int count, IApiConfigProvider apiConfig)
+    public Task<IEnumerable<CityInfo>?> QueryTopCities(int count, IApiConfigProvider apiConfig)
     {
         throw new NotImplementedException();
     }

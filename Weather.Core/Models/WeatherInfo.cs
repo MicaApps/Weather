@@ -12,6 +12,10 @@ public class WeatherInfo
 
     public string Text { get; set; } = string.Empty;
 
+    public string TextDay { get; set; } = string.Empty;
+
+    public string TextNight { get; set; } = string.Empty;
+
     public Temperature? Temperature { get; set; }
 
     public Temperature? TemperatureMax { get; set; }
@@ -42,11 +46,11 @@ public class WeatherInfo
 
     public string? WindDirectionLight { get; set; }
 
-    public double WindScale { get; set; }
+    public string? WindScale { get; set; }
 
-    public double WindScaleDay { get; set; }
+    public string? WindScaleDay { get; set; }
 
-    public double WindScaleNight { get; set; }
+    public string? WindScaleNight { get; set; }
 
     public double WindSpeedKmPerHour { get; set; }
 

@@ -63,7 +63,7 @@ public class SelectCityPageViewModel : ObservableObject
 
         var cities = await queryer.FuzzyQuery(Location, apiConfig);
 
-        if (cities.Any() == false)
+        if (cities is null || cities.Any() == false)
             CityInfos.Add(new CityInfo
             {
                 Name = "No result found.",

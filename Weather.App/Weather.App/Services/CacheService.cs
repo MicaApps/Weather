@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using Weather.Core.Models;
 
@@ -33,12 +34,16 @@ public class CacheService
     {
         var cityCache = Path.Combine(CacheFolder, "Weather.App.Cache.Cities.json");
         var weatherCache = Path.Combine(CacheFolder, "Weather.App.Cache.Weather.json");
+        var dailyWeatherCache = Path.Combine(CacheFolder, "Weather.App.Cache.DailyWeather.json");
 
         if (File.Exists(cityCache))
             cityCaches = JsonSerializer.Deserialize<Dictionary<string, CityInfo>>(File.ReadAllText(cityCache));
 
         if (File.Exists(weatherCache))
             weatherCaches = JsonSerializer.Deserialize<Dictionary<string, WeatherCache>>(File.ReadAllText(weatherCache));
+
+        if (File.Exists(dailyWeatherCache))
+            dailyWeatherForecastCaches = JsonSerializer.Deserialize<Dictionary<string, List<WeatherCache>>>(File.ReadAllText(dailyWeatherCache));
     }
 
     public CacheService Initialize()
@@ -53,9 +58,11 @@ public class CacheService
     {
         var cityCache = Path.Combine(CacheFolder, "Weather.App.Cache.Cities.json");
         var weatherCache = Path.Combine(CacheFolder, "Weather.App.Cache.Weather.json");
+        var dailyWeatherCache = Path.Combine(CacheFolder, "Weather.App.Cache.DailyWeather.json");
 
         File.WriteAllText(cityCache, JsonSerializer.Serialize(cityCaches, serializerOptions));
         File.WriteAllText(weatherCache, JsonSerializer.Serialize(weatherCaches, serializerOptions));
+        File.WriteAllText(dailyWeatherCache, JsonSerializer.Serialize(dailyWeatherForecastCaches, serializerOptions));
 
         return this;
     }
@@ -120,6 +127,41 @@ public class CacheService
         }
 
         info = null;
+
+        return false;
+    }
+
+    private readonly Dictionary<string, List<WeatherCache>> dailyWeatherForecastCaches = [];
+
+    public CacheService AddDailyWeatherForecast(string location, IEnumerable<WeatherInfo> weatherInfos)
+    {
+        var list = weatherInfos.Select(
+            x => new WeatherCache
+            {
+                Location = location,
+            }.Refresh(x)
+        ).ToList();
+
+        if (dailyWeatherForecastCaches.ContainsKey(location))
+            dailyWeatherForecastCaches[location] = list;
+        else
+            dailyWeatherForecastCaches.Add(location, list);
+
+        SaveCache();
+
+        return this;
+    }
+
+    public bool TryQueryDailyWeatherForecast(string location, out IEnumerable<WeatherInfo> infos)
+    {
+        if (dailyWeatherForecastCaches.ContainsKey(location))
+        {
+            infos = dailyWeatherForecastCaches[location].Select(x => x.WeatherInfo);
+
+            return true;
+        }
+
+        infos = null;
 
         return false;
     }

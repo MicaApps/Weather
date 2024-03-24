@@ -67,7 +67,7 @@ public sealed partial class HomePage : Page
 
             EventService.Invoke(nameof(EventService.SelectLocationOver), null);
 
-            (DataContext as HomePageViewModel).Refresh(updateCity: false, updateWeather: false);
+            (DataContext as HomePageViewModel).Refresh(updateCity: false, updateWeather: false, updateDailyForecast: true);
         });
     }
 }

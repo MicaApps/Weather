@@ -8,4 +8,6 @@ namespace Weather.Core.Standards.Query;
 public interface IWeatherQueryer : IAdapter
 {
     public Task<WeatherInfo?> QueryCurrentWeather(string location, IApiConfigProvider apiConfig);
+
+    public Task<List<WeatherInfo>?> QueryDailyWeatherForecast(string location, IApiConfigProvider apiConfig);
 }

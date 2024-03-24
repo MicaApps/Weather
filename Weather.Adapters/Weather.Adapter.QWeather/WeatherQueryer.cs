@@ -31,8 +31,7 @@ public class WeatherQueryer : IWeatherQueryer
 
         var response = await http.GetAsync(url);
 
-        if (response.IsSuccessStatusCode == false)
-            throw new HttpRequestException($"The request to {url} failed with status code {response.StatusCode}");
+        if (response.IsSuccessStatusCode == false) return null;
 
         using var stream = await response.Content.ReadAsStreamAsync();
 
@@ -44,8 +43,7 @@ public class WeatherQueryer : IWeatherQueryer
 
         dynamic json = JObject.Parse(body);
 
-        if ((json.code as string)?.Equals("200") == false)
-            return null;
+        if ((json.code as string)?.Equals("200") == false) return null;
 
         var result = new WeatherInfo();
 
@@ -93,7 +91,7 @@ public class WeatherQueryer : IWeatherQueryer
         return result;
     }
 
-    public async Task<WeatherInfo?> QueryWeatherForecast(string location, IApiConfigProvider apiConfig)
+    public async Task<List<WeatherInfo>?> QueryDailyWeatherForecast(string location, IApiConfigProvider apiConfig)
     {
         using var http = new HttpClient();
 
@@ -108,8 +106,7 @@ public class WeatherQueryer : IWeatherQueryer
 
         var response = await http.GetAsync(url);
 
-        if (response.IsSuccessStatusCode == false)
-            throw new HttpRequestException($"The request to {url} failed with status code {response.StatusCode}");
+        if (response.IsSuccessStatusCode == false) return null;
 
         using var stream = await response.Content.ReadAsStreamAsync();
 
@@ -121,10 +118,13 @@ public class WeatherQueryer : IWeatherQueryer
 
         dynamic json = JObject.Parse(body);
 
-        if ((json.code as string)?.Equals("200") == false)
-            return null;
+        if ((json.code as string)?.Equals("200") == false) return null;
+
+        if (json.daily is null) return null;
 
         var result = new List<WeatherInfo>();
+
+        var updateTime = DateTime.Parse(json.updateTime as string ?? "0000-00-00");
 
         var refer_sources = new List<string>();
 
@@ -141,35 +141,45 @@ public class WeatherQueryer : IWeatherQueryer
                     refer_license.Add(item as string ?? "Convertion failed.");
         }
 
-        if (json.fxLink as string is not null)
-            result.Reference.AppendLink((json.fxLink as string)!);
-
-        result.UpdateTime = JsonSerializer.Deserialize<DateTime>($"\"{json.updateTime}\"");
-
-        var now = json.now;
-
-        result.ObservationTime = JsonSerializer.Deserialize<DateTime>($"\"{now.obsTime}\"");
-        result.Text = now.text;
-        result.Temperature = new()
+        foreach (var item in json.daily)
         {
-            Value = now.temp,
-            Unit = TemperatureUnits.Celsius,
-        };
-        result.FeelsLike = new()
-        {
-            Value = now.feelsLike,
-            Unit = TemperatureUnits.Celsius,
-        };
-        result.Wind360 = now.wind360;
-        result.WindDirection = now.windDir;
-        result.WindScale = now.windScale;
-        result.WindSpeedKmPerHour = now.windSpeed;
-        result.Humidity = now.humidity;
-        result.PrecipMillimeter = now.precip;
-        result.PressureHpa = now.pressure;
-        result.VisibilityKm = now.vis;
-        result.Cloud = now.cloud ?? double.NaN;
-        result.Dew = now.dew ?? double.NaN;
+            var weather = new WeatherInfo()
+            {
+                UpdateTime = updateTime,
+                ForecastTime = DateTime.Parse(item.fxDate as string ?? "0000-00-00"),
+                TextDay = item.textDay,
+                TextNight = item.textNight,
+                Sunrise = item.sunrise is null ? null : DateTime.Parse(item.sunrise as string ?? "00:00"),
+                Sunset = item.sunset is null ? null : DateTime.Parse(item.sunset as string ?? "00:00"),
+                Moonrise = item.moonrise is null ? null : DateTime.Parse(item.moonrise as string ?? "00:00"),
+                Moonset = item.moonset is null ? null : DateTime.Parse(item.moonset as string ?? "00:00"),
+                MoonPhase = item.moonPhase,
+                TemperatureMax = new()
+                {
+                    Value = item.tempMax,
+                    Unit = TemperatureUnits.Celsius,
+                },
+                TemperatureMin = new()
+                {
+                    Value = item.tempMin,
+                    Unit = TemperatureUnits.Celsius
+                },
+                Wind360Day = item.wind360Day,
+                Wind360Light = item.wind360Night,
+                WindDirectionDay = item.windDirDay,
+                WindDirectionLight = item.windDirNight,
+                WindScaleDay = item.windScaleDay,
+                WindScaleNight = item.windScaleNight,
+                WindSpeedKmPerHourDay = item.windSpeedDay,
+                WindSpeedKmPerHourNight = item.windSpeedNight,
+                Humidity = item.humidity,
+                PrecipMillimeter = item.precip,
+                PressureHpa = item.pressure,
+                VisibilityKm = item.vis,
+                Cloud = item.cloud ?? double.NaN,
+                UvIndex = item.uvIndex,
+            };
+        }
 
         return result;
     }
