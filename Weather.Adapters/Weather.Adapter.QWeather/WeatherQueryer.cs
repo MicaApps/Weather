@@ -4,6 +4,7 @@ using System.Text.Json;
 using Newtonsoft.Json.Linq;
 using Weather.Adapter.QWeather.Utils;
 using Weather.Core.Models;
+using Weather.Core.Models.Units;
 using Weather.Core.Standards.Query;
 using Weather.Core.Standards.WebApi;
 
@@ -12,6 +13,8 @@ namespace Weather.Adapter.QWeather;
 public class WeatherQueryer : IWeatherQueryer
 {
     public string GetAdapterIdentity() => ConstantTable.AdapterIdentity;
+
+    public string GetAdapterDiscription() => ConstantTable.AdapterDiscription;
 
     public async Task<WeatherInfo?> QueryCurrentWeather(string location, IApiConfigProvider apiConfig)
     {
@@ -65,12 +68,17 @@ public class WeatherQueryer : IWeatherQueryer
         var now = json.now;
 
         result.ObservationTime = JsonSerializer.Deserialize<DateTime>($"\"{now.obsTime}\"");
+        result.Text = now.text;
         result.Temperature = new()
         {
             Value = now.temp,
-            Unit = Core.Models.Units.TemperatureUnits.Celsius,
+            Unit = TemperatureUnits.Celsius,
         };
-        result.FeelsLike = now.feelsLike;
+        result.FeelsLike = new()
+        {
+            Value = now.feelsLike,
+            Unit = TemperatureUnits.Celsius,
+        };
         result.Wind360 = now.wind360;
         result.WindDirection = now.windDir;
         result.WindScale = now.windScale;
@@ -78,6 +86,7 @@ public class WeatherQueryer : IWeatherQueryer
         result.Humidity = now.humidity;
         result.PrecipMillimeter = now.precip;
         result.PressureHpa = now.pressure;
+        result.VisibilityKm = now.vis;
         result.Cloud = now.cloud ?? double.NaN;
         result.Dew = now.dew ?? double.NaN;
 

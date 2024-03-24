@@ -8,6 +8,8 @@ public class CityInfo
 
     public string? Country { get; set; }
 
+    public string AdministrativeDivision => $"{Name}, {Country}";
+
     public string? Id { get; set; }
 
     public string? Rank { get; set; }

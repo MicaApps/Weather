@@ -5,32 +5,82 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:Weather.App.Views.Pages"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:vm="using:Weather.App.ViewModels.Pages"
       Background="Transparent"
       mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:HomePageViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
 
     <StackPanel Margin="30">
         <StackPanel Spacing="10">
             <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                        Style="{StaticResource SubtitleTextBlockStyle}"
-                       Text="上海市, 中国"/>
+                       Text="{x:Bind ViewModel.CityInfo.AdministrativeDivision, Mode=OneWay}"/>
             <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                        Style="{StaticResource SubtitleTextBlockStyle}"
-                       Text="多云"/>
+                       Text="{x:Bind ViewModel.WeatherInfo.Text, Mode=OneWay}"/>
         </StackPanel>
 
         <TextBlock Margin="0,100,0,0"
                    Style="{StaticResource DisplayTextBlockStyle}"
-                   Text="13°"/>
+                   Text="{x:Bind ViewModel.WeatherInfo.Temperature.Text, Mode=OneWay}"/>
 
         <StackPanel Margin="0,20,0,0"
                     Orientation="Horizontal"
                     Spacing="20">
-            <Button Content="13°"/>
-            <Button Content="14°"/>
-            <Button Content="14°"/>
-            <Button Content="15°"/>
-            <Button Content="16°"/>
-            <Button Content="17°"/>
+            <Button VerticalAlignment="Top">
+                <StackPanel>
+                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                               Style="{ThemeResource CaptionTextBlockStyle}"
+                               Text="Feels like"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.FeelsLike.Text, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+            <Button VerticalAlignment="Top">
+                <StackPanel>
+                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                               Style="{ThemeResource CaptionTextBlockStyle}"
+                               Text="Pressure (Hpa)"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.PressureHpa, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+            <Button VerticalAlignment="Top">
+                <StackPanel>
+                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                               Style="{ThemeResource CaptionTextBlockStyle}"
+                               Text="Humidity"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.Humidity, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+            <Button VerticalAlignment="Top">
+                <StackPanel>
+                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                               Style="{ThemeResource CaptionTextBlockStyle}"
+                               Text="Visibility (KM)"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.VisibilityKm, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+            <Button VerticalAlignment="Top">
+                <StackPanel>
+                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                               Style="{ThemeResource CaptionTextBlockStyle}"
+                               Text="Cloud"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.Cloud, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+            <Button VerticalAlignment="Top">
+                <StackPanel>
+                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                               Style="{ThemeResource CaptionTextBlockStyle}"
+                               Text="Dew"/>
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind ViewModel.WeatherInfo.Dew, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+            <Button VerticalAlignment="Top" Command="{x:Bind ViewModel.RefreshCommand}">
+                <FontIcon Margin="7.5" Glyph="&#xE72C;"/>
+            </Button>
         </StackPanel>
     </StackPanel>
 </Page>

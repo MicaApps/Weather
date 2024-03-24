@@ -58,5 +58,7 @@ public class DefaultApiArgumentsProvider : IApiArgumentsProvider
 {
     public string GetAdapterIdentity() => "Weather.Core.Default";
 
+    public string GetAdapterDiscription() => "The default implementation of IApiArgumentsProvider.";
+
     public IDictionary<string, string> Arguments { get; set; } = new Dictionary<string, string>();
 }

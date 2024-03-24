@@ -15,12 +15,15 @@
         <None Remove="Views\Pages\CityPage.xaml" />
         <None Remove="Views\Pages\HomePage.xaml" />
         <None Remove="Views\Pages\NotFoundPage.xaml" />
+        <None Remove="Views\Pages\SelectApiPage.xaml" />
         <None Remove="Views\Pages\SelectCityPage.xaml" />
         <None Remove="Views\Pages\TestPage.xaml" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+        <PackageReference Include="CommunityToolkit.WinUI.UI" Version="7.1.2" />
+        <PackageReference Include="LiveChartsCore.SkiaSharpView.WinUI" Version="2.0.0-rc2.1" />
         <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.230913002" />
         <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.755" />
 
@@ -30,6 +33,12 @@
     <ItemGroup>
         <ProjectReference Include="..\..\Weather.Adapters\Weather.Adapter.QWeather\Weather.Adapter.QWeather.csproj" />
         <ProjectReference Include="..\..\Weather.Core\Weather.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Page Update="Views\Pages\SelectApiPage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </Page>
     </ItemGroup>
 
     <ItemGroup>

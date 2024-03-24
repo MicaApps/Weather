@@ -12,6 +12,8 @@ public class CityQueryer : ICityQueryer
 {
     public string GetAdapterIdentity() => ConstantTable.AdapterIdentity;
 
+    public string GetAdapterDiscription() => ConstantTable.AdapterDiscription;
+
     public async Task<IEnumerable<CityInfo>> FuzzyQuery(string location, IApiConfigProvider apiConfig)
     {
         using var http = new HttpClient();

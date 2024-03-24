@@ -45,7 +45,12 @@ public class SelectCityPageViewModel : ObservableObject
     {
         CityInfos.Clear();
 
-        var queryers = PluginsService.Instance.RequestPlugins<ICityQueryer>();
+        var queryers = PluginsService.Instance.RequestPlugins<ICityQueryer>()
+            .Where(
+                x => false
+                    || string.IsNullOrWhiteSpace(AppConfig.Instance.Api.ProviderIdentity)
+                    || x.GetAdapterIdentity().Equals(AppConfig.Instance.Api.ProviderIdentity)
+            );
 
         if (queryers.Any() == false)
             throw new InvalidOperationException();
@@ -61,11 +66,17 @@ public class SelectCityPageViewModel : ObservableObject
         if (cities.Any() == false)
             CityInfos.Add(new CityInfo
             {
-                Name = "No result found."
+                Name = "No result found.",
+                Id = string.Empty,
             });
         else
+        {
+            foreach (var city in cities)
+                CacheService.Instance.AddCity(city.Id, city);
+
             foreach (var city in cities.Take(5))
                 CityInfos.Add(city);
+        }
 
         SelectedIndex = CityInfos.Count > 0 ? 0 : -1;
     }

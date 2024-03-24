@@ -30,6 +30,8 @@ public class DefaultApiConfigProvider : IApiConfigProvider
 {
     public string GetAdapterIdentity() => "Weather.Core.Default";
 
+    public string GetAdapterDiscription() => "The default API configuration provider.";
+
     public string Key { get; set; } = string.Empty;
 
     public string Host { get; set; } = string.Empty;

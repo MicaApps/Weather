@@ -11,11 +11,15 @@ public partial class App : Application
         InitializeComponent();
 
         PluginsService.Instance.Initialize();
+
+        CacheService.Instance.Initialize();
     }
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         AppConfig.Instance.RanTime++;
+
+        AppConfig.Instance.Save();
 
         MainWindow.Instance.Activate();
     }

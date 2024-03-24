@@ -6,6 +6,19 @@ public class Temperature
 
     public double Value { get; set; } = -273.15;
 
+    public string Text => Unit switch
+    {
+        TemperatureUnits.Celsius => $"{Value} °C",
+        TemperatureUnits.Kelvin => $"{Value} K",
+        TemperatureUnits.Fahrenheit => $"{Value} °F",
+        TemperatureUnits.Rankine => $"{Value} °R",
+        TemperatureUnits.Delisle => $"{Value} °De",
+        TemperatureUnits.Newton => $"{Value} °N",
+        TemperatureUnits.Réaumur => $"{Value} °Ré",
+        TemperatureUnits.Rømer => $"{Value} °Rø",
+        _ => $"{Value} ({Unit})",
+    };
+
     public TemperatureUnits Unit { get; set; } = TemperatureUnits.Celsius;
 
     public Temperature SetValue(double value, TemperatureUnits unit = TemperatureUnits.Celsius)

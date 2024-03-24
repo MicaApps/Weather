@@ -1,10 +1,9 @@
 using System;
-using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
 using Weather.App.Configuration;
 using Weather.App.Services;
+using Weather.App.ViewModels.Pages;
 
 namespace Weather.App.Views.Pages;
 
@@ -27,9 +26,27 @@ public sealed partial class HomePage : Page
     {
         InitializeComponent();
 
+        Check();
+    }
+
+    public void Check()
+    {
         DispatcherQueue.TryEnqueue(async () =>
         {
-            while (string.Empty.Equals(AppConfig.Instance.SelectedLocation))
+            while (string.IsNullOrWhiteSpace(AppConfig.Instance.Api.Key) || string.IsNullOrWhiteSpace(AppConfig.Instance.Api.ProviderIdentity))
+            {
+                var dialog = new ContentDialog
+                {
+                    XamlRoot = XamlRoot,
+                    Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
+                    CloseButtonText = "OK",
+                    Content = new SelectApiPage()
+                };
+
+                _ = await dialog.ShowAsync();
+            }
+
+            while (string.IsNullOrWhiteSpace(AppConfig.Instance.SelectedLocation))
             {
                 var dialog = new ContentDialog
                 {
@@ -49,6 +66,8 @@ public sealed partial class HomePage : Page
             }
 
             EventService.Invoke(nameof(EventService.SelectLocationOver), null);
+
+            (DataContext as HomePageViewModel).Refresh();
         });
     }
 }

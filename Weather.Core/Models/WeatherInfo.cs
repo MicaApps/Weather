@@ -8,9 +8,11 @@ public class WeatherInfo
 
     public DateTime UpdateTime { get; set; }
 
+    public string Text { get; set; } = string.Empty;
+
     public Temperature? Temperature { get; set; }
 
-    public double FeelsLike { get; set; }
+    public Temperature? FeelsLike { get; set; }
 
     public double Wind360 { get; set; }
 
@@ -25,6 +27,8 @@ public class WeatherInfo
     public double PrecipMillimeter { get; set; }
 
     public double PressureHpa { get; set; }
+
+    public double VisibilityKm { get; set; }
 
     public double Cloud { get; set; }
 

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page x:Class="Weather.App.Views.Pages.SelectApiPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:Weather.App.Views.Pages"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:vm="using:Weather.App.ViewModels.Pages"
+      Background="Transparent"
+      mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:SelectApiPageViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
+
+    <StackPanel Margin="15,5" Spacing="20">
+        <TextBlock FontSize="24" Text="Select api provider"/>
+
+        <TextBox Width="240"
+                 Header="Key"
+                 PlaceholderText="Key"
+                 Text="{x:Bind ViewModel.Key, Mode=TwoWay}"
+                 TextChanged="TextBox_TextChanged"/>
+
+        <ComboBox Width="240"
+                  Header="Providers"
+                  ItemsSource="{x:Bind ViewModel.Apis}"
+                  SelectedIndex="{x:Bind ViewModel.SelectedIndex, Mode=TwoWay}"
+                  SelectionChanged="ComboBox_SelectionChanged">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="x:String">
+                    <ComboBoxItem Content="{x:Bind}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <HyperlinkButton HorizontalAlignment="Right" Content="Create your provider"/>
+    </StackPanel>
+</Page>
