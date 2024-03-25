@@ -57,7 +57,6 @@ public sealed partial class MainWindow : Window
     {
         "HomePage" => typeof(HomePage),
         "CityPage" => typeof(CityPage),
-        "TestPage" => typeof(TestPage),
         _ => typeof(NotFoundPage),
     };
 }

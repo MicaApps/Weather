@@ -34,11 +34,6 @@
                         <FontIcon Glyph="&#xEC06;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="测试" Tag="TestPage">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEBE8;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
             </NavigationView.MenuItems>
 
             <Frame x:Name="MainFrame"/>
