@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -19,105 +18,98 @@ public class HomePageViewModel : ObservableObject
         RefreshCommand = new RelayCommand(() => Refresh());
     }
 
-    public HomePageViewModel Refresh(bool updateCity = false, bool updateWeather = true, bool updateDailyForecast = true)
+    public HomePageViewModel Refresh()
+    {
+        RefreshCityInfo(refreshWeather: true);
+
+        return this;
+    }
+
+    public HomePageViewModel RefreshCityInfo(bool refreshWeather = true)
     {
         var location = AppConfig.Instance.SelectedLocation;
 
-        if (!updateCity && CacheService.Instance.TryQueryCity(location, out var city))
+        if (CacheService.Instance.TryQueryCity(location, out var city))
+        {
             CityInfo = city;
+
+            if (refreshWeather) RefreshWeatherInfo();
+        }
         else
         {
             var queryers = PluginsService.Instance.RequestPlugins<ICityQueryer>()
                 .Where(x => x.GetAdapterIdentity().Equals(AppConfig.Instance.Api.ProviderIdentity)
             );
 
-            if (queryers.Any())
-                Task.Run(async () =>
-                {
-                    var queryer = queryers.First();
+            if (queryers.Any() == false) return this;
 
-                    var apiConfig = IApiConfigProvider.Default;
+            Task.Run(async () =>
+            {
+                var queryer = queryers.First();
 
-                    apiConfig.Key = AppConfig.Instance.Api.Key;
+                var apiConfig = IApiConfigProvider.Default;
 
-                    var cities = await queryer.FuzzyQuery(location, apiConfig);
+                apiConfig.Key = AppConfig.Instance.Api.Key;
 
-                    if (cities is null) return;
+                var cities = await queryer.FuzzyQuery(location, apiConfig);
 
-                    if (cities.Any())
-                        CacheService.Instance.AddCity(location, cities.First());
+                if (cities is null || cities.Any() == false) return;
 
-                    Refresh(updateCity: false, updateWeather: updateWeather, updateDailyForecast: updateDailyForecast);
-                });
+                CacheService.Instance.AddCity(location, cities.First());
 
-            return this;
-        }
-
-        if (!updateWeather && CacheService.Instance.TryQueryWeather(CityInfo.Id, out var info))
-            WeatherInfo = info;
-        else
-        {
-            var queryers = PluginsService.Instance.RequestPlugins<IWeatherQueryer>()
-                .Where(x => x.GetAdapterIdentity().Equals(AppConfig.Instance.Api.ProviderIdentity)
-            );
-
-            if (queryers.Any())
-                Task.Run(async () =>
-                {
-                    var queryer = queryers.First();
-
-                    var apiConfig = IApiConfigProvider.Default;
-
-                    apiConfig.Key = AppConfig.Instance.Api.Key;
-
-                    var weather = await queryer.QueryCurrentWeather(CityInfo.Id, apiConfig);
-
-                    if (weather is not null)
-                        CacheService.Instance.AddWeather(CityInfo.Id, weather);
-                    else return;
-
-                    Refresh(updateCity: false, updateWeather: false, updateDailyForecast: updateDailyForecast);
-                });
-
-            return this;
-        }
-
-        if (!updateDailyForecast && CacheService.Instance.TryQueryDailyWeatherForecast(CityInfo.Id, out var infos))
-        {
-            DailyWeatherInfos.Clear();
-
-            foreach (var item in infos)
-                DailyWeatherInfos.Add(item);
-        }
-        else
-        {
-            var queryers = PluginsService.Instance.RequestPlugins<IWeatherQueryer>()
-                .Where(x => x.GetAdapterIdentity().Equals(AppConfig.Instance.Api.ProviderIdentity)
-            );
-
-            if (queryers.Any())
-                Task.Run(async () =>
-                {
-                    var queryer = queryers.First();
-
-                    var apiConfig = IApiConfigProvider.Default;
-
-                    apiConfig.Key = AppConfig.Instance.Api.Key;
-
-                    var weathers = await queryer.QueryDailyWeatherForecast(CityInfo.Id, apiConfig);
-
-                    if (weathers is null) return;
-
-                    if (weathers.Any())
-                        CacheService.Instance.AddDailyWeatherForecast(CityInfo.Id, weathers);
-
-                    Refresh(updateCity: false, updateWeather: false, updateDailyForecast: false);
-                });
-
-            return this;
+                RefreshCityInfo(refreshWeather: refreshWeather);
+            });
         }
 
         return this;
+    }
+
+    public HomePageViewModel RefreshWeatherInfo()
+    {
+        if (CacheService.Instance.TryQueryWeather(CityInfo.Id, out var info))
+        {
+            WeatherInfo = info;
+        }
+        else
+        {
+            var queryers = PluginsService.Instance.RequestPlugins<IWeatherQueryer>()
+                .Where(x => x.GetAdapterIdentity().Equals(AppConfig.Instance.Api.ProviderIdentity)
+            );
+
+            if (queryers.Any() == false) return this;
+
+            Task.Run(async () =>
+            {
+                var queryer = queryers.First();
+
+                var apiConfig = IApiConfigProvider.Default;
+
+                apiConfig.Key = AppConfig.Instance.Api.Key;
+
+                var weather = await queryer.QueryCurrentWeather(CityInfo.Id, apiConfig);
+
+                if (weather is not null)
+                {
+                    CacheService.Instance.AddWeather(CityInfo.Id, weather);
+
+                    RefreshWeatherInfo();
+                }
+            });
+        }
+
+        return this;
+    }
+
+    private CityInfo cityInfo = new();
+
+    public CityInfo CityInfo
+    {
+        get => cityInfo;
+        set
+        {
+            SetProperty(ref cityInfo, value);
+            OnPropertyChanged(nameof(CityInfo));
+        }
     }
 
     private WeatherInfo weatherInfo = new();
@@ -129,22 +121,6 @@ public class HomePageViewModel : ObservableObject
         {
             SetProperty(ref weatherInfo, value);
             OnPropertyChanged(nameof(WeatherInfo));
-        }
-    }
-
-    private readonly ObservableCollection<WeatherInfo> dailyWeatherInfos = [];
-
-    public ObservableCollection<WeatherInfo> DailyWeatherInfos => dailyWeatherInfos;
-
-    private CityInfo cityInfo = new();
-
-    public CityInfo CityInfo
-    {
-        get => cityInfo;
-        set
-        {
-            SetProperty(ref cityInfo, value);
-            OnPropertyChanged(nameof(CityInfo));
         }
     }
 

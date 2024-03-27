@@ -4,6 +4,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:Weather.App.Views.Pages"
+      xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:Weather.App.ViewModels.Pages"
       Background="Transparent"
@@ -140,24 +141,6 @@
             </Button>
         </StackPanel>
 
-        <NavigationView Margin="0,20,0,0"
-                        IsBackButtonVisible="Collapsed"
-                        IsSettingsVisible="False"
-                        PaneDisplayMode="Top"
-                        SelectionFollowsFocus="Enabled">
-            <NavigationView.MenuItems>
-                <NavigationViewItem Content="24 小时预报"
-                                    Icon="Clock"
-                                    IsSelected="True"/>
-                <NavigationViewItem Content="30 天预报" Icon="Calendar"/>
-                <NavigationViewItem Content="降水">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEB42;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-            </NavigationView.MenuItems>
-
-            <Frame/>
-        </NavigationView>
+        <local:DailyWeatherForecastPage Margin="0,20,0,0"/>
     </StackPanel>
 </Page>

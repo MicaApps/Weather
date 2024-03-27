@@ -83,14 +83,14 @@ public class CacheService
 
     public bool TryQueryCity(string id, out CityInfo info)
     {
+        info = null;
+
         if (cityCaches.ContainsKey(id))
         {
             info = cityCaches[id];
 
             return true;
         }
-
-        info = null;
 
         return false;
     }
@@ -119,14 +119,23 @@ public class CacheService
 
     public bool TryQueryWeather(string location, out WeatherInfo info)
     {
+        info = null;
+
         if (weatherCaches.ContainsKey(location))
         {
-            info = weatherCaches[location].WeatherInfo;
+            var result = weatherCaches[location];
+
+            if (result.IsExpired)
+            {
+                weatherCaches.Remove(location);
+
+                return false;
+            }
+
+            info = result.WeatherInfo;
 
             return true;
         }
-
-        info = null;
 
         return false;
     }
@@ -154,14 +163,20 @@ public class CacheService
 
     public bool TryQueryDailyWeatherForecast(string location, out IEnumerable<WeatherInfo> infos)
     {
+        infos = null;
+
         if (dailyWeatherForecastCaches.ContainsKey(location))
         {
-            infos = dailyWeatherForecastCaches[location].Select(x => x.WeatherInfo);
+            var result = dailyWeatherForecastCaches[location];
+
+            result.RemoveAll(x => x.IsExpired);
+
+            if (result.Any() == false) return false;
+
+            infos = result.Select(x => x.WeatherInfo);
 
             return true;
         }
-
-        infos = null;
 
         return false;
     }

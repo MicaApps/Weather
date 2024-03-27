@@ -95,7 +95,7 @@ public class WeatherQueryer : IWeatherQueryer
     {
         using var http = new HttpClient();
 
-        apiConfig.InitializeWeatherApi().Path = "/weather/30d";
+        apiConfig.InitializeWeatherApi().Path = "/weather/7d";
 
         apiConfig.ApiArguments.InitializeDefaultArguments()
             .AppendArgument("key", apiConfig.Key)
@@ -118,13 +118,13 @@ public class WeatherQueryer : IWeatherQueryer
 
         dynamic json = JObject.Parse(body);
 
-        if ((json.code as string)?.Equals("200") == false) return null;
+        if (((string)json.code).Equals("200") == false) return null;
 
         if (json.daily is null) return null;
 
         var result = new List<WeatherInfo>();
 
-        var updateTime = DateTime.Parse(json.updateTime as string ?? "0000-00-00");
+        var updateTime = JsonSerializer.Deserialize<DateTime>($"\"{json.updateTime}\"");
 
         var refer_sources = new List<string>();
 
@@ -143,16 +143,20 @@ public class WeatherQueryer : IWeatherQueryer
 
         foreach (var item in json.daily)
         {
+            var forecastTime = JsonSerializer.Deserialize<DateTime>($"\"{item.fxDate}\"");
+
+            DateTime GetTime(string x) => DateTime.Parse($"{forecastTime:yyyy-MM-dd} {x}");
+
             var weather = new WeatherInfo()
             {
                 UpdateTime = updateTime,
-                ForecastTime = DateTime.Parse(item.fxDate as string ?? "0000-00-00"),
+                ForecastTime = forecastTime,
                 TextDay = item.textDay,
                 TextNight = item.textNight,
-                Sunrise = item.sunrise is null ? null : DateTime.Parse(item.sunrise as string ?? "00:00"),
-                Sunset = item.sunset is null ? null : DateTime.Parse(item.sunset as string ?? "00:00"),
-                Moonrise = item.moonrise is null ? null : DateTime.Parse(item.moonrise as string ?? "00:00"),
-                Moonset = item.moonset is null ? null : DateTime.Parse(item.moonset as string ?? "00:00"),
+                Sunrise = item.sunrise is null ? null : GetTime(item.sunrise),
+                Sunset = item.sunset is null ? null : GetTime(item.sunset),
+                Moonrise = item.moonrise is null ? null : GetTime(item.moonrise),
+                Moonset = item.moonset is null ? null : GetTime(item.moonset),
                 MoonPhase = item.moonPhase,
                 TemperatureMax = new()
                 {
@@ -179,6 +183,8 @@ public class WeatherQueryer : IWeatherQueryer
                 Cloud = item.cloud ?? double.NaN,
                 UvIndex = item.uvIndex,
             };
+
+            result.Add(weather);
         }
 
         return result;

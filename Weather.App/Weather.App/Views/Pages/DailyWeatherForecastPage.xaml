@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page x:Class="Weather.App.Views.Pages.DailyWeatherForecastPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:Weather.App.Views.Pages"
+      xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:models="using:Weather.Core.Models"
+      xmlns:vm="using:Weather.App.ViewModels.Pages"
+      Background="Transparent"
+      mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:DailyWeatherForecastPageViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
+
+    <Page.Resources>
+        <DataTemplate x:Key="HorizontalBarTemplate" x:DataType="models:WeatherInfo">
+            <Button>
+                <StackPanel Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="{x:Bind TextDay}"/>
+                        <TextBlock Text="{x:Bind TextNight}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="{x:Bind TemperatureMin.Text}"/>
+                        <TextBlock Text="{x:Bind TemperatureMax.Text}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Button>
+        </DataTemplate>
+    </Page.Resources>
+
+    <StackPanel Spacing="20">
+        <StackPanel Orientation="Horizontal" Spacing="20">
+            <TextBlock VerticalAlignment="Center"
+                       Style="{ThemeResource SubtitleTextBlockStyle}"
+                       Text="7 天天气预报"/>
+            <Button VerticalAlignment="Center" Command="{x:Bind ViewModel.RefreshCommand}">
+                <FontIcon FontSize="14" Glyph="&#xE72C;"/>
+            </Button>
+        </StackPanel>
+        <Grid>
+            <!--<lvc:CartesianChart/>-->
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          HorizontalScrollMode="Enabled"
+                          IsVerticalScrollChainingEnabled="False"
+                          VerticalScrollBarVisibility="Disabled"
+                          VerticalScrollMode="Disabled">
+                <ItemsRepeater ItemTemplate="{StaticResource HorizontalBarTemplate}" ItemsSource="{x:Bind ViewModel.DailyWeatherInfos}">
+                    <ItemsRepeater.Layout>
+                        <StackLayout Orientation="Horizontal" Spacing="15"/>
+                    </ItemsRepeater.Layout>
+                </ItemsRepeater>
+            </ScrollViewer>
+        </Grid>
+    </StackPanel>
+</Page>

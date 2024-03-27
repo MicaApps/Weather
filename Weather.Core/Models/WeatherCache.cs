@@ -8,7 +8,7 @@ public class WeatherCache
 
     public DateTime CacheTime { get; set; } = DateTime.Now;
 
-    public DateTime ExpireTime { get; set; } = DateTime.Now.AddMinutes(30);
+    public DateTime ExpireTime { get; set; } = DateTime.Now.AddMinutes(10);
 
     public bool IsExpired => DateTime.Now > ExpireTime;
 
@@ -18,7 +18,7 @@ public class WeatherCache
             WeatherInfo = info;
 
         CacheTime = DateTime.Now;
-        ExpireTime = DateTime.Now.AddMinutes(30);
+        ExpireTime = DateTime.Now.AddMinutes(10);
 
         return this;
     }
