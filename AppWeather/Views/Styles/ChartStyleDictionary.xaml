@@ -9,7 +9,7 @@
           TargetType="Charting:AreaDataPoint">
         <Setter Property="Background">
             <Setter.Value>
-                <LinearGradientBrush x:Key="ChartBackground" StartPoint="0,0" EndPoint="0,1">
+                <LinearGradientBrush x:Name="ChartBackground1" StartPoint="0,0" EndPoint="0,1">
                     <GradientStop Color="#FF000000" Offset="-0.1"/>
                     <GradientStop Color="#00000000" Offset="0.4"/>
                     <GradientStop Color="#00F5F5" Offset="0.7"/>
@@ -25,7 +25,7 @@
             <Setter.Value>
                 <ControlTemplate
                     TargetType="Charting:AreaDataPoint">
-                    <Grid x:Name="Root" Opacity="0" Background="{Binding Theme}" />
+                    <Grid x:Name="Root" Opacity="0" Background="Red" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -34,7 +34,7 @@
           TargetType="Charting:AreaDataPoint">
         <Setter Property="Background">
             <Setter.Value>
-                <LinearGradientBrush x:Key="ChartBackground" StartPoint="0,0" EndPoint="0,1">
+                <LinearGradientBrush x:Name="ChartBackground2" StartPoint="0,0" EndPoint="0,1">
                     <GradientStop Color="#FFFFFFFF" Offset="-0.1"/>
                     <GradientStop Color="#00FFFFFF" Offset="0.4"/>
                     <GradientStop Color="#00F5F5" Offset="0.7"/>
@@ -50,7 +50,7 @@
             <Setter.Value>
                 <ControlTemplate
                     TargetType="Charting:AreaDataPoint">
-                    <Grid x:Name="Root" Opacity="0" Background="{Binding Theme}" />
+                    <Grid x:Name="Root" Opacity="0" Background="Red" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

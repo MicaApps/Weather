@@ -3,9 +3,11 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
+using UnityPlayer;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
+using Windows.Graphics.Display;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.ViewManagement;
@@ -20,6 +22,13 @@ namespace AppWeather
     /// </summary>
     public sealed partial class App : Application
     {
+        private AppCallbacks m_AppCallbacks;
+        public SplashScreen splashScreen;
+        /// <summary>
+        /// Gets the current <see cref="App"/> instance in use
+        /// </summary>
+        public new static App Current => (App)Application.Current;
+
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
         /// 已执行，逻辑上等同于 main() 或 WinMain()。
@@ -28,6 +37,8 @@ namespace AppWeather
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            SetupOrientation();
+            m_AppCallbacks = new AppCallbacks();
         }
 
         /// <summary>
@@ -37,6 +48,8 @@ namespace AppWeather
         /// <param name="e">有关启动请求和过程的详细信息。</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            splashScreen = e.SplashScreen;
+            m_AppCallbacks.SetAppArguments(e.Arguments);
             Frame rootFrame = Window.Current.Content as Frame;
 
             // 不要在窗口已包含内容时重复应用程序初始化，
@@ -143,7 +156,13 @@ namespace AppWeather
                 Window.Current.Activate();
             }
         }
+         
 
+        void SetupOrientation()
+        {
+            DisplayInformation.AutoRotationPreferences = DisplayOrientations.Landscape | DisplayOrientations.LandscapeFlipped | DisplayOrientations.Portrait | DisplayOrientations.PortraitFlipped;
+            // ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
+        }
         /// <summary>
         /// 导航到特定页失败时调用
         /// </summary>

@@ -38,6 +38,7 @@ namespace AppWeather.Models
         public double MinTemp { get; set; }
         public double MaxTemp { get; set; }
         public long TimeStamp { get; set; }
+        public string PlaceId { get; set; }
     }
 
     public class EveryDayWeather

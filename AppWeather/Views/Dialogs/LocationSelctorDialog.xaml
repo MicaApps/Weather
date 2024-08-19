@@ -1,0 +1,41 @@
+﻿<ContentDialog
+    x:Class="AppWeather.Views.Dialogs.LocationSelctorDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AppWeather.Views.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Select your reigon" PrimaryButtonText="Done" CloseButtonText="Cancel" DefaultButton="Primary"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick" CloseButtonClick="ContentDialog_CloseButtonClick">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBox x:Name="TextBox_SearchCity" PlaceholderText="Search.."/>
+
+        <ListView x:Name="ListView_CityList" Height="180" Grid.Row="1" Margin="0,10,0,0">
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <FrameworkElement.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            </Style>
+                        </FrameworkElement.Resources>
+                        <TextBlock Text="City name"/>
+                        <TextBlock Text="City description" Opacity="0.55"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+            <ListViewItem/>
+
+        </ListView>
+
+    </Grid>
+</ContentDialog>

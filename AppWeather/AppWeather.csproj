@@ -119,14 +119,20 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\BindConverter\LocationGridViewContentConverter.cs" />
+    <Compile Include="Models\BindConverter\LocationGridViewHolderConverter.cs" />
     <Compile Include="Models\CityInfo.cs" />
     <Compile Include="Models\JsonHelper.cs" />
+    <Compile Include="Models\ApiWeather.cs" />
     <Compile Include="Models\OpenWeather.cs" />
     <Compile Include="Models\UnitConversion.cs" />
     <Compile Include="Models\WeatherClass.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\LocationPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
+    <Compile Include="Views\Dialogs\LocationSelctorDialog.xaml.cs">
+      <DependentUpon>LocationSelctorDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
@@ -137,9 +143,6 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Sunrise.xaml.cs">
-      <DependentUpon>Sunrise.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
@@ -156,6 +159,7 @@
     <Content Include="Assets\noise_high.png" />
     <Content Include="Assets\Vector 3.svg" />
     <Content Include="Assets\Vector 3_white.svg" />
+    <Content Include="Data\nativePlugins.txt" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -177,6 +181,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\Dialogs\LocationSelctorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -186,10 +194,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Sunrise.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -216,14 +220,26 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.14</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls.Primitives">
+      <Version>7.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.UI.Xaml">
+      <Version>2.8.6</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
       <Version>2.0.1</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
     </PackageReference>
+    <PackageReference Include="SQLite">
+      <Version>3.13.0</Version>
+    </PackageReference>
     <PackageReference Include="Syncfusion.SfGauge.UWP">
       <Version>20.3.0.50</Version>
+    </PackageReference>
+    <PackageReference Include="System.Data.SQLite">
+      <Version>1.0.118</Version>
     </PackageReference>
     <PackageReference Include="Win2D.uwp">
       <Version>1.26.0</Version>
@@ -232,14 +248,26 @@
       <Version>2.3.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Views\Fonts\WeatherColorIcons.ttf" />
+    <None Include="Data\boot.config" />
+    <None Include="Data\globalgamemanagers" />
+    <None Include="Data\globalgamemanagers.assets" />
+    <None Include="Data\globalgamemanagers.assets.resS" />
+    <None Include="Data\il2cpp_data\Metadata\global-metadata.dat" />
+    <None Include="Data\il2cpp_data\Resources\mscorlib.dll-resources.dat" />
+    <None Include="Data\level0" />
+    <None Include="Data\level0.resS" />
+    <None Include="Data\resources.assets" />
+    <None Include="Data\resources.assets.resS" />
+    <None Include="Data\Resources\unity default resources" />
+    <None Include="Data\Resources\unity_builtin_extra" />
+    <None Include="Data\RuntimeInitializeOnLoads.json" />
+    <None Include="Data\ScriptingAssemblies.json" />
+    <None Include="Data\sharedassets0.assets" />
+    <None Include="Data\sharedassets0.assets.resS" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Models\DataBase\city.list.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <Content Include="Views\Fonts\WeatherColorIcons.ttf" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
@@ -252,4 +280,22 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <!-- 以下是Unity部件的设置 -->
+  <ItemGroup>
+    <Reference Include="UnityPlayer">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SolutionDir)Players\UAP\il2cpp\$(Platform)\$(Configuration)\UnityPlayer.winmd</HintPath>
+    </Reference>
+    <Content Include="$(SolutionDir)Players\UAP\il2cpp\$(Platform)\$(Configuration)\baselib.dll" />
+    <Content Include="$(SolutionDir)build\bin\$(Platform)\$(Configuration)\GameAssembly.dll" />
+    <Content Include="$(SolutionDir)build\bin\$(Platform)\$(Configuration)\GameAssembly.pdb" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64' OR '$(Configuration)|$(Platform)'=='Release|x64'">
+    <Content Include="$(SolutionDir)Players\UAP\il2cpp\$(PlatformTarget)\$(Configuration)\WinPixEventRuntime_UAP.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\**">
+      <ExcludeFromResourceIndex>true</ExcludeFromResourceIndex>
+    </Content>
+  </ItemGroup>
 </Project>

@@ -23,8 +23,7 @@ namespace AppWeather
         {
             this.InitializeComponent();
             Window.Current.SetTitleBar(DragGrid);
-            segoeFontFamily = new FontFamily("Segoe MDL2 Assets");
-           
+            segoeFontFamily = new FontFamily("Segoe MDL2 Assets");           
         }
 
         //透明背景与其深浅色转换
@@ -82,10 +81,11 @@ namespace AppWeather
             string prefix = $"ms-appx://{(path.StartsWith('/') ? string.Empty : "/")}";
             return new Uri($"{prefix}{path}");
         }
+         
 
         private void navigationView_Loaded(object sender, RoutedEventArgs e)
         {
-            var homeItem = new NavigationViewItem()
+            var homeItem = new Microsoft.UI.Xaml.Controls.NavigationViewItem()
             {
                 Content = "主页",
                 Icon = new FontIcon()
@@ -96,7 +96,7 @@ namespace AppWeather
                 Tag = "Home",
             };
 
-            var locationItem = new NavigationViewItem()
+            var locationItem = new Microsoft.UI.Xaml.Controls.NavigationViewItem()
             {
                 Content = "城市",
                 Icon = new FontIcon()
@@ -109,38 +109,44 @@ namespace AppWeather
 
             navigationView.MenuItems.Add(homeItem);
             navigationView.MenuItems.Add(locationItem);
-
+            
             navigationView.SelectedItem = homeItem;
 
             frame = new Frame();
             //frame.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-            frame.Content = new HomePage();
 
+
+            frame.Navigate(typeof(HomePage));
+            //frame.Navigate(typeof(LocationPage));
             navigationView.Content = frame;
 
             navigationView.SelectionChanged += NavigationView_SelectionChanged;
         }
 
-        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        private void NavigationView_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
         {
             try
             {
-                if (args.SelectedItem is NavigationViewItem item)
-                {
-
+                if (args.SelectedItem is Microsoft.UI.Xaml.Controls.NavigationViewItem item)
+                { 
                     switch (item.Tag)
                     {
-                        case "Home":                         
-                            frame.Content = new HomePage();
+                        case "Home":
+                            frame.Navigate(typeof(HomePage));
+                            //frame.Content = new HomePage();
                             break;
                         case "Location":
-                            frame.Content = new LocationPage();
+                            frame.Navigate(typeof(LocationPage));
+                            //frame.Content = new LocationPage();
                             break;
                         case "Settings":
-                            frame.Content = new SettingsPage();
+                            frame.Navigate(typeof(SettingsPage));
+                            //frame.Content = new SettingsPage();
                             break;
-                        default:                           
-                            frame.Content = new SettingsPage();
+
+                        default:
+                            frame.Navigate(typeof(LocationPage));
+                            //frame.Content = new SettingsPage();
                             break;
                     }
                 }

@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:AppWeather"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource SystemControlAcrylicWindowBrush}"
     >
@@ -19,7 +19,7 @@
     </Page.Resources>
     
     <Grid>
-        <NavigationView x:Name="navigationView" Loaded="navigationView_Loaded"/>
+        <muxc:NavigationView x:Name="navigationView" Loaded="navigationView_Loaded"/>
         <Grid Height="32" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="32"/>

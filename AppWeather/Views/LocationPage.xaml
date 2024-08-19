@@ -7,7 +7,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core" 
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" 
+    xmlns:bindconverter="using:AppWeather.Models.BindConverter"
     mc:Ignorable="d"
     Background="Transparent">
     <interactivity:Interaction.Behaviors>
@@ -16,9 +18,17 @@
         </core:EventTriggerBehavior>
     </interactivity:Interaction.Behaviors>
 
-    <Grid x:Name="ContentArea" Background="Transparent">
-        <Grid>
-            <GridView
+    <Grid x:Name="ContentArea" Background="Transparent" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="461*"/>
+            <RowDefinition Height="540*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.RowSpan="2">
+            <Grid.Resources>
+                <bindconverter:LocationGridViewContentConverter x:Key="ContentConverter"/>
+                <bindconverter:LocationGridViewHolderConverter x:Key="HolderConverter"/>
+            </Grid.Resources>
+            <!--<GridView
                 x:Name="CityView"
                 ItemsSource="{x:Bind ViewModel.CityWeathers, Mode=TwoWay}"
                 SelectedItem="{x:Bind ViewModel.SelectedCity, Mode=TwoWay}"
@@ -64,16 +74,57 @@
                         </Grid>
                     </DataTemplate>
                 </GridView.ItemTemplate>
-            </GridView>
+            </GridView>-->
+            <!--以下控件中的样式必须引用WinUI2后才能使用-->
+            <controls:AdaptiveGridView Name="CityView" SelectionMode="None" Margin="8,80,8,8" ItemHeight="120" DesiredWidth="270"  ItemsSource="{x:Bind ViewModel.CityWeathers,Mode=OneWay}" RightTapped="{x:Bind ViewModel.CityView_RightTapped}" IsRightTapEnabled="True" >
+                <controls:AdaptiveGridView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Height="120"  >
+                            <Grid CornerRadius="0" HorizontalAlignment="Left" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Width="120" Visibility="{Binding CityName,Converter={StaticResource HolderConverter}}">
+                                <FontIcon FontSize="30" FontFamily="Segoe Fluent Icons" Glyph="&#xE710;" />
+                            </Grid>
+                            <Grid CornerRadius="0" Padding="8" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Visibility="{Binding CityName,Converter={StaticResource ContentConverter}}" PointerEntered="Grid_PointerEntered">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Temp}" Style="{ThemeResource TitleLargeTextBlockStyle}"/>
+                                    <TextBlock Text="°C" Style="{ThemeResource TitleLargeTextBlockStyle}"/>
+                                </StackPanel>
+                                <TextBlock Text="{Binding CityName}" Margin="0,-6,0,0" Grid.Row="1" Foreground="Gray"/>
+                                <TextBlock Text="{Binding State}" Grid.Row="2"/>
+                                <!--To-DO:Icon-->
+                                <FontIcon Grid.Row="2" FontFamily="{ThemeResource SymbolThemeFontFamily}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Glyph="&#xE753;" />
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </controls:AdaptiveGridView.ItemTemplate>
+                <controls:AdaptiveGridView.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="设为主页" Command="{x:Bind ViewModel.SetAsMainCommand}">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Grid.Row="2" FontFamily="{ThemeResource SymbolThemeFontFamily}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Glyph="&#xE80F;" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem Text="删除当前" Icon="Delete" Command="{x:Bind ViewModel.DeleteCommand}">
+
+                        </MenuFlyoutItem>
+                    </MenuFlyout>
+                </controls:AdaptiveGridView.ContextFlyout>
+            </controls:AdaptiveGridView>
             <ProgressRing x:Name="progressRing" Height="50" Width="50" 
                           IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" Visibility="{x:Bind ViewModel.ProgressRingVisbility, Mode=OneWay}"/>
         </Grid>
         <CommandBar DefaultLabelPosition="Right" IsOpen="True" Background="Transparent">
-            <AppBarButton Icon="Send" x:Name="SetAsMainBtn" Command="{x:Bind ViewModel.SetAsMainCommand}"/>
-            <AppBarButton Icon="Clear" x:Uid="abb_clear" x:Name="abb_Clear" Command="{x:Bind ViewModel.ClearCommand}"/>
-            <AppBarButton Icon="Delete" x:Uid="abb_delete" x:Name="abb_Delete" Command="{x:Bind ViewModel.DeleteCommand}"/>
-            <AppBarButton Icon="Refresh" x:Uid="abb_refresh" x:Name="abb_refresh" Command="{x:Bind ViewModel.RefreshCommand}"/>
-            <AppBarButton Icon="Add" x:Uid="abb_add" x:Name="abb_add" Command="{x:Bind ViewModel.AddCommand}" CommandParameter="{Binding ElementName=locationPage}"/>
+            
+            <AppBarButton Icon="Send" x:Name="SetAsMainBtn" Command="{x:Bind ViewModel.SetAsMainCommand}" Visibility="Collapsed"/>
+            
+            <AppBarButton Icon="Delete" Label="Delete All" x:Uid="abb_clear" x:Name="abb_Clear" Command="{x:Bind ViewModel.ClearCommand}"/>
+            <AppBarButton Icon="Delete" Label="Delete" x:Uid="abb_delete" x:Name="abb_Delete" Command="{x:Bind ViewModel.DeleteCommand}"/>
+            <AppBarButton Icon="Refresh" Label="Refresh" x:Uid="abb_refresh" x:Name="abb_refresh" Command="{x:Bind ViewModel.RefreshCommand}"/>
+            <AppBarButton Icon="Add" Label="Add City" x:Uid="abb_add" x:Name="abb_add" Command="{x:Bind ViewModel.AddCommand}" CommandParameter="{Binding ElementName=locationPage}"/>
         </CommandBar>
     </Grid>
 </Page>

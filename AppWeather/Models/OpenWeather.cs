@@ -27,7 +27,7 @@ namespace AppWeather.Models
                 cityInfos = JsonHelper.DeserializeJsonToList<CityInfo>(citylistjson);
 
             CityInfo cityinfo = cityInfos.Where(city => city.name.Equals(cityName)).FirstOrDefault();
-
+            if(cityinfo == null)throw new ArgumentNullException("GetWeather:未查询到有效的城市信息！");
             string cityID = ((int)cityinfo.id).ToString();
             string url = "http://api.openweathermap.org/data/2.5/forecast?id=" + cityID + "&appid=" + appid;
 

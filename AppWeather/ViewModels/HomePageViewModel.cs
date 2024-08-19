@@ -1,4 +1,4 @@
-﻿using AppWeather.Models;
+using AppWeather.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 using System.Xml.Linq;
 using Windows.Storage;
@@ -18,10 +19,13 @@ namespace AppWeather.ViewModels
 {
     public class HomePageViewModel : ObservableObject
     {
-        public string cityName = "Shanghai";
+        //public string cityName = "Shanghai";
         public List<WeatherClass> weathers;
         public BackgroundWorker bgWorker = null;
         public ObservableCollection<EveryDayWeather> everyDayWeathers = new ObservableCollection<EveryDayWeather>();
+        public bool IsInitialized { get; set; }
+
+
 
         //Light or Dark
         private string _theme;
@@ -218,10 +222,14 @@ namespace AppWeather.ViewModels
             set => SetProperty(ref _hourWeatherList, value);
         }
 
+        ApplicationDataContainer GetLocationSettings { get { return Windows.Storage.ApplicationData.Current.LocalSettings; } }
+ 
+
         public ICommand RefreshCommand { get; }
 
         public HomePageViewModel()
         {
+            LocationPageViewModel.RefreshHomePage += Refresh;
             RefreshCommand = new RelayCommand(Refresh);
 
             var DefaultTheme = new Windows.UI.ViewManagement.UISettings();
@@ -276,11 +284,13 @@ namespace AppWeather.ViewModels
             // load a setting that is local to the device
             String homeCity = localSettings.Values["Location"] as string;
 
-            if (!String.IsNullOrEmpty(homeCity))
-                cityName = homeCity;
-            else
-                //set default value
-                cityName = "Shanghai";
+            //if (!String.IsNullOrEmpty(homeCity))
+            //    cityName = homeCity;
+            //else
+            //    //set default value
+            //    cityName = "Shanghai";
+
+
 
             bgWorker = new BackgroundWorker();
             bgWorker.DoWork += refreshWeatherBW_DoWork;//工作线程回调，将要执行的代码放在此函数里    
@@ -290,9 +300,21 @@ namespace AppWeather.ViewModels
             bgWorker.RunWorkerAsync();
         }
 
+        public void Initialize()
+        {
+            // Initialization code...
+            Refresh();
+            IsInitialized = true;
+        }
+
         private void refreshWeatherBW_DoWork(object sender, DoWorkEventArgs e)
         {
-            weathers = OpenWeather.GetWeathers(cityName);
+            //ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            //localSettings.Values["LocationPlaceId"] = WeatherAdapter.GetLocationInformation("漠河市").location[0].placeId; 
+            var placeId = GetLocationSettings.Values["LocationPlaceId"] as string;
+            //weathers = OpenWeather.GetWeathers(cityName);
+            weathers = WeatherAdapter.GetWeathers(placeId);
+            
         }
 
         private void refreshWeatherBW_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -306,9 +328,11 @@ namespace AppWeather.ViewModels
                 {
                     //获取最接近当前时间的天气信息
                     WeatherClass currentWeather = weathers.OrderBy(x => Math.Abs((long)x.TimeStamp - time)).First(); //weathers[index];
-                    LocationName = cityName;
+                    //LocationName = cityName;
+                    LocationName = weathers.FirstOrDefault().CityName;
                     Weather = currentWeather.State;
                     Tip = "";
+                    //？
                     if (Weather.Equals("Clouds"))
                     {
                         CurrentWeatherImg = "../Images/Cloud.png";
@@ -321,14 +345,24 @@ namespace AppWeather.ViewModels
                     {
                         CurrentWeatherImg = "../Images/Clear.png";
                     }
+
+                    if(Weather.Contains("雨")) CurrentWeatherImg = "../Images/Rainny.png";
+                    else if(Weather.Contains("晴朗")) CurrentWeatherImg = "../Images/Clear.png";
+                    else CurrentWeatherImg = "../Images/Cloud.png";
+
+
                     //当前温度
                     double temp = double.Parse(currentWeather.Temp);
                     CurrentTemp = temp.ToString("0.0") + "℃";
 
-                    FeelsLike = currentWeather.FeelsLike.ToString("0.0") + "℃";
-                    //今日最低最高温度
-                    double todayMinTemp = weathers.Where(i => i.Time.Split(" ")[0].Equals(currentDate)).Min(k => k.MinTemp);
-                    double todayMaxTemp = weathers.Where(i => i.Time.Split(" ")[0].Equals(currentDate)).Max(k => k.MaxTemp);
+                    FeelsLike = currentWeather.FeelsLike.ToString("0.0") + "℃";//体感温度
+                    //今日最低最高温度 
+                    double todayMinTemp;//= weathers.Where(i => DateTime.Parse(i.Time).Date==DateTime.Today.Date).Min(k => k.MinTemp);
+                    double todayMaxTemp;//= weathers.Where(i => DateTime.Parse(i.Time).Date == DateTime.Today.Date).Max(k => k.MaxTemp);
+
+                    //获取24小时内的最低温度和最高温度
+                    todayMinTemp = weathers.OrderBy(k => k.Time).Take(24).Min(j=>j.MinTemp);
+                    todayMaxTemp = weathers.OrderBy(k => k  .Time).Take(24).Max(j => j.MaxTemp);
                     TodayTemperature = todayMinTemp.ToString("0.0") + "℃-" + todayMaxTemp.ToString("0.0") + "℃";
 
                     Humidity = currentWeather.Humidity.ToString();
@@ -344,11 +378,15 @@ namespace AppWeather.ViewModels
                     Sunset = startTime.AddSeconds(currentWeather.Sunset).ToLongTimeString().ToString();
 
                     everyDayWeathers.Clear();
-                    for (int i = 0; i < 6; i++)
+
+                    var tMinTemps = weathers.GroupBy(a => DateTime.Parse(a.Time).Date).Select(b => b.Min(c => c.MinTemp)).ToArray();
+                    var tMaxTemps = weathers.GroupBy(a => DateTime.Parse(a.Time).Date).Select(b => b.Max(c => c.MaxTemp)).ToArray();
+                    //显示6日天气
+                    for (int i = 1; i < 9; i++)
                     {
-                        string ttime = DateTime.Now.AddDays(i).ToString("u");
-                        string tDate = ttime.Split(' ')[0];
-                        string weather = weathers.Where(k => k.Time.Split(" ")[0].Equals(tDate)).First().State;
+                        //string ttime = DateTime.Now.AddDays(i).ToString("u");
+                        //string tDate = ttime.Split(' ')[0];
+                        string weather = weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).FirstOrDefault().State;
                         string img = "\uE9BD";
                         if (weather.Equals("Clouds"))
                         {
@@ -363,8 +401,15 @@ namespace AppWeather.ViewModels
                             img = "\uE9BD";
                         }
 
-                        double tMinTemp = weathers.Where(k => k.Time.Split(" ")[0].Equals(tDate)).Min(k => k.MinTemp);
-                        double tMaxTemp = weathers.Where(j => j.Time.Split(" ")[0].Equals(tDate)).Max(k => k.MaxTemp);
+                        if(weather.Contains("雨")) img = "\uE9E2";
+                        else if(weather.Contains("晴朗")) img = "\uE9BD";
+                        else img = "\uE9BF";
+
+                        double tMinTemp = weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).Min(k => k.MinTemp);
+                        double tMaxTemp = weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).Max(k => k.MaxTemp);
+
+                        tMinTemp = tMinTemps[i];
+                        tMaxTemp = tMaxTemps[i];
                         everyDayWeathers.Add(new EveryDayWeather { Img = img, Weather = weather, MinTemp = tMinTemp.ToString("0.0"), MaxTemp = tMaxTemp.ToString("0.0") });
                     }
 

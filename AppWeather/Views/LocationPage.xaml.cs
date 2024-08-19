@@ -1,6 +1,7 @@
 ﻿using AppWeather.Models;
 using AppWeather.ViewModels;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,9 +38,20 @@ namespace AppWeather.Views
         {
             this.InitializeComponent();
 
+
+
             DataContext = Ioc.Default.GetRequiredService<LocationPageViewModel>();
 
         }
 
+
+
+        private void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            var vm = DataContext as LocationPageViewModel;
+            var grid  = sender as Grid;
+            var item = grid.DataContext;
+            vm.SelectedCity = item as SimpleWeatherClass;
+        }
     }
 }
