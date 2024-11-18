@@ -89,6 +89,10 @@
                                     <RowDefinition Height="auto"/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="{Binding Temp}" Style="{ThemeResource TitleLargeTextBlockStyle}"/>
                                     <TextBlock Text="°C" Style="{ThemeResource TitleLargeTextBlockStyle}"/>
@@ -96,7 +100,8 @@
                                 <TextBlock Text="{Binding CityName}" Margin="0,-6,0,0" Grid.Row="1" Foreground="Gray"/>
                                 <TextBlock Text="{Binding State}" Grid.Row="2"/>
                                 <!--To-DO:Icon-->
-                                <FontIcon Grid.Row="2" FontFamily="{ThemeResource SymbolThemeFontFamily}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Glyph="&#xE753;" />
+                                <!--<FontIcon Grid.Row="2" FontFamily="{ThemeResource SymbolThemeFontFamily}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Glyph="&#xE753;" />-->
+                                <Image Source="{Binding IconImagePath}" Grid.Column="1" Width="50" Height="50"/>
                             </Grid>
                         </Grid>
                     </DataTemplate>

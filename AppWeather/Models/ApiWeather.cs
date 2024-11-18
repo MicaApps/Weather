@@ -18,11 +18,15 @@ namespace AppWeather.Models
         public static SearchLocationResponse GetLocationInformation(string cityName)
         {
             string api = $"v3/location/searchflat?query={cityName}&language={CultureInfo.CurrentCulture.Name}&apiKey=793db2b6128c4bc2bdb2b6128c0bc230&format=json";
-            var responseString = client.GetStringAsync(api).GetAwaiter().GetResult();
-            var ret = JsonConvert.DeserializeObject<SearchLocationResponse>(responseString);
-            //var placeId=ret.location[0].placeId;
-            //placeId.Dump();
-            return ret;
+            var response = client.GetAsync(api).GetAwaiter().GetResult();
+            if(response.IsSuccessStatusCode)
+            {
+                var responseString = response.Content.ReadAsStringAsync().Result;
+                var ret = JsonConvert.DeserializeObject<SearchLocationResponse>(responseString);
+
+                return ret;
+            } 
+            return null;
         }
 
         public static SearchLocationResponse GetLocationInformation(string cityName, string language)
@@ -33,6 +37,30 @@ namespace AppWeather.Models
             //var placeId=ret.location[0].placeId;
             //placeId.Dump();
             return ret;
+        }
+
+        public static V3WxObservationsCurrent GetCurrentWeater(string placeId)
+        {
+            //_systemLanguage = CultureInfo.CurrentCulture.Name; 
+            string api = "v2/aggcommon/v3-wx-observations-current;v3-wx-forecast-hourly-10day;v3-wx-forecast-daily-10day;v3-location-point;v2idxDrySkinDaypart10;v2idxWateringDaypart10;v2idxPollenDaypart10;v2idxRunDaypart10;v2idxDriveDaypart10?format=json&placeid="
+                    + placeId
+                    + "&units=" + "m" //Enum.GetName(typeof(WetUnits),0);
+                    + "&language=" +
+                    "zh-cn" + "&apiKey=793db2b6128c4bc2bdb2b6128c0bc230";
+
+            var responseString = client.GetStringAsync(api).GetAwaiter().GetResult();
+            return JsonConvert.DeserializeObject<RootV3Response>(responseString).v3wxobservationscurrent;
+        }
+
+        public static V3WxObservationsCurrent GetCurrentWeater(string placeId,string Language)
+        {
+            string api = "v2/aggcommon/v3-wx-observations-current;v3-wx-forecast-hourly-10day;v3-wx-forecast-daily-10day;v3-location-point;v2idxDrySkinDaypart10;v2idxWateringDaypart10;v2idxPollenDaypart10;v2idxRunDaypart10;v2idxDriveDaypart10?format=json&placeid="
+                    + placeId
+                    + "&units=" + "m" //Enum.GetName(typeof(WetUnits),0);
+                    + "&language=" +
+                    Language + "&apiKey=793db2b6128c4bc2bdb2b6128c0bc230";
+            var responseString = client.GetStringAsync(api).GetAwaiter().GetResult();
+            return JsonConvert.DeserializeObject<RootV3Response>(responseString).v3wxobservationscurrent;
         }
 
         public static RootV3Response GetWeater(string placeId)
@@ -62,8 +90,8 @@ namespace AppWeather.Models
             var v3Response = GetWeater(placeId);
             //v3Response.Dump();
             //v3Response.v3locationpoint.LocationV3.country +"-"+ v3Response.v3locationpoint.LocationV3.adminDistrict +"-"+ 
-
-            return new SimpleWeatherClass() { CityName = v3Response.v3locationpoint.LocationV3.displayName, Temp = v3Response.v3wxobservationscurrent.temperature, State = v3Response.v3wxobservationscurrent.wxPhraseLong,PlaceId =placeId };
+            //$"/WeatherIcons/{.IconImagePath}.png"
+            return new SimpleWeatherClass() { CityName = v3Response.v3locationpoint.LocationV3.displayName, Temp = v3Response.v3wxobservationscurrent.temperature, State = v3Response.v3wxobservationscurrent.wxPhraseLong,PlaceId =placeId ,IconImagePath= $"/WeatherIcons/{v3Response.v3wxobservationscurrent.iconCode}.png" };
         }
 
         //获取详细天气数据
@@ -99,6 +127,12 @@ namespace AppWeather.Models
                 w.TimeStamp = hourly.validTimeUtc[i];//时间戳
                 w.Sunrise =(long) v3.v3wxforecastdaily10day.sunriseTimeUtc[i/24];//日出时间
                 w.Sunset = (long)v3.v3wxforecastdaily10day.sunsetTimeUtc[i/24];//日落时间
+                w.UVDescription = daily.daypart[0].uvDescription[i/24+1]; 
+
+                w.UvIndex = daily.daypart[0].uvIndex[i/24+0]??5;
+
+                w.IconCode =daily.daypart[0].iconCode[i/24+1]??0;
+
 
                 weathers.Add(w);
 

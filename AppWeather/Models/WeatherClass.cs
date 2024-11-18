@@ -28,6 +28,12 @@ namespace AppWeather.Models
         public string Time { get; set; }
         public long TimeStamp { get; set; }
 
+        public string UVDescription {  get; set; }
+
+        public int UvIndex { get; set; }
+
+        public int IconCode {  get; set; }
+
     }
 
     public class SimpleWeatherClass
@@ -39,6 +45,11 @@ namespace AppWeather.Models
         public double MaxTemp { get; set; }
         public long TimeStamp { get; set; }
         public string PlaceId { get; set; }
+
+        /// <summary>
+        /// 此处应当已经被转换为可绑定的路径
+        /// </summary>
+        public string IconImagePath { get; set; }
     }
 
     public class EveryDayWeather

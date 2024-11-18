@@ -28,22 +28,72 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="./Styles/ChartStyleDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
         </ResourceDictionary>
+
+        <!--<Style x:Key="SliderWithTicks" TargetType="Slider">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            --><!-- Slider itself --><!--
+                            <Slider Grid.Row="0" Background="Transparent" 
+                                Minimum="{TemplateBinding Minimum}" 
+                                Maximum="{TemplateBinding Maximum}" 
+                                Value="{TemplateBinding Value}" />
+
+                            --><!-- Ticks ItemsControl --><!--
+                            <ItemsControl Grid.Row="1" Margin="0,20,0,0">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Rectangle Width="2" Fill="Gray" 
+                                               HorizontalAlignment="Center" 
+                                               Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Slider}}, Path=ActualHeight}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style TargetType="ContentPresenter">
+                                        <Setter Property="LayoutTransform">
+                                            <Setter.Value>
+                                                <TranslateTransform X="{Binding Path=Value, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Slider}}, Converter={StaticResource TickToTranslateConverter}}" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                                <ItemsControl.ItemsSource>
+                                    <local:TicksSource Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" />
+                                </ItemsControl.ItemsSource>
+                            </ItemsControl>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <local:TicksConverter x:Key="TickToTranslateConverter" />--> 
     </Page.Resources>
 
     <Grid x:Name="ContentArea" Margin="0,0,0,0">
         <ScrollViewer x:Name="PageScrollViewer">
             <Grid Background="Transparent">
-                <Grid Height="1800">
-                    <Grid Width="700" Height="500" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 60 -220 0">
-                        <SwapChainPanel x:Name="m_DXSwapChainPanel">
+                <Grid Height="1800" Background="Transparent">
+                    <Grid Background="Transparent" Width="700" Height="500" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 60 -220 0">
+                        <SwapChainPanel  x:Name="m_DXSwapChainPanel">
                             <Grid x:Name="m_ExtendedSplashGrid" Background="Transparent">
                                 <Image
-x:Name="m_ExtendedSplashImage"
-HorizontalAlignment="Center"
-VerticalAlignment="Center"
-Source="Assets/SplashScreen.png" />
+                                    x:Name="m_ExtendedSplashImage"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Source="Assets/SplashScreen.png" />
                             </Grid>
                         </SwapChainPanel>
                     </Grid>
@@ -114,12 +164,16 @@ Source="Assets/SplashScreen.png" />
                                                 <RowDefinition Height="20" />
                                                 <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
-                                            <TextBlock
+                                            <Image Source="{Binding Img,Mode=OneWay}" 
+                                                   Height="32"
+                                                   Width="32"
+                                                   />
+                                            <!--<TextBlock
                                                 Grid.Row="0"
                                                 FontFamily="{StaticResource WeatherIconFont}"
                                                 FontSize="22"
                                                 Foreground="Red"
-                                                Text="{Binding Img, Mode=OneWay}" />
+                                                Text="{Binding Img, Mode=OneWay}" />-->
                                             <TextBlock Grid.Row="1" Text="{Binding Weather, Mode=OneWay}" />
                                             <StackPanel Grid.Row="2" Orientation="Horizontal">
                                                 <TextBlock FontWeight="Bold" Text="{Binding MinTemp, Mode=OneWay}" />
@@ -215,7 +269,7 @@ Source="Assets/SplashScreen.png" />
                                     VerticalAlignment="Top"
                                     Background="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}" />
                                 <StackPanel Margin="0,10,0,0">
-                                    <TextBlock FontWeight="Bold" Text="Fills Like" />
+                                    <TextBlock FontWeight="Bold" Text="Feels Like" />
                                     <TextBlock
                                         FontSize="40"
                                         FontWeight="Bold"
@@ -414,12 +468,13 @@ Source="Assets/SplashScreen.png" />
                                 Margin="5,0,5,0"
                                 Background="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}" />
 
+                            <!--  以下是3个文本标签  -->
                             <StackPanel
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 Margin="0,10,0,0">
                                 <TextBlock>
-                                    <Run FontWeight="Bold" Text="Fills Like" />
+                                    <Run FontWeight="Bold" Text="Wind" />
 
                                 </TextBlock>
                                 <!--  调节用  -->
@@ -432,7 +487,7 @@ Source="Assets/SplashScreen.png" />
                                 Grid.Column="1"
                                 Margin="0,10,0,0">
                                 <TextBlock>
-                                    <Run FontWeight="Bold" Text="Fills Like" />
+                                    <Run FontWeight="Bold" Text="Pressure" />
                                 </TextBlock>
                             </StackPanel>
 
@@ -441,7 +496,7 @@ Source="Assets/SplashScreen.png" />
                                 Grid.Column="2"
                                 Margin="0,10,0,0">
                                 <TextBlock>
-                                    <Run FontWeight="Bold" Text="Fills Like" />
+                                    <Run FontWeight="Bold" Text="UV Modirate" />
                                 </TextBlock>
                             </StackPanel>
 
@@ -455,7 +510,7 @@ Source="Assets/SplashScreen.png" />
                                 <Grid.Resources>
                                     <local:ValueConverter x:Key="ValueConverter" />
                                 </Grid.Resources>
-                                <gauge:SfCircularGauge
+                                <!--<gauge:SfCircularGauge
                                     x:Name="gauge"
                                     Width="200"
                                     Height="200"
@@ -540,7 +595,7 @@ Source="Assets/SplashScreen.png" />
                                                     Value="{Binding WindDegree1, Mode=TwoWay}" />
                                             </gauge:CircularScale.Pointers>
 
-                                            <!--<gauge:CircularScale.Pointers>
+                                            --><!--<gauge:CircularScale.Pointers>
                                                 <gauge:CircularPointer x:Name="arrowPointer"
                                                PointerType="NeedlePointer"
                                                Value="{Binding WindDegree, Mode=TwoWay}"
@@ -561,10 +616,10 @@ Source="Assets/SplashScreen.png" />
                                                PointerCapStroke="Transparent"
                                                NeedlePointerStroke="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}"
                                                NeedlePointerStrokeThickness="10"/>
-                                            </gauge:CircularScale.Pointers>-->
+                                            </gauge:CircularScale.Pointers>--><!--
                                         </gauge:CircularScale>
                                     </gauge:SfCircularGauge.Scales>
-                                </gauge:SfCircularGauge>
+                                </gauge:SfCircularGauge>-->
                             </Grid>
 
                             <!--  气压计  -->
@@ -572,9 +627,9 @@ Source="Assets/SplashScreen.png" />
                                 Grid.Row="2"
                                 Grid.Column="1"
                                 Margin="20,0,0,20">
-                                <gauge:SfCircularGauge Width="210" Height="210">
+                                <!--<gauge:SfCircularGauge Width="210" Height="210">
                                     <gauge:SfCircularGauge.Scales>
-                                        <!--  Range指针  -->
+                                        --><!--  Range指针  --><!--
                                         <gauge:CircularScale
                                             EndValue="2000"
                                             LabelStroke="Transparent"
@@ -595,7 +650,7 @@ Source="Assets/SplashScreen.png" />
                                                     Value="1000" />
                                             </gauge:CircularScale.Pointers>
                                         </gauge:CircularScale>
-                                        <!--  渐变色Needle指针  -->
+                                        --><!--  渐变色Needle指针  --><!--
                                         <gauge:CircularScale
                                             EndValue="2000"
                                             LabelStroke="Transparent"
@@ -607,7 +662,7 @@ Source="Assets/SplashScreen.png" />
                                             StartValue="0"
                                             SweepAngle="2000"
                                             TickStroke="Transparent">
-                                            <gauge:CircularScale.Pointers>
+                                            --><!--<gauge:CircularScale.Pointers>
                                                 <gauge:CircularPointer
                                                     KeyTipHorizontalOffset="3"
                                                     NeedleLengthFactor="0.95"
@@ -624,10 +679,10 @@ Source="Assets/SplashScreen.png" />
                                                         </LinearGradientBrush>
                                                     </gauge:CircularPointer.NeedlePointerStroke>
                                                 </gauge:CircularPointer>
-                                            </gauge:CircularScale.Pointers>
+                                            </gauge:CircularScale.Pointers>--><!--
                                         </gauge:CircularScale>
                                     </gauge:SfCircularGauge.Scales>
-                                </gauge:SfCircularGauge>
+                                </gauge:SfCircularGauge>-->
                             </Grid>
                             <!--<Frame Grid.Row="2"  Grid.Column="2" x:Name="AgaueFrame4" Margin="20,0,0,20">
                             </Frame>-->
@@ -646,14 +701,26 @@ Source="Assets/SplashScreen.png" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
 
-                            <StackPanel
+                            <!--<StackPanel
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 Margin="0,10,0,0">
                                 <TextBlock>
-                                    <Run FontWeight="Bold" Text="Fills Like" />
+                                    <Run FontWeight="Bold" Text="Fills Like?4" />
                                 </TextBlock>
-                            </StackPanel>
+                            </StackPanel>-->
+                            
+                            <!--显示外圆-->
+                            <Grid
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Margin="20,0,0,20">
+                                <Image
+                                    Width="200"
+                                    Height="200"
+                                    Source="{x:Bind ViewModel.Ellipse1, Mode=TwoWay}"
+                                    Stretch="UniformToFill" />
+                            </Grid>
 
                             <Grid
                                 Grid.Row="2"
@@ -666,18 +733,54 @@ Source="Assets/SplashScreen.png" />
                                     Stretch="UniformToFill" />
                             </Grid>
 
-                            <Grid
+                            <!--<Grid
                                 Grid.Row="2"
-                                Grid.Column="0"
+                                Grid.Column="2"
                                 Margin="20,0,0,20">
                                 <Image
                                     Width="200"
                                     Height="200"
-                                    Source="{x:Bind ViewModel.Ellipse2, Mode=TwoWay}"
+                                    Source="{x:Bind ViewModel.Ellipse1, Mode=TwoWay}"
                                     Stretch="UniformToFill" />
-                            </Grid>
+                            </Grid>-->
 
-                            <!--  透明剪裁  -->
+                            <!--  风向 透明剪裁 第三行第二列  -->
+                            <Grid
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Margin="20,0,0,20">
+
+                                <Polygon
+                                    Width="200"
+                                    Height="200"
+                                    Fill="{ThemeResource SystemControlAcrylicWindowBrush}"
+                                    Points="333.2,412.8 547.4,469.8 542.6,490.2 490.7,473.8 329,430.7 486,587.1 471.7,602.4 435,562.3 316.5,444.1 374.2,658.1 354.2,664.1 342.4,611 297.8,445.2 253.7,610.5 241.5,664.3 221.9,659 279.1,444.1 161.3,562.2 123.8,602.7 109.6,588.2 266.6,430.7 105.5,474.1 52.8,490.4 47.7,470.8 262.4,412.9 101.2,369.9 47.4,357.7 52.8,338.1 267.7,395.4 149.6,277.5 109.1,240.1 123.5,225.8 281,382.8 237.7,221.7 221.3,169 241,163.9 297.7,374.3 353.6,164.4 373.9,169.2 357.6,221 314.5,382.7 470.9,225.8 486.1,240 446.1,276.8 327.9,395.3 541.8,337.6 547.9,357.5 494.8,369.3"
+                                    Stretch="UniformToFill" />
+                                <Path Data="M0,0V513H513V0H0ZM256.14,512.5C114.75,512.5,.14,397.88,.14,256.5S114.75,.5,256.14,.5s256,114.62,256,256-114.62,256-256,256Z" Stretch="UniformToFill" Width="200" Height="200"
+                                    Fill="{ThemeResource SystemControlAcrylicWindowBrush}"/>
+                                <Ellipse
+                                    Width="156"
+                                    Height="156"
+                                    Fill="{ThemeResource SystemControlAcrylicWindowBrush}" />
+
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Path Fill="Red" Width="40" Height="40" Stretch="Fill" UseLayoutRounding="True" RenderTransformOrigin="0.5,0.5"
+                                          Data="m 3.5 0 4 0 0 8 3 0 -5 5 -5 -5 3 0 z" >
+                                        
+                                        <Path.RenderTransform>
+                                            <RotateTransform Angle="{x:Bind ViewModel.WindDegree,Mode=TwoWay}"/>                                                                                       
+                                        </Path.RenderTransform>                                          
+                                    </Path>
+                                    <TextBlock
+                                        FontSize="35"
+                                        FontWeight="Black"
+                                        Text="{x:Bind ViewModel.WindDegree, Mode=TwoWay}"
+                                        TextAlignment="Center" />
+                                </StackPanel>
+                            </Grid>
+                        
+
+                        <!--  气压 透明剪裁 第三行第二列  -->
                             <Grid
                                 Grid.Row="2"
                                 Grid.Column="1"
@@ -689,8 +792,8 @@ Source="Assets/SplashScreen.png" />
                                     Fill="{ThemeResource SystemControlAcrylicWindowBrush}"
                                     Points="333.2,412.8 547.4,469.8 542.6,490.2 490.7,473.8 329,430.7 486,587.1 471.7,602.4 435,562.3 316.5,444.1 374.2,658.1 354.2,664.1 342.4,611 297.8,445.2 253.7,610.5 241.5,664.3 221.9,659 279.1,444.1 161.3,562.2 123.8,602.7 109.6,588.2 266.6,430.7 105.5,474.1 52.8,490.4 47.7,470.8 262.4,412.9 101.2,369.9 47.4,357.7 52.8,338.1 267.7,395.4 149.6,277.5 109.1,240.1 123.5,225.8 281,382.8 237.7,221.7 221.3,169 241,163.9 297.7,374.3 353.6,164.4 373.9,169.2 357.6,221 314.5,382.7 470.9,225.8 486.1,240 446.1,276.8 327.9,395.3 541.8,337.6 547.9,357.5 494.8,369.3"
                                     Stretch="UniformToFill" />
-                                <!--<Path Data="M0,0V513H513V0H0ZM256.14,512.5C114.75,512.5,.14,397.88,.14,256.5S114.75,.5,256.14,.5s256,114.62,256,256-114.62,256-256,256Z" Stretch="UniformToFill" Width="200" Height="200"
-                                         Fill="{ThemeResource SystemControlAcrylicWindowBrush}"/>-->
+                                <Path Data="M0,0V513H513V0H0ZM256.14,512.5C114.75,512.5,.14,397.88,.14,256.5S114.75,.5,256.14,.5s256,114.62,256,256-114.62,256-256,256Z" Stretch="UniformToFill" Width="200" Height="200"
+                                         Fill="{ThemeResource SystemControlAcrylicWindowBrush}"/>
                                 <Ellipse
                                     Width="156"
                                     Height="156"
@@ -707,7 +810,7 @@ Source="Assets/SplashScreen.png" />
                             </Grid>
                         </Grid>
 
-                        <!--  文本，风向，气压计2  -->
+                        <!-- 未用 定义行数和列数 文本，风向，气压计2  -->
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -736,12 +839,12 @@ Source="Assets/SplashScreen.png" />
                                 Margin="5,0,5,0"
                                 Background="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}" />
 
-                            <StackPanel
+                            <!--<StackPanel
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 Margin="0,10,0,0">
                                 <TextBlock>
-                                    <Run FontWeight="Bold" Text="Fills Like" />
+                                    <Run FontWeight="Bold" Text="Fills Like?5" />
                                 </TextBlock>
                             </StackPanel>
 
@@ -750,7 +853,7 @@ Source="Assets/SplashScreen.png" />
                                 Grid.Column="1"
                                 Margin="0,10,0,0">
                                 <TextBlock>
-                                    <Run FontWeight="Bold" Text="Fills Like" />
+                                    <Run FontWeight="Bold" Text="Fills Like?6" />
                                 </TextBlock>
                             </StackPanel>
 
@@ -759,18 +862,19 @@ Source="Assets/SplashScreen.png" />
                                 Grid.Column="2"
                                 Margin="0,10,0,0">
                                 <TextBlock>
-                                    <Run FontWeight="Bold" Text="Fills Like" />
+                                    <Run FontWeight="Bold" Text="Fills Like?7" />
                                 </TextBlock>
-                            </StackPanel>
+                            </StackPanel>-->
+                            
 
-                            <!--  气压计  -->
+                            <!--  未用  -->
                             <Grid
                                 Grid.Row="2"
-                                Grid.Column="1"
+                                Grid.Column="0"
                                 Margin="20,0,0,20">
-                                <gauge:SfCircularGauge Width="210" Height="210">
+                                <!--<gauge:SfCircularGauge Width="210" Height="210">
                                     <gauge:SfCircularGauge.Scales>
-                                        <!--  Needle指针  -->
+                                        --><!--  Needle指针  --><!--
                                         <gauge:CircularScale
                                             EndValue="2000"
                                             LabelStroke="Transparent"
@@ -794,13 +898,13 @@ Source="Assets/SplashScreen.png" />
                                             </gauge:CircularScale.Pointers>
                                         </gauge:CircularScale>
                                     </gauge:SfCircularGauge.Scales>
-                                </gauge:SfCircularGauge>
+                                </gauge:SfCircularGauge>-->
                             </Grid>
                             <!--<Frame Grid.Row="2"  Grid.Column="2" x:Name="AgaueFrame4" Margin="20,0,0,20">
                             </Frame>-->
                         </Grid>
 
-                        <!--  文本，图片，透明剪裁2  -->
+                        <!-- 紫外线强度 文本，图片，透明剪裁2  -->
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -813,49 +917,52 @@ Source="Assets/SplashScreen.png" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
 
-                            <StackPanel
+                            <!--<StackPanel
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 Margin="0,10,0,0">
                                 <TextBlock>
-                                    <Run FontWeight="Bold" Text="Fills Like" />
+                                    <Run FontWeight="Bold" Text="Fills Like?8" />
                                 </TextBlock>
-                            </StackPanel>
+                            </StackPanel>-->
 
                             <!--  透明剪裁  -->
                             <Grid
                                 Grid.Row="2"
-                                Grid.Column="1"
+                                Grid.Column="2"
                                 Margin="20,0,0,20">
 
-                                <Polygon
+                                <!--<Polygon
                                     Width="200"
                                     Height="200"
                                     Fill="{ThemeResource SystemControlAcrylicWindowBrush}"
                                     Points="333.2,412.8 547.4,469.8 542.6,490.2 490.7,473.8 329,430.7 486,587.1 471.7,602.4 435,562.3 316.5,444.1 374.2,658.1 354.2,664.1 342.4,611 297.8,445.2 253.7,610.5 241.5,664.3 221.9,659 279.1,444.1 161.3,562.2 123.8,602.7 109.6,588.2 266.6,430.7 105.5,474.1 52.8,490.4 47.7,470.8 262.4,412.9 101.2,369.9 47.4,357.7 52.8,338.1 267.7,395.4 149.6,277.5 109.1,240.1 123.5,225.8 281,382.8 237.7,221.7 221.3,169 241,163.9 297.7,374.3 353.6,164.4 373.9,169.2 357.6,221 314.5,382.7 470.9,225.8 486.1,240 446.1,276.8 327.9,395.3 541.8,337.6 547.9,357.5 494.8,369.3"
                                     Stretch="UniformToFill" />
-                                <!--<Path Data="M0,0V513H513V0H0ZM256.14,512.5C114.75,512.5,.14,397.88,.14,256.5S114.75,.5,256.14,.5s256,114.62,256,256-114.62,256-256,256Z" Stretch="UniformToFill" Width="200" Height="200"
-                                         Fill="{ThemeResource SystemControlAcrylicWindowBrush}"/>-->
+                                --><!--<Path Data="M0,0V513H513V0H0ZM256.14,512.5C114.75,512.5,.14,397.88,.14,256.5S114.75,.5,256.14,.5s256,114.62,256,256-114.62,256-256,256Z" Stretch="UniformToFill" Width="200" Height="200"
+                                         Fill="{ThemeResource SystemControlAcrylicWindowBrush}"/>--><!--
                                 <Ellipse
                                     Width="130"
                                     Height="140"
-                                    Fill="{ThemeResource SystemControlAcrylicWindowBrush}" />
+                                    Fill="{ThemeResource SystemControlAcrylicWindowBrush}" />-->
 
                                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    
                                     <TextBlock
                                         FontSize="35"
-                                        FontWeight="Black"
-                                        Text="{x:Bind ViewModel.Pressure, Mode=TwoWay}"
+                                        FontWeight="Black"                                        
+                                        Text="{x:Bind ViewModel.UVIndex, Mode=TwoWay}"
                                         TextAlignment="Center" />
-                                    <TextBlock FontSize="30" Text="hPa" />
+                                    <!--<TextBlock FontSize="30" Text="hPa" />-->
+                                    <Slider Value="{x:Bind ViewModel.UVIndex,Mode=TwoWay}" Minimum="0" Maximum="20" Width="200" IsEnabled="False" 
+                                            TickFrequency="5" TickPlacement="TopLeft"    
+                                            HorizontalAlignment="Center"
+                                            >
+                                         
+                                    </Slider>
                                 </StackPanel>
                             </Grid>
                         </Grid>
-
-
-
-
-
+                        
 
                         <!--  湿度和空气质量指数  -->
                         <Grid Grid.Row="3">

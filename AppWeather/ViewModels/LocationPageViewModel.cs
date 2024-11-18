@@ -364,6 +364,7 @@ namespace AppWeather.ViewModels
                         cityName = textBox.Text.Trim().ToLower();
                         await Task.Run(() => {
                             var citys = WeatherAdapter.GetLocationInformation(cityName);
+                            if(citys==null) return;
                             citys.location.ForEach(item =>
                             {
                                 if (!string.IsNullOrWhiteSpace(item.city)) cityNameList.Add(new CityInfo() { CityName = item.displayName, Location = item.country });
@@ -407,6 +408,7 @@ namespace AppWeather.ViewModels
                 {
                     //此时TextBox.Text已被替换
                     var locationData = WeatherAdapter.GetLocationInformation(cityName);
+                    if (locationData == null) return;
                     if (locationData.location.Any(x => x.displayName.Equals(cityName)))
                     {
                         bgWorker.RunWorkerCompleted += AddCityBW_RunWorkerCompleted;//当完成时回调
@@ -414,7 +416,8 @@ namespace AppWeather.ViewModels
                         IsBusy = true;
                         bgWorker.RunWorkerAsync(cityName);
                         CityInfo cityInfo = new CityInfo();                                                                                                                                                                                 //北京，晴朗，36.1这样的格式
-                        var placeId = WeatherAdapter.GetLocationInformation(cityName).location[0].placeId;
+                        var placeId = WeatherAdapter.GetLocationInformation(cityName)?.location[0].placeId;
+                        if (placeId == null) return;
                         AddPlaceId(placeId);
                         var weather = WeatherAdapter.GetSimpleWeater(placeId);
                         if (!CityWeathers.Any(a=>a.CityName.Equals(weather.CityName))) CityWeathers.Add(weather);//向UI中添加城市-天气和温度需要调用Api获取

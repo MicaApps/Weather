@@ -175,6 +175,54 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\Images\geogebra-export %285%29.svg" />
+    <Content Include="WeatherIcons\0.png" />
+    <Content Include="WeatherIcons\1.png" />
+    <Content Include="WeatherIcons\10.png" />
+    <Content Include="WeatherIcons\11.png" />
+    <Content Include="WeatherIcons\12.png" />
+    <Content Include="WeatherIcons\13.png" />
+    <Content Include="WeatherIcons\14.png" />
+    <Content Include="WeatherIcons\15.png" />
+    <Content Include="WeatherIcons\16.png" />
+    <Content Include="WeatherIcons\17.png" />
+    <Content Include="WeatherIcons\18.png" />
+    <Content Include="WeatherIcons\19.png" />
+    <Content Include="WeatherIcons\2.png" />
+    <Content Include="WeatherIcons\20.png" />
+    <Content Include="WeatherIcons\21.png" />
+    <Content Include="WeatherIcons\22.png" />
+    <Content Include="WeatherIcons\23.png" />
+    <Content Include="WeatherIcons\24.png" />
+    <Content Include="WeatherIcons\25.png" />
+    <Content Include="WeatherIcons\26.png" />
+    <Content Include="WeatherIcons\27.png" />
+    <Content Include="WeatherIcons\28.png" />
+    <Content Include="WeatherIcons\29.png" />
+    <Content Include="WeatherIcons\3.png" />
+    <Content Include="WeatherIcons\30.png" />
+    <Content Include="WeatherIcons\31.png" />
+    <Content Include="WeatherIcons\32.png" />
+    <Content Include="WeatherIcons\33.png" />
+    <Content Include="WeatherIcons\34.png" />
+    <Content Include="WeatherIcons\35.png" />
+    <Content Include="WeatherIcons\36.png" />
+    <Content Include="WeatherIcons\37.png" />
+    <Content Include="WeatherIcons\38.png" />
+    <Content Include="WeatherIcons\39.png" />
+    <Content Include="WeatherIcons\4.png" />
+    <Content Include="WeatherIcons\40.png" />
+    <Content Include="WeatherIcons\41.png" />
+    <Content Include="WeatherIcons\42.png" />
+    <Content Include="WeatherIcons\43.png" />
+    <Content Include="WeatherIcons\44.png" />
+    <Content Include="WeatherIcons\45.png" />
+    <Content Include="WeatherIcons\46.png" />
+    <Content Include="WeatherIcons\47.png" />
+    <Content Include="WeatherIcons\5.png" />
+    <Content Include="WeatherIcons\6.png" />
+    <Content Include="WeatherIcons\7.png" />
+    <Content Include="WeatherIcons\8.png" />
+    <Content Include="WeatherIcons\9.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -282,6 +330,9 @@
   -->
   <!-- 以下是Unity部件的设置 -->
   <ItemGroup>
+    <Reference Include="IL2CPPToWinRTBridge">
+      <HintPath>..\..\..\..\Desktop\IL2CPPToWinRTBridge\IL2CPPToWinRTBridge.winmd</HintPath>
+    </Reference>
     <Reference Include="UnityPlayer">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(SolutionDir)Players\UAP\il2cpp\$(Platform)\$(Configuration)\UnityPlayer.winmd</HintPath>

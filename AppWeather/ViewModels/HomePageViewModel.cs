@@ -14,18 +14,36 @@ using Windows.System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
+using IL2CPPToWinRTBridge;
+using System.Net.Sockets;
+using System.Net;
+using System.Threading.Tasks;
+using System.Text;
+using System.Threading;
+using Windows.UI.Xaml.Controls.Primitives;
+using System.IO;
+using Newtonsoft.Json;
+using System.Diagnostics;
+using Windows.UI.Core;
+
 
 namespace AppWeather.ViewModels
 {
     public class HomePageViewModel : ObservableObject
-    {
+    { 
         //public string cityName = "Shanghai";
         public List<WeatherClass> weathers;
         public BackgroundWorker bgWorker = null;
         public ObservableCollection<EveryDayWeather> everyDayWeathers = new ObservableCollection<EveryDayWeather>();
         public bool IsInitialized { get; set; }
 
+        //private V3WxObservationsCurrent currentWeatherCn;//固定语言版本的当前天气，用于和Untity通信；-还是用中文吧
 
+        //public V3WxObservationsCurrent CurrentWeatherCn 
+        //{
+        //    get { return currentWeatherCn; }
+        //    set { SetProperty(ref currentWeatherCn, value); }
+        //}
 
         //Light or Dark
         private string _theme;
@@ -165,6 +183,19 @@ namespace AppWeather.ViewModels
 
         }
 
+        string uvDescription;
+        public string UvDescription
+        {
+            get { return uvDescription; }
+            set {  SetProperty(ref uvDescription, value);}
+        }
+
+        int uvIndex;
+        public int UVIndex
+        {
+            get { return uvIndex; }
+            set { SetProperty(ref uvIndex, value); }
+        }
 
         private string _rainfall;
 
@@ -226,6 +257,7 @@ namespace AppWeather.ViewModels
  
 
         public ICommand RefreshCommand { get; }
+        private WeatherClass CurrentWeather { get;  set; }
 
         public HomePageViewModel()
         {
@@ -274,9 +306,33 @@ namespace AppWeather.ViewModels
                 Theme = "#CC000000";
                 Ellipse1 = "ms-appx:///Views/Images/Ellipse 15_Dark.png";
                 Ellipse2 = "ms-appx:///Views/Images/Ellipse 16_Dark.png";
-            }
+            }                
 
+            Task.Run(async() => {
+                Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                server.Bind(new IPEndPoint(IPAddress.Any, 2333));//监听本地回环地址2333端口
+                while (true)
+                {
+                    try
+                    {
+                        server.Listen(10);
+                        var Accept = server.Accept();
+                        while(Accept.Connected)
+                        {
+                            var buffer = Encoding.UTF8.GetBytes("Hello");
+                            Accept.Send(buffer);
+                            await Task.Delay(100);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        //throw;
+                    }
+                }
+            });
         }
+
+ 
 
         private void Refresh()
         {
@@ -314,7 +370,33 @@ namespace AppWeather.ViewModels
             var placeId = GetLocationSettings.Values["LocationPlaceId"] as string;
             //weathers = OpenWeather.GetWeathers(cityName);
             weathers = WeatherAdapter.GetWeathers(placeId);
-            
+
+            //CurrentWeatherCn = WeatherAdapter.GetCurrentWeater(placeId, "zh-CN");//获取固定语言的天气信息，用于判断天气图标以及和Untity通信            
+        }
+
+        private async Task WriteMessage(string msg)
+        {
+            // 捕获并处理异常
+            try
+            {
+                // 获取应用程序的本地存储文件夹
+                StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+
+                // 在后台线程中创建文件
+                await Task.Run(async () =>
+                {
+                    // 创建文件
+                    StorageFile sampleFile = await localFolder.CreateFileAsync("sample.txt", CreationCollisionOption.ReplaceExisting);
+
+                    // 在文件中写入内容
+                    await FileIO.WriteTextAsync(sampleFile, msg);
+
+                });
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         private void refreshWeatherBW_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -327,35 +409,74 @@ namespace AppWeather.ViewModels
                 if (weathers.Count > 0)
                 {
                     //获取最接近当前时间的天气信息
-                    WeatherClass currentWeather = weathers.OrderBy(x => Math.Abs((long)x.TimeStamp - time)).First(); //weathers[index];
+                    CurrentWeather = weathers.OrderBy(x => Math.Abs((long)x.TimeStamp - time)).First(); //weathers[index];
                     //LocationName = cityName;
                     LocationName = weathers.FirstOrDefault().CityName;
-                    Weather = currentWeather.State;
+                    //Weather = CurrentWeatherCn.cloudCoverPhrase;//CurrentWeather.State;
                     Tip = "";
                     //？
-                    if (Weather.Equals("Clouds"))
-                    {
-                        CurrentWeatherImg = "../Images/Cloud.png";
-                    }
-                    else if (Weather.Equals("Rain"))
-                    {
-                        CurrentWeatherImg = "../Images/Rainny.png";
-                    }
-                    else if (Weather.Equals("Clear"))
-                    {
-                        CurrentWeatherImg = "../Images/Clear.png";
-                    }
+                    //if (Weather.Equals("Clouds"))
+                    //{
+                    //    CurrentWeatherImg = "../Images/Cloud.png";
 
-                    if(Weather.Contains("雨")) CurrentWeatherImg = "../Images/Rainny.png";
-                    else if(Weather.Contains("晴朗")) CurrentWeatherImg = "../Images/Clear.png";
-                    else CurrentWeatherImg = "../Images/Cloud.png";
+                    //}
+                    //else if (Weather.Equals("Rain"))
+                    //{
+                    //    CurrentWeatherImg = "../Images/Rainny.png";
+                    //}
+                    //else if (Weather.Equals("Clear"))
+                    //{
+                    //    CurrentWeatherImg = "../Images/Clear.png";
+                    //}
+                    //File.WriteAllText("Weathers.txt", CurrentWeather.IconCode.ToString());
+                    Send(CurrentWeather.IconCode.ToString());//直接把中文的气象状态发给Untity；
 
+                    // Create sample file; replace if exists.
+                    //Windows.Storage.StorageFolder storageFolder =
+                    //    Windows.Storage.ApplicationData.Current.LocalFolder;
+                    //Windows.Storage.StorageFile sampleFile =
+                    //    storageFolder.CreateFileAsync("sample.txt",
+                    //        Windows.Storage.CreationCollisionOption.ReplaceExisting).GetResults();
+
+                    //Windows.Storage.FileIO.WriteTextAsync(sampleFile, JsonConvert.SerializeObject(CurrentWeather.IconCode)).GetResults();
+                    //Debug.WriteLine(Windows.Storage.FileIO.ReadTextAsync(sampleFile).GetResults());
+
+                    //WriteMessage("1ekhkwerwrw").GetAwaiter().GetResult();    
+
+
+                    //var tempFolder = ApplicationData.Current.TemporaryFolder;
+
+                    //Task.Run(() => {
+                    //    var tempFile = tempFolder.CreateFileAsync("temp.txt", CreationCollisionOption.ReplaceExisting).GetResults();
+                    //    FileIO.WriteTextAsync(tempFile, "12397982497297984").GetResults();
+                    //}).GetAwaiter().GetResult();
+
+                    //Debug.WriteLine(FileIO.ReadTextAsync(tempFile).GetResults());
+
+                    //if(Weather.Contains("雨"))
+                    //{ 
+                    //    CurrentWeatherImg = "../Images/Rainny.png";
+                    //}
+                    //else if(Weather.Contains("晴朗"))
+                    //{ 
+                    //    CurrentWeatherImg = "../Images/Clear.png";
+                    //}
+                    //else if(Weather.Contains("雪"))
+                    //{ 
+                    //    CurrentWeatherImg = "../Images/Cloud.png";
+                    //}
+                    //else
+                    //{ 
+                    //    CurrentWeatherImg = "../Images/Cloud.png";
+                    //}
+
+                    //CurrentWeatherImg = $"/WeatherIcons/{CurrentWeatherCn.iconCode}.png";
 
                     //当前温度
-                    double temp = double.Parse(currentWeather.Temp);
+                    double temp = double.Parse(CurrentWeather.Temp);
                     CurrentTemp = temp.ToString("0.0") + "℃";
 
-                    FeelsLike = currentWeather.FeelsLike.ToString("0.0") + "℃";//体感温度
+                    FeelsLike = CurrentWeather.FeelsLike.ToString("0.0") + "℃";//体感温度
                     //今日最低最高温度 
                     double todayMinTemp;//= weathers.Where(i => DateTime.Parse(i.Time).Date==DateTime.Today.Date).Min(k => k.MinTemp);
                     double todayMaxTemp;//= weathers.Where(i => DateTime.Parse(i.Time).Date == DateTime.Today.Date).Max(k => k.MaxTemp);
@@ -365,17 +486,20 @@ namespace AppWeather.ViewModels
                     todayMaxTemp = weathers.OrderBy(k => k  .Time).Take(24).Max(j => j.MaxTemp);
                     TodayTemperature = todayMinTemp.ToString("0.0") + "℃-" + todayMaxTemp.ToString("0.0") + "℃";
 
-                    Humidity = currentWeather.Humidity.ToString();
-                    Pressure = currentWeather.Pressure.ToString();
-                    Vsibility = currentWeather.Vsibility.ToString("0.0") + "km";
-                    WindSpeed = currentWeather.WindSpeed.ToString();
-                    //WindDegree = currentWeather.WindDegree;
-                    WindDegree = 0;
+                    Humidity = CurrentWeather.Humidity.ToString();
+                    Pressure = CurrentWeather.Pressure.ToString();
+                    Vsibility = CurrentWeather.Vsibility.ToString("0.0") + "km";
+                    WindSpeed = CurrentWeather.WindSpeed.ToString();
+                    //WindDegree = CurrentWeather.WindDegree;
+                    WindDegree = CurrentWeather.WindDegree + 90;
 
-                    Rainfall = currentWeather.Rainfall.ToString("0.0") + "%";
+                    UvDescription = CurrentWeather.UVDescription;
+                    UVIndex = CurrentWeather.UvIndex;
+
+                    Rainfall = CurrentWeather.Rainfall.ToString("0.0") + "%";
                     System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));//当地时区
-                    Sunrise = startTime.AddSeconds(currentWeather.Sunrise).ToLongTimeString().ToString();
-                    Sunset = startTime.AddSeconds(currentWeather.Sunset).ToLongTimeString().ToString();
+                    Sunrise = startTime.AddSeconds(CurrentWeather.Sunrise).ToLongTimeString().ToString();
+                    Sunset = startTime.AddSeconds(CurrentWeather.Sunset).ToLongTimeString().ToString();
 
                     everyDayWeathers.Clear();
 
@@ -388,22 +512,24 @@ namespace AppWeather.ViewModels
                         //string tDate = ttime.Split(' ')[0];
                         string weather = weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).FirstOrDefault().State;
                         string img = "\uE9BD";
-                        if (weather.Equals("Clouds"))
-                        {
-                            img = "\uE9BF";
-                        }
-                        else if (weather.Equals("Rain"))
-                        {
-                            img = "\uE9E2";
-                        }
-                        else if (weather.Equals("Sunny"))
-                        {
-                            img = "\uE9BD";
-                        }
+                        //if (weather.Equals("Clouds"))
+                        //{
+                        //    img = "\uE9BF";
+                        //}
+                        //else if (weather.Equals("Rain"))
+                        //{
+                        //    img = "\uE9E2";
+                        //}
+                        //else if (weather.Equals("Sunny"))
+                        //{
+                        //    img = "\uE9BD";
+                        //}
 
-                        if(weather.Contains("雨")) img = "\uE9E2";
-                        else if(weather.Contains("晴朗")) img = "\uE9BD";
-                        else img = "\uE9BF";
+                        //直接用天气的Code判断图标
+                        //if(weather.Contains("雨")) img = "\uE9E2";
+                        //else if(weather.Contains("晴朗")) img = "\uE9BD";
+                        //else img = "\uE9BF";
+                        img = $"/WeatherIcons/{weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).FirstOrDefault().IconCode}.png";
 
                         double tMinTemp = weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).Min(k => k.MinTemp);
                         double tMaxTemp = weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).Max(k => k.MaxTemp);
@@ -443,6 +569,19 @@ namespace AppWeather.ViewModels
 
                 HourWeatherList = new ObservableCollection<HourWeather>(weatherList.GroupBy(t => t.Time).Select(g => g.First()).ToList());
             }
+        }
+
+        // UWP 发送消息
+        public static bool Send(string message)
+        {
+            IIL2CPPBridge bridge = BridgeBootstrapper.GetIL2CPPBridge();
+            // 如果同一时间在Unity中IIL2CPPBridge已经实例化(即上文的初始化),则不为null
+            if (bridge != null)
+            {
+                bridge.Connect(message);
+                return true;
+            }
+            return false;
         }
 
     }

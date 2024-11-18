@@ -4,6 +4,7 @@ using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -347,5 +348,33 @@ namespace AppWeather.Views
         }
     }
 
+
+    //public class TicksConverter : IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, string language)
+    //    {
+    //        double sliderValue = (double)value;
+    //        return sliderValue;
+    //    }
+
+    //    public object ConvertBack(object value, Type targetType, object parameter, string language)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
+
+    //public class TicksSource : IEnumerable
+    //{
+    //    public double Minimum { get; set; }
+    //    public double Maximum { get; set; }
+
+    //    public IEnumerator GetEnumerator()
+    //    {
+    //        for (double i = Minimum; i <= Maximum; i += (Maximum - Minimum) / 10)
+    //        {
+    //            yield return i;
+    //        }
+    //    }
+    //}
 
 }
