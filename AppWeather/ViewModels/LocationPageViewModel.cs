@@ -138,6 +138,8 @@ namespace AppWeather.ViewModels
                     // load a setting that is local to the device
                     String cities = localSettings.Values["Cities"] as string;
                     List<string> cityArray = cities.Split('&').ToList();
+                    if (cityArray != null && cityArray.Count <=1) return;
+
                     cityArray.Remove(cityName);
                     localSettings.Values["Cities"] = string.Join('&', cityArray);
 

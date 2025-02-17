@@ -143,6 +143,7 @@ namespace AppWeather.Views
 
         private async void GetSplashBackgroundColor()
         {
+            //wvWindDegree.cor
             try
             {
                 StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///AppxManifest.xml"));

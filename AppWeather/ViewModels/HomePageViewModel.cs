@@ -25,6 +25,9 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using Windows.UI.Core;
+using Microsoft.Graphics.Canvas.Effects;
+using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls;
 
 
 namespace AppWeather.ViewModels
@@ -143,6 +146,9 @@ namespace AppWeather.ViewModels
 
         private string _pressure;
 
+        /// <summary>
+        /// 气压
+        /// </summary>
         public string Pressure
         {
             get => _pressure;
@@ -167,6 +173,9 @@ namespace AppWeather.ViewModels
 
         private double _windDegree;
         private double _windDegree1;
+        /// <summary>
+        /// 这是风向啊~~~~~~~~~~
+        /// </summary>
         public double WindDegree
         {
             get => _windDegree;
@@ -308,28 +317,28 @@ namespace AppWeather.ViewModels
                 Ellipse2 = "ms-appx:///Views/Images/Ellipse 16_Dark.png";
             }                
 
-            Task.Run(async() => {
-                Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                server.Bind(new IPEndPoint(IPAddress.Any, 2333));//监听本地回环地址2333端口
-                while (true)
-                {
-                    try
-                    {
-                        server.Listen(10);
-                        var Accept = server.Accept();
-                        while(Accept.Connected)
-                        {
-                            var buffer = Encoding.UTF8.GetBytes("Hello");
-                            Accept.Send(buffer);
-                            await Task.Delay(100);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        //throw;
-                    }
-                }
-            });
+            //Task.Run(async() => {
+            //    Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            //    server.Bind(new IPEndPoint(IPAddress.Any, 2333));//监听本地回环地址2333端口
+            //    while (true)
+            //    {
+            //        try
+            //        {
+            //            server.Listen(10);
+            //            var Accept = server.Accept();
+            //            while(Accept.Connected)
+            //            {
+            //                var buffer = Encoding.UTF8.GetBytes("Hello");
+            //                Accept.Send(buffer);
+            //                await Task.Delay(100);
+            //            }
+            //        }
+            //        catch (Exception)
+            //        {
+            //            //throw;
+            //        }
+            //    }
+            //});
         }
 
  
@@ -368,6 +377,14 @@ namespace AppWeather.ViewModels
             //ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             //localSettings.Values["LocationPlaceId"] = WeatherAdapter.GetLocationInformation("漠河市").location[0].placeId; 
             var placeId = GetLocationSettings.Values["LocationPlaceId"] as string;
+
+            //var localCityName= new GetLocationCityName().GetLocalCityName().GetAwaiter().GetResult();
+            //var tmp= WeatherAdapter.GetLocationInformation(localCityName)?.location[0].placeId;
+            if (string.IsNullOrWhiteSpace(placeId))
+            {
+                var cityName = new GetLocationCityName().GetLocalCityName().GetAwaiter().GetResult();
+                placeId = WeatherAdapter.GetLocationInformation(cityName)?.location[0].placeId;
+            }
             //weathers = OpenWeather.GetWeathers(cityName);
             weathers = WeatherAdapter.GetWeathers(placeId);
 
@@ -395,7 +412,34 @@ namespace AppWeather.ViewModels
             }
             catch (Exception ex)
             {
+                Debug.WriteLine($"写入文件时出错: {ex.Message}");
+            }
+        }
 
+        string WriteMsg(string msg)
+        {
+            try
+            {
+                string path = "";
+
+
+                StorageFile file;
+
+                //var tmpFolder = ApplicationData.Current.TemporaryFolder;
+                //file = tmpFolder.CreateFileAsync("MyData.txt", CreationCollisionOption.ReplaceExisting).AsTask().GetAwaiter().GetResult();
+
+                var curFolder = ApplicationData.Current.LocalFolder;
+                file = curFolder.CreateFileAsync(@"StreamingAssets\WeatherData.txt", CreationCollisionOption.ReplaceExisting).AsTask().GetAwaiter().GetResult();
+
+                FileIO.WriteTextAsync(file, msg).AsTask().GetAwaiter().GetResult();
+                Debug.WriteLine($"输出文件完整路径: {file.Path}");
+
+                return file.Path;
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
             }
         }
 
@@ -429,7 +473,15 @@ namespace AppWeather.ViewModels
                     //    CurrentWeatherImg = "../Images/Clear.png";
                     //}
                     //File.WriteAllText("Weathers.txt", CurrentWeather.IconCode.ToString());
+                    var moonPhase = CurrentWeather.MoonPhase;
+                    var moonPhaseCode = CurrentWeather.MoonPhaseCode;
+                    var moonPhaseDay= CurrentWeather.MoonPhaseDay;
+
                     Send(CurrentWeather.IconCode.ToString());//直接把中文的气象状态发给Untity；
+
+                    Debug.WriteLine(WriteMsg(CurrentWeather.IconCode.ToString()+","+moonPhaseDay +"," + CurrentWeather.DayOrNight));                    
+
+                    //window.chrome.webview.postMessage
 
                     // Create sample file; replace if exists.
                     //Windows.Storage.StorageFolder storageFolder =

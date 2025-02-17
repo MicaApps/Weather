@@ -133,6 +133,12 @@ namespace AppWeather.Models
 
                 w.IconCode =daily.daypart[0].iconCode[i/24+1]??0;
 
+                w.MoonPhase = daily.moonPhase[0];
+
+                w.MoonPhaseCode = daily.moonPhaseCode[0];
+
+                w.MoonPhaseDay = daily.moonPhaseDay[0];
+                w.DayOrNight = v3.v3wxobservationscurrent.dayOrNight.ToString();//"N"表示晚上，"D"表示白天
 
                 weathers.Add(w);
 

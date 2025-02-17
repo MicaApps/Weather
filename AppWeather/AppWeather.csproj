@@ -122,6 +122,7 @@
     <Compile Include="Models\BindConverter\LocationGridViewContentConverter.cs" />
     <Compile Include="Models\BindConverter\LocationGridViewHolderConverter.cs" />
     <Compile Include="Models\CityInfo.cs" />
+    <Compile Include="Models\GetLocationCityName.cs" />
     <Compile Include="Models\JsonHelper.cs" />
     <Compile Include="Models\ApiWeather.cs" />
     <Compile Include="Models\OpenWeather.cs" />

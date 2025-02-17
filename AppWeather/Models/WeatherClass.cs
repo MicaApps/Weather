@@ -34,6 +34,12 @@ namespace AppWeather.Models
 
         public int IconCode {  get; set; }
 
+        public string MoonPhase {  get; set; }
+        public string MoonPhaseCode {  get; set; }
+
+        public int MoonPhaseDay {  get; set; }
+
+        public string DayOrNight { get; set; }
     }
 
     public class SimpleWeatherClass

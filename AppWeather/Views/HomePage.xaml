@@ -711,7 +711,7 @@
                             </StackPanel>-->
                             
                             <!--显示外圆-->
-                            <Grid
+                            <!--<Grid
                                 Grid.Row="2"
                                 Grid.Column="0"
                                 Margin="20,0,0,20">
@@ -731,7 +731,7 @@
                                     Height="200"
                                     Source="{x:Bind ViewModel.Ellipse1, Mode=TwoWay}"
                                     Stretch="UniformToFill" />
-                            </Grid>
+                            </Grid>-->
 
                             <!--<Grid
                                 Grid.Row="2"
@@ -749,8 +749,11 @@
                                 Grid.Row="2"
                                 Grid.Column="0"
                                 Margin="20,0,0,20">
+                                <WebView Name="wvWindDegree">
+                                    
+                                </WebView>
 
-                                <Polygon
+                                <!--<Polygon
                                     Width="200"
                                     Height="200"
                                     Fill="{ThemeResource SystemControlAcrylicWindowBrush}"
@@ -776,7 +779,7 @@
                                         FontWeight="Black"
                                         Text="{x:Bind ViewModel.WindDegree, Mode=TwoWay}"
                                         TextAlignment="Center" />
-                                </StackPanel>
+                                </StackPanel>-->
                             </Grid>
                         
 
@@ -785,8 +788,11 @@
                                 Grid.Row="2"
                                 Grid.Column="1"
                                 Margin="20,0,0,20">
+                                <WebView x:Name="Pressure">
+                                    
+                                </WebView>
 
-                                <Polygon
+                                <!--<Polygon
                                     Width="200"
                                     Height="200"
                                     Fill="{ThemeResource SystemControlAcrylicWindowBrush}"
@@ -806,7 +812,7 @@
                                         Text="{x:Bind ViewModel.Pressure, Mode=TwoWay}"
                                         TextAlignment="Center" />
                                     <TextBlock FontSize="30" Text="hPa" />
-                                </StackPanel>
+                                </StackPanel>-->
                             </Grid>
                         </Grid>
 
