@@ -169,6 +169,8 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Resources\WebPages\Pressure.html" />
+    <Content Include="Resources\WebPages\Wind.html" />
     <Content Include="Views\Images\Ellipse 15_Dark.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

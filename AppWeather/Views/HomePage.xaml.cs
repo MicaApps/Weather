@@ -215,6 +215,15 @@ namespace AppWeather.Views
             }
             return timeSpan;
         }
+
+        private void InitializeWebviews()
+        {
+            var src_WindDegree = new Uri("ms-appx-web:///Resources/WebPages/Wind.html");
+            WebView_WindDegree.Navigate(src_WindDegree);
+
+            var src_Pressure = new Uri("ms-appx-web:///Resources/WebPages/Pressure.html");
+            WebView_Pressure.Navigate(src_Pressure);
+        }
         private void Canvas_Draw(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl sender, Microsoft.Graphics.Canvas.UI.Xaml.CanvasDrawEventArgs args)
         {
             //using (var canvasDrawingSession = args.DrawingSession)
@@ -290,6 +299,11 @@ namespace AppWeather.Views
             //20240802由xiapeng01@126.com注释
             //Canvas.RemoveFromVisualTree();
             //Canvas = null;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            InitializeWebviews();
         }
 
         //private void Slider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)

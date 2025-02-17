@@ -12,8 +12,8 @@
     xmlns:local="using:AppWeather.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="Transparent"
-    Unloaded="Page_Unloaded"
-    mc:Ignorable="d">
+    Loaded="Page_Loaded" Unloaded="Page_Unloaded"
+    mc:Ignorable="d" d:DesignHeight="2852">
     <interactivity:Interaction.Behaviors>
         <core:EventTriggerBehavior EventName="Loaded">
             <core:InvokeCommandAction Command="{x:Bind ViewModel.RefreshCommand}" />
@@ -748,8 +748,8 @@
                             <Grid
                                 Grid.Row="2"
                                 Grid.Column="0"
-                                Margin="20,0,0,20">
-                                <WebView Name="wvWindDegree">
+                                Margin="0,40,0,20">
+                                <WebView Name="WebView_WindDegree" DefaultBackgroundColor="Transparent" >
                                     
                                 </WebView>
 
@@ -788,7 +788,7 @@
                                 Grid.Row="2"
                                 Grid.Column="1"
                                 Margin="20,0,0,20">
-                                <WebView x:Name="Pressure">
+                                <WebView x:Name="WebView_Pressure" DefaultBackgroundColor="Transparent" >
                                     
                                 </WebView>
 
