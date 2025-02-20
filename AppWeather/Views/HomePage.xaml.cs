@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityPlayer;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -218,12 +220,19 @@ namespace AppWeather.Views
 
         private void InitializeWebviews()
         {
-            var src_WindDegree = new Uri("ms-appx-web:///Resources/WebPages/Wind.html");
-            WebView_WindDegree.Navigate(src_WindDegree);
-
-            var src_Pressure = new Uri("ms-appx-web:///Resources/WebPages/Pressure.html");
-            WebView_Pressure.Navigate(src_Pressure);
+            var baseUri = "ms-appx:///Resources/WebPages";
+            _ = loadWebView2(WebView_WindDegree, new Uri(baseUri + "/Wind.html"));
+            _ = loadWebView2(WebView_Pressure, new Uri(baseUri + "/Pressure.html"));
         }
+
+
+        private static async Task<StorageFile> loadWebView2(WebView2 webview2, Uri uri)
+        {
+            var storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
+            webview2.Source = new Uri(storageFile.Path);
+            return storageFile;
+        }
+
         private void Canvas_Draw(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl sender, Microsoft.Graphics.Canvas.UI.Xaml.CanvasDrawEventArgs args)
         {
             //using (var canvasDrawingSession = args.DrawingSession)

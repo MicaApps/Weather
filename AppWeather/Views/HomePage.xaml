@@ -9,6 +9,7 @@
     xmlns:datavis="using:WinRTXamlToolkit.Controls.DataVisualization"
     xmlns:gauge="using:Syncfusion.UI.Xaml.Gauges"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:local="using:AppWeather.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="Transparent"
@@ -749,9 +750,9 @@
                                 Grid.Row="2"
                                 Grid.Column="0"
                                 Margin="0,40,0,20">
-                                <WebView Name="WebView_WindDegree" DefaultBackgroundColor="Transparent" >
+                                <muxc:WebView2 Name="WebView_WindDegree" Background="Transparent">
                                     
-                                </WebView>
+                                </muxc:WebView2>
 
                                 <!--<Polygon
                                     Width="200"
@@ -788,9 +789,9 @@
                                 Grid.Row="2"
                                 Grid.Column="1"
                                 Margin="20,0,0,20">
-                                <WebView x:Name="WebView_Pressure" DefaultBackgroundColor="Transparent" >
+                                <muxc:WebView2 x:Name="WebView_Pressure">
                                     
-                                </WebView>
+                                </muxc:WebView2>
 
                                 <!--<Polygon
                                     Width="200"
