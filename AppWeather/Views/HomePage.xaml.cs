@@ -4,6 +4,7 @@ using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.Web.WebView2.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -215,7 +216,7 @@ namespace AppWeather.Views
             {
                 throw new FormatException($"Invalid time format: {timeString}");
             }
-            return timeSpan;
+            return timeSpan;                                                                                                                              
         }
 
         private void InitializeWebviews()
@@ -223,6 +224,7 @@ namespace AppWeather.Views
             var baseUri = "ms-appx:///Resources/WebPages";
             _ = loadWebView2(WebView_WindDegree, new Uri(baseUri + "/Wind.html"));
             _ = loadWebView2(WebView_Pressure, new Uri(baseUri + "/Pressure.html"));
+                                                                                              
         }
 
 
@@ -313,6 +315,11 @@ namespace AppWeather.Views
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             InitializeWebviews();
+        }
+
+        private void WebView_WindDegree_CoreWebView2Initialized(WebView2 sender, CoreWebView2InitializedEventArgs args)
+        {
+            sender.CoreWebView2.Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "00FFFFFF");
         }
 
         //private void Slider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)

@@ -750,7 +750,7 @@
                                 Grid.Row="2"
                                 Grid.Column="0"
                                 Margin="0,40,0,20">
-                                <muxc:WebView2 Name="WebView_WindDegree" Background="Transparent">
+                                <muxc:WebView2 Name="WebView_WindDegree" CoreWebView2Initialized="WebView_WindDegree_CoreWebView2Initialized" Background="Transparent">
                                     
                                 </muxc:WebView2>
 
