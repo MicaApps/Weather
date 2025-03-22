@@ -1,4 +1,4 @@
-﻿<Page
+<Page
     x:Class="AppWeather.Views.HomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -23,9 +23,13 @@
     <Page.Resources>
         <ResourceDictionary>
             <FontFamily x:Key="WeatherIconFont">Fonts/WeatherColorIcons.ttf#Weather Color</FontFamily>
+            <SolidColorBrush x:Key="DarkTheme"
+                             Color="White" />
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="./Styles/ChartStyleDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
         </ResourceDictionary>
     </Page.Resources>
 
@@ -170,14 +174,23 @@
                         </Grid>
 
                         <!--能见度和日出日落-->
-                        <Grid Grid.Row="1">
+                        <Grid Grid.Row="1" Name="mygrid">
+                            <Grid.Resources>
+                                <local:ValueConverter x:Key="PercentageConverter"/>
+                            </Grid.Resources>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="8*"/>
+                                <RowDefinition Height="3*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
                             <!--能见度-->
-                            <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5,0,5,5">
+                            <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5,0,5,5">
                                 <Grid Height="4" Background="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}" VerticalAlignment="Top"/>
                                 <StackPanel Margin="0 10 0 0">
                                     <TextBlock Text="Visiblity" FontWeight="Bold"/>
@@ -186,7 +199,7 @@
                                 <TextBlock Text="It's perfectly clear right now." TextWrapping="WrapWholeWords" VerticalAlignment="Bottom" Margin="10" FontSize="20" />
                             </StackPanel>
                             <!--日出-->
-                            <Grid Grid.Column="1" Grid.Row="1"  Height="190" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5,0,5,5">
+                            <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="4"  Height="190" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5,0,5,5">
                                 <Grid Height="4" Background="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}" VerticalAlignment="Top"/>
                                 <StackPanel Margin="0 10 0 0">
                                     <TextBlock>
@@ -196,7 +209,7 @@
                                 </StackPanel>
                             </Grid>
                             <!--日落-->
-                            <Grid Grid.Column="2" Grid.Row="1"  Height="190" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5,0,5,5">
+                            <Grid Grid.Column="2" Grid.Row="0" Grid.RowSpan="4"  Height="190" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5,0,5,5">
                                 <Grid Height="4" Background="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}" VerticalAlignment="Top"/>
                                 <StackPanel Margin="0 10 0 0">
                                     <TextBlock>
@@ -224,8 +237,8 @@
 
                             </Grid>-->
 
-                            <canvas:CanvasControl x:Name="Canvas" ClearColor="Black" Draw="Canvas_Draw"
-                                                  Grid.Column="1" Grid.ColumnSpan="2">
+                            <canvas:CanvasControl x:Name="Canvas" ClearColor="Transparent"  Draw="Canvas_Draw"
+                                                  Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" >
                                 
                             </canvas:CanvasControl>
 
@@ -237,6 +250,8 @@
 
 
                         <!--风向、压力和紫外线，仪表盘-->
+                        
+                        <!--文本，风向，气压计1-->
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -256,7 +271,11 @@
                             <StackPanel Grid.Row="1" Grid.Column="0" Margin="0 10 0 0">
                                 <TextBlock>
                                     <Run Text="Fills Like" FontWeight="Bold"/>
+                                    
                                 </TextBlock>
+                                <!--调节用-->
+                                <!--<Slider Minimum="0"   Maximum="80"  Value="{Binding WindDegree, Mode=TwoWay}"/>-->
+
                             </StackPanel>
 
                             <StackPanel Grid.Row="1" Grid.Column="1" Margin="0 10 0 0">
@@ -271,6 +290,7 @@
                                 </TextBlock>
                             </StackPanel>
 
+                            <!--风速，风向标-->
                             <Grid Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20,0,0,20">
                                 <Grid.Resources>
                                     <local:ValueConverter x:Key="ValueConverter"/>
@@ -311,6 +331,43 @@
                                      LabelStroke="#9E9E9E"
                                      SmallTickStroke="#BEBEBE">
                                             <gauge:CircularScale.Pointers>
+                                                <gauge:CircularPointer PointerType="NeedlePointer"
+                                               Value="{Binding WindDegree, Mode=TwoWay}"
+                                               NeedlePointerType="Rectangle"
+                                               EnableAnimation="True"
+                                               EnableDragging="False"
+                                               NeedleLengthFactor="0.8"
+                                               NeedlePointerStroke="{StaticResource DarkTheme}"
+                                               NeedlePointerStrokeThickness="5" />
+                                                <gauge:CircularPointer PointerType="NeedlePointer"
+                                               Value="{Binding WindDegree1, Mode=TwoWay}"
+                                               NeedlePointerType="Rectangle"
+                                               EnableAnimation="True"
+                                               EnableDragging="False"
+                                               NeedleLengthFactor="0.8"
+                                               NeedlePointerStroke="{StaticResource DarkTheme}"
+                                               NeedlePointerStrokeThickness="5" />
+                                                <gauge:CircularPointer PointerType="SymbolPointer"
+                                               Symbol="Triangle"
+                                               SymbolPointerWidth="20"
+                                               SymbolPointerHeight="20"
+                                               SymbolPointerStroke="{StaticResource DarkTheme}"
+                                               SymbolPointerBorderThickness="0"
+                                               Value="{Binding WindDegree, Mode=TwoWay}"
+                                               EnableAnimation="True"
+                                               EnableDragging="False" />
+                                                <gauge:CircularPointer PointerType="SymbolPointer"
+                                               Symbol="Ellipse"
+                                               SymbolPointerWidth="20"
+                                               SymbolPointerHeight="20"
+                                               SymbolPointerStroke="{StaticResource DarkTheme}"
+                                               SymbolPointerBorderThickness="0"
+                                               Value="{Binding WindDegree1, Mode=TwoWay}"
+                                               EnableAnimation="True"
+                                               EnableDragging="False" />
+                                            </gauge:CircularScale.Pointers>
+
+                                            <!--<gauge:CircularScale.Pointers>
                                                 <gauge:CircularPointer x:Name="arrowPointer"
                                                PointerType="NeedlePointer"
                                                Value="{Binding WindDegree, Mode=TwoWay}"
@@ -331,43 +388,71 @@
                                                PointerCapStroke="Transparent"
                                                NeedlePointerStroke="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}"
                                                NeedlePointerStrokeThickness="10"/>
-                                            </gauge:CircularScale.Pointers>
+                                            </gauge:CircularScale.Pointers>-->
                                         </gauge:CircularScale>
                                     </gauge:SfCircularGauge.Scales>
                                 </gauge:SfCircularGauge>
                             </Grid>
 
-                            <!--<Grid Grid.Row="2" Grid.Column="1" Margin="20,0,0,20">
-                                <gauge:SfCircularGauge Height="200" Width="200">
+                            <!--气压计-->
+                            <Grid Grid.Row="2" Grid.Column="1" Margin="20,0,0,20">
+                                <gauge:SfCircularGauge Height="210" Width="210">
                                     <gauge:SfCircularGauge.Scales>
-                                        <gauge:CircularScale RimStrokeThickness="0" RimStroke="Transparent" TickStroke="Transparent" SmallTickStroke="Transparent"  LabelStroke="Transparent" StartAngle="90" SweepAngle="2000" StartValue="0" EndValue="2000" RangePointerPosition="Custom" RangePointerOffset="0.05">
+                                        <!--Range指针-->
+                                        <gauge:CircularScale RimStrokeThickness="0" 
+                                                             RimStroke="Transparent" 
+                                                             TickStroke="Transparent" 
+                                                             SmallTickStroke="Transparent"  
+                                                             LabelStroke="Transparent" 
+                                                             StartAngle="90" 
+                                                             SweepAngle="2000" 
+                                                             StartValue="0" 
+                                                             EndValue="2000" 
+                                                             RangePointerPosition="Custom" 
+                                                             RangePointerOffset="0.05">
                                             <gauge:CircularScale.Pointers>
-                                                <gauge:CircularPointer PointerType="RangePointer" RangePointerStrokeThickness="20" RangePointerStroke="#66FFFFFF" Value="{Binding Pressure}" >
-                                                </gauge:CircularPointer>
+                                                <gauge:CircularPointer PointerType="RangePointer" 
+                                                                       RangePointerStrokeThickness="50" 
+                                                                       RangePointerStroke="#7FFFFFFF" 
+                                                                       Value="1000" />
                                             </gauge:CircularScale.Pointers>
                                         </gauge:CircularScale>
-                                        <gauge:CircularScale RimStrokeThickness="00" RimStroke="Transparent" TickStroke="Transparent" SmallTickStroke="Transparent"  LabelStroke="Transparent" RangePointerPosition="Cross" StartAngle="90" SweepAngle="2000" StartValue="0" EndValue="2000">
+                                        <!--渐变色Needle指针-->
+                                        <gauge:CircularScale RimStrokeThickness="10" 
+                     RimStroke="Transparent" 
+                     TickStroke="Transparent" 
+                     SmallTickStroke="Transparent"  
+                     LabelStroke="Transparent" 
+                     RangePointerPosition="Cross" 
+                     StartAngle="90" 
+                     SweepAngle="2000" 
+                     StartValue="0" 
+                     EndValue="2000">
                                             <gauge:CircularScale.Pointers>
-                                                <gauge:CircularPointer KeyTipHorizontalOffset="3"  PointerType="SymbolPointer" Symbol="Rectangle" Value="{Binding Pressure}" SymbolPointerStroke="White" SymbolPointerWidth="7" SymbolPointerHeight="30" />
-                                                <gauge:CircularPointer KeyTipHorizontalOffset="3"  PointerType="SymbolPointer" Symbol="Rectangle" Value="{Binding Pressure}" SymbolPointerWidth="27" SymbolPointerHeight="30" >
-                                                    <gauge:CircularPointer.SymbolPointerStroke>
-                                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <gauge:CircularPointer KeyTipHorizontalOffset="3"  
+                               NeedlePointerStrokeThickness="50" 
+                               PointerType="NeedlePointer" 
+                               NeedleLengthFactor="0.95"  
+                               Symbol="Rectangle" Value="{Binding Pressure}" >
+                                                    <gauge:CircularPointer.NeedlePointerStroke>
+                                                        <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
                                                             <GradientStop Color="Transparent"/>
-                                                            <GradientStop Color="#7FFFFFFF" Offset="0.5"/>
-                                                            <GradientStop Color="Transparent" Offset="0.51"/>
+                                                            <GradientStop Color="Transparent" Offset="0.5"/>
+                                                            <GradientStop Color="#9FFFFFFF" Offset="0.5"/>
                                                             <GradientStop Color="Transparent" Offset="1"/>
                                                         </LinearGradientBrush>
-                                                    </gauge:CircularPointer.SymbolPointerStroke>
+                                                    </gauge:CircularPointer.NeedlePointerStroke>
                                                 </gauge:CircularPointer>
                                             </gauge:CircularScale.Pointers>
                                         </gauge:CircularScale>
                                     </gauge:SfCircularGauge.Scales>
                                 </gauge:SfCircularGauge>
-                            </Grid>-->
+                            </Grid>
                             <!--<Frame Grid.Row="2"  Grid.Column="2" x:Name="AgaueFrame4" Margin="20,0,0,20">
                             </Frame>-->
                         </Grid>
 
+                        <!--文本，图片，透明剪裁1-->
                         <Grid Grid.Row="2" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -394,13 +479,14 @@
                                 <Image Source="{x:Bind ViewModel.Ellipse2, Mode=TwoWay}" Stretch="UniformToFill" Width="200" Height="200"/>
                             </Grid>
 
+                            <!--透明剪裁-->
                             <Grid Grid.Row="2" Grid.Column="1" Margin="20,0,0,20">
 
                                 <Polygon Points="333.2,412.8 547.4,469.8 542.6,490.2 490.7,473.8 329,430.7 486,587.1 471.7,602.4 435,562.3 316.5,444.1 374.2,658.1 354.2,664.1 342.4,611 297.8,445.2 253.7,610.5 241.5,664.3 221.9,659 279.1,444.1 161.3,562.2 123.8,602.7 109.6,588.2 266.6,430.7 105.5,474.1 52.8,490.4 47.7,470.8 262.4,412.9 101.2,369.9 47.4,357.7 52.8,338.1 267.7,395.4 149.6,277.5 109.1,240.1 123.5,225.8 281,382.8 237.7,221.7 221.3,169 241,163.9 297.7,374.3 353.6,164.4 373.9,169.2 357.6,221 314.5,382.7 470.9,225.8 486.1,240 446.1,276.8 327.9,395.3 541.8,337.6 547.9,357.5 494.8,369.3" 
                                          Fill="{Binding SystemControlAcrylicWindowBrush}" Stretch="UniformToFill" Width="200" Height="200"/>
-                                <Path Data="M0,0V513H513V0H0ZM256.14,512.5C114.75,512.5,.14,397.88,.14,256.5S114.75,.5,256.14,.5s256,114.62,256,256-114.62,256-256,256Z" Stretch="UniformToFill" Width="200" Height="200"
-                                         Fill="{ThemeResource SystemControlAcrylicWindowBrush}"/>
-                                <Ellipse Width="160" Height="160" Fill="{ThemeResource SystemControlAcrylicWindowBrush}"></Ellipse>
+                                <!--<Path Data="M0,0V513H513V0H0ZM256.14,512.5C114.75,512.5,.14,397.88,.14,256.5S114.75,.5,256.14,.5s256,114.62,256,256-114.62,256-256,256Z" Stretch="UniformToFill" Width="200" Height="200"
+                                         Fill="{ThemeResource SystemControlAcrylicWindowBrush}"/>-->
+                                <Ellipse Width="156" Height="156" Fill="{ThemeResource SystemControlAcrylicWindowBrush}"></Ellipse>
 
                                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <TextBlock Text="{x:Bind ViewModel.Pressure, Mode=TwoWay}"
@@ -413,6 +499,117 @@
                             </Grid>
                         </Grid>
 
+                        <!--文本，风向，气压计2-->
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0" Grid.Column="0"  Background="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}" Margin="5,0,5,0"/>
+                            <Grid Grid.Row="0" Grid.Column="1"  Background="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}" Margin="5,0,5,0"/>
+                            <Grid Grid.Row="0" Grid.Column="2"  Background="{x:Bind ViewModel.ThemeForeground, Mode=TwoWay}" Margin="5,0,5,0"/>
+
+                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0 10 0 0">
+                                <TextBlock>
+                                    <Run Text="Fills Like" FontWeight="Bold"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0 10 0 0">
+                                <TextBlock>
+                                    <Run Text="Fills Like" FontWeight="Bold"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="2" Margin="0 10 0 0">
+                                <TextBlock>
+                                    <Run Text="Fills Like" FontWeight="Bold"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <!--气压计-->
+                            <Grid Grid.Row="2" Grid.Column="1" Margin="20,0,0,20">
+                                <gauge:SfCircularGauge Height="210" Width="210">
+                                    <gauge:SfCircularGauge.Scales>
+                                        <!--Needle指针-->
+                                        <gauge:CircularScale RimStrokeThickness="00" 
+                                                             RimStroke="Transparent" 
+                                                             TickStroke="Transparent" 
+                                                             SmallTickStroke="Transparent"  
+                                                             LabelStroke="Transparent" 
+                                                             RangePointerPosition="Cross" 
+                                                             StartAngle="90" 
+                                                             SweepAngle="2000" 
+                                                             StartValue="0" 
+                                                             EndValue="2000">
+                                            <gauge:CircularScale.Pointers>
+                                                <gauge:CircularPointer KeyTipHorizontalOffset="3"  
+                                                                       NeedlePointerStroke="#FFFFFF" 
+                                                                       NeedlePointerStrokeThickness="10"  
+                                                                       PointerType="NeedlePointer" 
+                                                                       NeedleLengthFactor="1"  
+                                                                       Symbol="Rectangle" 
+                                                                       Value="{Binding Pressure}" />
+                                            </gauge:CircularScale.Pointers>
+                                        </gauge:CircularScale>
+                                    </gauge:SfCircularGauge.Scales>
+                                </gauge:SfCircularGauge>
+                            </Grid>
+                            <!--<Frame Grid.Row="2"  Grid.Column="2" x:Name="AgaueFrame4" Margin="20,0,0,20">
+                            </Frame>-->
+                        </Grid>
+
+                        <!--文本，图片，透明剪裁2-->
+                        <Grid Grid.Row="2" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0 10 0 0">
+                                <TextBlock>
+                                    <Run Text="Fills Like" FontWeight="Bold"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <!--透明剪裁-->
+                            <Grid Grid.Row="2" Grid.Column="1" Margin="20,0,0,20">
+
+                                <Polygon Points="333.2,412.8 547.4,469.8 542.6,490.2 490.7,473.8 329,430.7 486,587.1 471.7,602.4 435,562.3 316.5,444.1 374.2,658.1 354.2,664.1 342.4,611 297.8,445.2 253.7,610.5 241.5,664.3 221.9,659 279.1,444.1 161.3,562.2 123.8,602.7 109.6,588.2 266.6,430.7 105.5,474.1 52.8,490.4 47.7,470.8 262.4,412.9 101.2,369.9 47.4,357.7 52.8,338.1 267.7,395.4 149.6,277.5 109.1,240.1 123.5,225.8 281,382.8 237.7,221.7 221.3,169 241,163.9 297.7,374.3 353.6,164.4 373.9,169.2 357.6,221 314.5,382.7 470.9,225.8 486.1,240 446.1,276.8 327.9,395.3 541.8,337.6 547.9,357.5 494.8,369.3" 
+                                         Fill="{Binding SystemControlAcrylicWindowBrush}" Stretch="UniformToFill" Width="200" Height="200"/>
+                                <!--<Path Data="M0,0V513H513V0H0ZM256.14,512.5C114.75,512.5,.14,397.88,.14,256.5S114.75,.5,256.14,.5s256,114.62,256,256-114.62,256-256,256Z" Stretch="UniformToFill" Width="200" Height="200"
+                                         Fill="{ThemeResource SystemControlAcrylicWindowBrush}"/>-->
+                                <Ellipse Width="130" Height="140" Fill="{ThemeResource SystemControlAcrylicWindowBrush}"></Ellipse>
+
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock Text="{x:Bind ViewModel.Pressure, Mode=TwoWay}"
+                                           TextAlignment="Center"
+                                           FontWeight="Black"
+                                           FontSize="35" />
+                                    <TextBlock Text="hPa"
+                                           FontSize="30"/>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+
+                        
+                        
+                        
+                        
+                        
                         <!--湿度和空气质量指数-->
                         <Grid Grid.Row="3">
                             <Grid.ColumnDefinitions>
