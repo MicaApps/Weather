@@ -11,6 +11,7 @@ using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Navigation;
 
 namespace AppWeather
@@ -28,6 +29,28 @@ namespace AppWeather
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+
+
+            Popup tmp = new Popup();
+            tmp.HorizontalOffset = -50;
+            tmp.Width = 300;
+            tmp.Height = 300;
+            Button btn = new Button();
+            btn.Width = 100;
+            btn.Height = 100;
+
+            Canvas canvas = new Canvas();
+            canvas.Width = 300;
+            canvas.Height = 300;
+            canvas.Children.Add(btn);
+
+            tmp.Child = canvas;
+
+
+            tmp.IsOpen = true;
+
+
         }
 
         /// <summary>
@@ -128,6 +151,8 @@ namespace AppWeather
 
                 // 将框架放在当前窗口中
                 Window.Current.Content = rootFrame;
+
+                
             }
 
             if (e.PrelaunchActivated == false)
