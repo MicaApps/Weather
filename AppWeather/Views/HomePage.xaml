@@ -788,7 +788,7 @@
                             <Grid
                                 Grid.Row="2"
                                 Grid.Column="1"
-                                Margin="20,0,0,20">
+                                Margin="0,40,0,20">
                                 <muxc:WebView2 x:Name="WebView_Pressure">
                                     
                                 </muxc:WebView2>

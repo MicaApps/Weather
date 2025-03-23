@@ -144,6 +144,35 @@ namespace AppWeather.ViewModels
             set => SetProperty(ref _humidity, value);
         }
 
+        private double _degPressure;
+        /// <summary>
+        /// 浮点数的气压,将气压从300-1700转换为0-360
+        /// </summary>
+        public double degPressure
+        {
+            get => _degPressure;
+            set => SetProperty(ref _degPressure, value);
+        }
+
+        private double _dbPressure;
+
+        /// <summary>
+        /// 浮点数的气压,单位hPa
+        /// </summary>
+        public double dbPressure
+        {
+            get => _dbPressure;
+            set => SetProperty(ref _dbPressure, value);
+        }
+
+        double Foo1(double inputValue)
+        {
+            //将300-1700转换为0-360
+            if (inputValue >= 300.0 && inputValue <= 1700.0)
+                return ((inputValue - 300.0) / ((1700.0 - 300.0) / 360.0));
+            return 0.0;
+        }
+
         private string _pressure;
 
         /// <summary>
@@ -539,6 +568,9 @@ namespace AppWeather.ViewModels
                     TodayTemperature = todayMinTemp.ToString("0.0") + "℃-" + todayMaxTemp.ToString("0.0") + "℃";
 
                     Humidity = CurrentWeather.Humidity.ToString();
+                    //他说用这个
+                    dbPressure = CurrentWeather.Pressure;//浮点值的气压单位hPa
+                    degPressure = Foo1(CurrentWeather.Pressure);//角度值气压，范围0-360
                     Pressure = CurrentWeather.Pressure.ToString();
                     Vsibility = CurrentWeather.Vsibility.ToString("0.0") + "km";
                     WindSpeed = CurrentWeather.WindSpeed.ToString();

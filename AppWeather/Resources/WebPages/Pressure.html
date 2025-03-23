@@ -5,11 +5,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pressure</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: transparent;
+    }
+
+    #pressure {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
 </head>
 
-<!-- TODO: background-color 请自行修改 -->
 <body>
-  <svg id="pressure" width="300" height="300" xmlns="http://www.w3.org/2000/svg"></svg>
+  <svg id="pressure" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"></svg>
 
   <script>
     const svgNS = "http://www.w3.org/2000/svg";
@@ -19,7 +35,7 @@
     let pointer;
     let paths = [];
 
-    let init = true
+    let init = true;
 
     let currentValue = 0;
     let targetValue = 0;
@@ -37,10 +53,11 @@
       return element;
     }
 
-    // NOTE: 该函数可外部调用，默认初始化 (init = true)
     function draw() {
       speedNumberElement = _createSVGElement("text", {
-        x: "150", y: "130", "font-size": "32px",
+        x: "150",
+        y: "130",
+        "font-size": "32px",
         fill: "oklch(100% 0 0 / 100%)",
         "text-anchor": "middle",
         "dominant-baseline": "middle",
@@ -50,23 +67,25 @@
       svg.appendChild(speedNumberElement);
 
       const speedUnit = _createSVGElement("text", {
-        x: "150", y: "168", "font-size": "32px",
+        x: "150",
+        y: "168",
+        "font-size": "32px",
         fill: "oklch(100% 0 0 / 100%)",
         "text-anchor": "middle",
-        "dominant-baseline": "middle"
+        "dominant-baseline": "middle",
       });
       speedUnit.textContent = "hPa";
       svg.appendChild(speedUnit);
 
-      const radius = 100;
-      const innerRadius = 76;
+      const radius = 146;
+      const innerRadius = 120;
       const centerX = 150;
       const centerY = 150;
       const spacing = 5;
 
       for (let i = 0; i < 360; i += 30) {
-        const startAngle = (i + spacing / 2) * Math.PI / 180;
-        const endAngle = (i + 30 - spacing / 2) * Math.PI / 180;
+        const startAngle = ((i + spacing / 2) * Math.PI) / 180;
+        const endAngle = ((i + 30 - spacing / 2) * Math.PI) / 180;
 
         const x1 = centerX + radius * Math.cos(startAngle);
         const y1 = centerY + radius * Math.sin(startAngle);
@@ -78,15 +97,13 @@
         const innerX2 = centerX + innerRadius * Math.cos(endAngle);
         const innerY2 = centerY + innerRadius * Math.sin(endAngle);
 
-        const largeArcFlag = 0;
-
-        const pathData = `M ${x1},${y1} A ${radius},${radius} 0 ${largeArcFlag},1 ${x2},${y2} L ${innerX2},${innerY2} A ${innerRadius},${innerRadius} 0 ${largeArcFlag},0 ${innerX1},${innerY1} Z`;
+        const pathData = `M ${x1},${y1} A ${radius},${radius} 0 0,1 ${x2},${y2} L ${innerX2},${innerY2} A ${innerRadius},${innerRadius} 0 0,0 ${innerX1},${innerY1} Z`;
 
         const path = _createSVGElement("path", {
           d: pathData,
           fill: "oklch(100% 0 0 / 20%)",
           "fill-rule": "evenodd",
-          "data-angle": (i - 90 >= 0 ? i - 90 : i + 360 - 90) + 15, // HACK: Temporary quick solution
+          "data-angle": (i - 90 >= 0 ? i - 90 : i + 360 - 90) + 15,
         });
 
         svg.appendChild(path);
@@ -94,8 +111,12 @@
       }
 
       pointer = _createSVGElement("line", {
-        x1: "150", y1: "222", x2: "150", y2: "252",
-        stroke: "oklch(100% 0 0 / 100%)", "stroke-width": "8",
+        x1: "150",
+        y1: "268",
+        x2: "150",
+        y2: "298",
+        stroke: "oklch(100% 0 0 / 100%)",
+        "stroke-width": "8",
       });
       svg.appendChild(pointer);
     }
@@ -104,63 +125,10 @@
       return (value / 1000).toFixed(3).replace(".", ",");
     }
 
-    function _animate(timestamp) {
-      if (!animationStartTime) animationStartTime = timestamp;
-
-      const elapsed = timestamp - animationStartTime;
-      const progress = Math.min(elapsed / animationDuration, 1);
-
-      const animatedValue = currentValue + (targetValue - currentValue) * progress;
-      const animatedAngle = currentAngle + (targetAngle - currentAngle) * progress;
-
-      speedNumberElement.textContent = _formatValue(animatedValue);
-      pointer.setAttribute("transform", `rotate(${animatedAngle}, 150, 150)`);
-
-      paths.forEach(path => {
-        const pathAngle = parseFloat(path.getAttribute("data-angle"));
-        const ratio = Math.min(1, Math.max(0, (animatedAngle - (pathAngle - 15)) / 30));
-        const opacity = 0.2 + 0.3 * ratio;
-        path.setAttribute("fill", `oklch(100% 0 0 / ${opacity * 100}%)`);
-      });
-
-      if (progress < 1) {
-        requestAnimationFrame(_animate);
-      } else {
-        currentValue = targetValue;
-        currentAngle = targetAngle;
-        animationStartTime = null;
-      }
-    }
-
-    /**
-     * @zh 更新压力计的值并触发动画
-     * @en Update the pressure gauge value and trigger animation
-     *
-     * @param {number} newValue - 新的压力值
-     * @param {number} newAngle - 新的指针角度
-     */
-    function updateWithAnimation(newValue, newAngle) {
-      targetValue = newValue;
-      targetAngle = newAngle;
-
-      if (!animationStartTime) {
-        requestAnimationFrame(_animate);
-      }
-    }
-
-    /**
-     * @zh 直接更新压力计的值，不触发动画
-     * @en Update the pressure gauge value directly without animation
-     *
-     * @param {number} newValue - 新的压力值 (New pressure value)
-     * @param {number} newAngle - 新的指针角度 (New pointer angle)
-     */
     function update(newValue, newAngle) {
       speedNumberElement.textContent = newValue;
-
       pointer.setAttribute("transform", `rotate(${newAngle}, 150, 150)`);
-
-      paths.forEach(path => {
+      paths.forEach((path) => {
         const pathAngle = parseFloat(path.getAttribute("data-angle"));
         const ratio = Math.min(1, Math.max(0, (newAngle - (pathAngle - 15)) / 30));
         const opacity = 0.2 + 0.3 * ratio;
@@ -168,53 +136,17 @@
       });
     }
 
-    // NOTE: 仅供测试，生产环境中可删除
-    function test() {
-      const steps = [
-        () => updateWithAnimation(190, 30),
-        () => update(1180, 60),
-        () => update(980, 30),
-        () => updateWithAnimation(2180, 180),
-        () => updateWithAnimation(4180, 360),
-        () => updateWithAnimation(0, 0)
-      ];
-
-      steps[0]();
-      let index = 1;
-      const interval = setInterval(() => {
-        if (index >= steps.length) {
-          clearInterval(interval);
-          return;
-        }
-        steps[index]();
-        index++;
-      }, 3000);
+    function handleResize() {
+      const { innerWidth, innerHeight } = window;
+      const size = Math.min(innerWidth, innerHeight);
+      svg.style.width = `${size}px`;
+      svg.style.height = `${size}px`;
     }
 
-    // NOTE: 性能测试，仅供娱乐
-    function performanceTest() {
-      let angle = 0;
-      let speed = 1;
-      let maxSpeed = 4294967295;
-      let acceleration = 1.02;
+    window.addEventListener("resize", handleResize);
+    handleResize();
 
-      const rotate = () => {
-        angle = (angle + speed) % 360;
-        update(Number.parseInt(speed, 10), angle)
-
-        speed = Math.min(maxSpeed, speed * acceleration);
-
-        requestAnimationFrame(rotate);
-      };
-
-      rotate();
-    }
-
-    if (init)
-      draw();
-
-    // test()
-    // performanceTest();
+    if (init) draw();
   </script>
 </body>
 

@@ -4,10 +4,12 @@ using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.Web.WebView2.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -45,10 +47,11 @@ namespace AppWeather.Views
         public HomePageViewModel ViewModel => (HomePageViewModel)DataContext;
         public HomePage()
         {
+            Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "00FFFFFF");
             this.InitializeComponent();
 
             DataContext = Ioc.Default.GetRequiredService<HomePageViewModel>();
-            //ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
             ViewModel.Initialize();
             Canvas.Invalidate();
 
@@ -197,16 +200,9 @@ namespace AppWeather.Views
         }
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Sunrise" || e.PropertyName == "Sunset")
-            {
-                // Redraw the graph
-                OnDraw();
-            }
+            UpdateManualData();
         }
         private CanvasRenderTarget renderTarget;
-        void OnDraw()
-        {
-        }
 
         public TimeSpan ParseTimeSpan(string timeString)
         {
@@ -218,11 +214,32 @@ namespace AppWeather.Views
             return timeSpan;
         }
 
-        private void InitializeWebviews()
+        private async void UpdateManualData()
         {
+            // -------------------------------
+            // Initialize if needed
+            // -------------------------------
+
             var baseUri = "ms-appx:///Resources/WebPages";
-            _ = loadWebView2(WebView_WindDegree, new Uri(baseUri + "/Wind.html"));
-            _ = loadWebView2(WebView_Pressure, new Uri(baseUri + "/Pressure.html"));
+
+            if (WebView_WindDegree.CoreWebView2 == null)
+               await loadWebView2(WebView_WindDegree, new Uri(baseUri + "/Wind.html"));
+            if (WebView_Pressure.CoreWebView2 == null)
+               await loadWebView2(WebView_Pressure, new Uri(baseUri + "/Pressure.html"));
+
+            // -------------------------------
+            // Update Real-time data
+            // -------------------------------
+
+            if (ViewModel.IsInitialized &&
+                WebView_Pressure.CoreWebView2 != null && WebView_WindDegree.CoreWebView2 != null)
+            {
+                _ = WebView_Pressure.CoreWebView2.ExecuteScriptAsync($"update({ViewModel.dbPressure}, {ViewModel.degPressure})");
+                _ = WebView_WindDegree.CoreWebView2.ExecuteScriptAsync($"update({ViewModel.WindDegree}, {ViewModel.WindDegree})");
+
+            }
+
+            Canvas.Invalidate();
         }
 
 
@@ -299,6 +316,7 @@ namespace AppWeather.Views
             Vector2 pos2 = new Vector2((float)(scaleX * (radian2 + Math.PI)), (float)(scaleY * (1 - y2)));
             CanvasRenderTarget renderTarget = new CanvasRenderTarget(Canvas, (float)Canvas.ActualWidth, (float)Canvas.ActualHeight, 96);
             args.DrawingSession.FillCircle(pos1, 5, Colors.White);
+            Debug.WriteLine(pos1.ToString());
             args.DrawingSession.FillCircle(pos2, 5, Colors.White);
         }
 
@@ -312,7 +330,7 @@ namespace AppWeather.Views
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            InitializeWebviews();
+            UpdateManualData();
         }
 
         //private void Slider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
