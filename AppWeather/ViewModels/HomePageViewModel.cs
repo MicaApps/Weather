@@ -506,7 +506,7 @@ namespace AppWeather.ViewModels
                     var moonPhaseCode = CurrentWeather.MoonPhaseCode;
                     var moonPhaseDay= CurrentWeather.MoonPhaseDay;
 
-                    Send(CurrentWeather.IconCode.ToString());//直接把中文的气象状态发给Untity；
+                    //Send(CurrentWeather.IconCode.ToString());//直接把中文的气象状态发给Untity；
 
                     Debug.WriteLine(WriteMsg(CurrentWeather.IconCode.ToString()+","+moonPhaseDay +"," + CurrentWeather.DayOrNight));                    
 
