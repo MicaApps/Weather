@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="50c23970-b046-42f3-96a1-414427a9fd8f"
-    Publisher="CN=Jihao"
-    Version="1.0.0.0" />
+    Name="49014Shompinice.19563584B6624"
+    Publisher="CN=Shomn"
+    Version="1.0.3.0" />
 
-  <mp:PhoneIdentity PhoneProductId="50c23970-b046-42f3-96a1-414427a9fd8f" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="0ffdf29a-e88d-4bfc-9131-359a182e314f" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>AppWeather</DisplayName>
-    <PublisherDisplayName>Jihao</PublisherDisplayName>
+    <DisplayName>通用天气</DisplayName>
+    <PublisherDisplayName>Shompinice</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -32,7 +32,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="AppWeather.App">
       <uap:VisualElements
-        DisplayName="AppWeather"
+        DisplayName="通用天气"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="AppWeather"
