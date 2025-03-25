@@ -1,3 +1,4 @@
 # Weather
 
-![image](https://github.com/DiskTools/Weather/assets/6630660/9a12f212-653c-4965-8ddb-e74a16f62e4e)
+![0a7441f811b9065652bc60e6aa12a47e](https://github.com/user-attachments/assets/57a1cfbf-8016-49d1-b1f2-db16293eca00)
+
