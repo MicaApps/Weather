@@ -27,7 +27,7 @@
     <AppxBundlePlatforms>x64</AppxBundlePlatforms>
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-    <PackageCertificateThumbprint>C0AF7CEF824303D52C3C729876F1AF462674A017</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>7B6920483EED65CBCE60EE996015BD4E36B5B7C0</PackageCertificateThumbprint>
     <PackageCertificateKeyFile>AppWeather_TemporaryKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">

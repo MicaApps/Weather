@@ -28,6 +28,7 @@ using Windows.UI.Core;
 using Microsoft.Graphics.Canvas.Effects;
 using Windows.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls;
+using Windows.Devices.I2c;
 
 
 namespace AppWeather.ViewModels
@@ -507,8 +508,25 @@ namespace AppWeather.ViewModels
                     var moonPhaseDay= CurrentWeather.MoonPhaseDay;
 
                     //Send(CurrentWeather.IconCode.ToString());//直接把中文的气象状态发给Untity；
+                    var iconCode = 0;
+                    if(CurrentWeather.IconCode >=27 && CurrentWeather.IconCode<45)
+                    {
+                        iconCode = (CurrentWeather.IconCode % 2 == 0) ? CurrentWeather.IconCode : CurrentWeather.IconCode+1;
+                    }else if(CurrentWeather.IconCode >= 45 && CurrentWeather.IconCode <= 47)
+                    {
+                        if (CurrentWeather.IconCode == 45) iconCode = 11;
+                        if (CurrentWeather.IconCode == 46) iconCode =41;
+                        if (CurrentWeather.IconCode == 47) iconCode =38;
+                    }else
+                    {
+                        iconCode = CurrentWeather.IconCode;
+                    }
 
-                    Debug.WriteLine(WriteMsg(CurrentWeather.IconCode.ToString()+","+moonPhaseDay +"," + CurrentWeather.DayOrNight));                    
+
+
+                        String fileName = WriteMsg(iconCode.ToString() + "," + moonPhaseDay + "," + CurrentWeather.DayOrNight);
+
+                    //Debug.WriteLine(WriteMsg(CurrentWeather.IconCode.ToString()+","+moonPhaseDay +"," + CurrentWeather.DayOrNight));                    
 
                     //window.chrome.webview.postMessage
 
