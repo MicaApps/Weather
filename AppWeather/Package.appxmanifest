@@ -8,10 +8,10 @@
 
   <Identity
     Name="49014Shompinice.19563584B6624"
-    Publisher="CN=Shomn"
-    Version="1.0.4.0" />
+    Publisher="CN=8136FD48-8D5A-4FB2-8DF9-A606C867768F"
+    Version="1.0.12.0" />
 
-  <mp:PhoneIdentity PhoneProductId="5f34306b-9181-4a61-9e90-a33c96c91f9c" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="83d797b6-1fff-4afd-9e84-7fb46a047051" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>通用天气</DisplayName>

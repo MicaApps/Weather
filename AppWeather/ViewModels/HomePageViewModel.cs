@@ -507,14 +507,33 @@ namespace AppWeather.ViewModels
                     var moonPhaseCode = CurrentWeather.MoonPhaseCode;
                     var moonPhaseDay= CurrentWeather.MoonPhaseDay;
 
+                    //CurrentWeather中有DayOrNight这个表示白天或者晚上，
+
                     //Send(CurrentWeather.IconCode.ToString());//直接把中文的气象状态发给Untity；
                     var iconCode = 0;
-                    if(CurrentWeather.IconCode >=27 && CurrentWeather.IconCode<45)
+                    if(CurrentWeather.IconCode >=27 && CurrentWeather.IconCode<47)
                     {
-                        iconCode = (CurrentWeather.IconCode % 2 == 0) ? CurrentWeather.IconCode : CurrentWeather.IconCode+1;
-                    }else if(CurrentWeather.IconCode >= 45 && CurrentWeather.IconCode <= 47)
-                    {
-                        if (CurrentWeather.IconCode == 45) iconCode = 11;
+                        if (CurrentWeather.IconCode == 27) iconCode = 27;
+                        if (CurrentWeather.IconCode == 28) iconCode = 28;
+                        if (CurrentWeather.IconCode == 29) iconCode = 29;
+                        if (CurrentWeather.IconCode == 30) iconCode = 30;
+                        if (CurrentWeather.IconCode == 31) iconCode = 31;
+                        if (CurrentWeather.IconCode == 32) iconCode = 32;
+                        if (CurrentWeather.IconCode == 33) iconCode = 33;
+                        if (CurrentWeather.IconCode == 34) iconCode = 34;
+                        if (CurrentWeather.IconCode == 35) iconCode = 35;
+                        if (CurrentWeather.IconCode == 36) iconCode = 36;
+                        if (CurrentWeather.IconCode == 37) iconCode = 37;
+
+                       
+                        if (CurrentWeather.IconCode == 38) iconCode = 38;
+                        if (CurrentWeather.IconCode == 39) iconCode = 39;
+                        if (CurrentWeather.IconCode == 40) iconCode = 40;
+                        if (CurrentWeather.IconCode == 41) iconCode = 41;
+                        if (CurrentWeather.IconCode == 42) iconCode = 42;
+                        if (CurrentWeather.IconCode == 43) iconCode = 43;
+                        if (CurrentWeather.IconCode == 44) iconCode = 44;
+                        if (CurrentWeather.IconCode == 45) iconCode = 45;
                         if (CurrentWeather.IconCode == 46) iconCode =41;
                         if (CurrentWeather.IconCode == 47) iconCode =38;
                     }else
