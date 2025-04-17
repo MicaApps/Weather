@@ -14,7 +14,7 @@ using Windows.System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
-using IL2CPPToWinRTBridge;
+//using IL2CPPToWinRTBridge;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading.Tasks;
@@ -693,17 +693,17 @@ namespace AppWeather.ViewModels
         }
 
         // UWP 发送消息
-        public static bool Send(string message)
-        {
-            IIL2CPPBridge bridge = BridgeBootstrapper.GetIL2CPPBridge();
+        //public static bool Send(string message)
+       // {
+         //   IIL2CPPBridge bridge = BridgeBootstrapper.GetIL2CPPBridge();
             // 如果同一时间在Unity中IIL2CPPBridge已经实例化(即上文的初始化),则不为null
-            if (bridge != null)
-            {
-                bridge.Connect(message);
-                return true;
-            }
-            return false;
-        }
+         //   if (bridge != null)
+          //  {
+           //     bridge.Connect(message);
+            //    return true;
+            //}
+           // return false;
+       // }
 
     }
 }
