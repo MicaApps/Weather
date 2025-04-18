@@ -1,0 +1,25 @@
+﻿<Page
+    x:Class="AppCoreOld2.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:AppCoreOld2"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+
+    <Grid>
+
+        <SwapChainPanel x:Name="m_DXSwapChainPanel">
+            <Grid x:Name="m_ExtendedSplashGrid" Background="Transparent">
+                <Image
+                    x:Name="m_ExtendedSplashImage"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Source="Assets/SplashScreen.png" />
+            </Grid>
+        </SwapChainPanel>
+
+        <Button Click="Button_Click" Content="Xxx" />
+    </Grid>
+</Page>
