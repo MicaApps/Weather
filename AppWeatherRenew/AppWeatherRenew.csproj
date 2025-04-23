@@ -123,6 +123,9 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -150,10 +153,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.14</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.UI.Xaml">
+      <Version>2.8.7</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
@@ -169,9 +179,6 @@
   -->
   <!-- 以下是Unity部件的设置 -->
   <ItemGroup>
-    <Reference Include="IL2CPPToWinRTBridge">
-      <HintPath>..\..\..\..\Desktop\IL2CPPToWinRTBridge\IL2CPPToWinRTBridge.winmd</HintPath>
-    </Reference>
     <Reference Include="UnityPlayer">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(SolutionDir)Players\UAP\il2cpp\$(Platform)\$(Configuration)\UnityPlayer.winmd</HintPath>
@@ -188,21 +195,9 @@
       <ExcludeFromResourceIndex>true</ExcludeFromResourceIndex>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Data\boot.config" />
-    <None Include="Data\globalgamemanagers" />
-    <None Include="Data\globalgamemanagers.assets" />
-    <None Include="Data\globalgamemanagers.assets.resS" />
-    <None Include="Data\il2cpp_data\Metadata\global-metadata.dat" />
-    <None Include="Data\il2cpp_data\Resources\mscorlib.dll-resources.dat" />
-    <None Include="Data\level0" />
-    <None Include="Data\resources.assets" />
-    <None Include="Data\resources.assets.resS" />
-    <None Include="Data\Resources\unity default resources" />
-    <None Include="Data\Resources\unity_builtin_extra" />
-    <None Include="Data\RuntimeInitializeOnLoads.json" />
-    <None Include="Data\ScriptingAssemblies.json" />
-    <None Include="Data\sharedassets0.assets" />
-    <None Include="Data\sharedassets0.assets.resS" />
-  </ItemGroup>
+  <!-- .Net 新特性  -->
+  <PropertyGroup>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 </Project>
