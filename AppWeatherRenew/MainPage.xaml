@@ -9,23 +9,19 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <FontFamily x:Key="SegoeFluentIcons">Segoe Fluent Icons</FontFamily>
-    </Page.Resources>
-
     <Grid>
         <muxc:NavigationView x:Name="NavigationView" SelectionChanged="NavigationView_SelectionChanged">
 
             <muxc:NavigationView.MenuItems>
                 <muxc:NavigationViewItem Content="主页" Tag="Home">
                     <muxc:NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE80F;" />
+                        <FontIcon Glyph="&#xE80F;" />
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
 
                 <muxc:NavigationViewItem Content="城市" Tag="Location">
                     <muxc:NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE707;" />
+                        <FontIcon Glyph="&#xE707;" />
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
             </muxc:NavigationView.MenuItems>
