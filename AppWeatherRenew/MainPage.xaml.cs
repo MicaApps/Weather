@@ -30,7 +30,7 @@ namespace AppCoreOld2
                     ContentFrame.Navigate(typeof(HomePage));
                     break;
                 case "Location":
-                    //ContentFrame.Navigate(typeof(LocationPage));
+                    ContentFrame.Navigate(typeof(LocationPage));
                     break;
             }
         }
