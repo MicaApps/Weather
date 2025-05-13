@@ -10,7 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppWeather", "AppWeather\Ap
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Il2CppOutputProject", "Il2CppOutputProject\Il2CppOutputProject.vcxproj", "{EA17D85E-DA6F-49EA-A879-8F48265B121D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppWeatherRenew", "AppWeatherRenew\AppWeatherRenew.csproj", "{37FB1694-0FF0-495E-8292-2F94D17EDA40}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppWeatherRe", "AppWeatherRe\AppWeatherRe.csproj", "{37FB1694-0FF0-495E-8292-2F94D17EDA40}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EA17D85E-DA6F-49EA-A879-8F48265B121D} = {EA17D85E-DA6F-49EA-A879-8F48265B121D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
