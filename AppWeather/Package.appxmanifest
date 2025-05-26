@@ -8,10 +8,10 @@
 
   <Identity
     Name="49014Shompinice.19563584B6624"
-    Publisher="CN=CYCY"
-    Version="1.0.12.0" />
+    Publisher="CN=8136FD48-8D5A-4FB2-8DF9-A606C867768F"
+    Version="1.0.16.0" />
 
-  <mp:PhoneIdentity PhoneProductId="83d797b6-1fff-4afd-9e84-7fb46a047051" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="0a345797-79ca-410a-a206-8cd548afae89" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>通用天气</DisplayName>
@@ -37,7 +37,7 @@
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="AppWeather"
         BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
     </Application>
