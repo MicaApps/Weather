@@ -24,8 +24,11 @@ Workloads
 ## Build Guide
 
 1. Pull the master branch
+
 https://github.com/MicaApps/Weather
+
 https://github.com/MicaApps/WeatherUnity
 
-2. First build the Unity component, then copy it to the specified location.
+3. First build the Unity component, then copy it to the specified location.
+
 https://github.com/MicaApps/Weather/blob/kituin/UnityREADME.md
