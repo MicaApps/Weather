@@ -9,17 +9,17 @@
 2. Visual Studio 2022
 
 Workloads
-Universal Windows Development
-C# Desktop Development
-C++ Desktop Development
-Unity Game Development
+- Universal Windows Development
+- C# Desktop Development
+- C++ Desktop Development
+- Unity Game Development
 
 3. Unity 6000.00.15f1
 
 Workloads
-Universal Windows
-IL2CPP Support
-Windows Decline Server Build Support
+- Universal Windows
+- IL2CPP Support
+- Windows Decline Server Build Support
 
 ## Build Guide
 
