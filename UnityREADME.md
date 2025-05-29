@@ -8,6 +8,8 @@ https://drive.google.com/file/d/1XuqEIxqqCAdbcWXLAyk7TosMHvSrhhbW/view?usp=drive
 
 随便你构建到哪个文件夹
 
+打开构建结果，运行里面的 sln文件，生成一遍。若提示找不到mobile引用，则在引用中删除该引用
+
 你需要把`Il2CppOutputProject`,`UnityCommon.props`,`Players` 三个放到`AppWeather`同级目录
 
 `Data`文件夹放入`AppWeather`文件夹内,并且之后每次更新Unity都这样替换
