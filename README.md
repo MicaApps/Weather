@@ -31,4 +31,4 @@ https://github.com/MicaApps/WeatherUnity
 
 3. First build the Unity component, then copy it to the specified location.
 
-https://github.com/MicaApps/Weather/blob/kituin/UnityREADME.md
+[https://github.com/MicaApps/Weather/blob/main/UnityREADME.md](https://github.com/MicaApps/Weather/blob/main/UnityREADME.md)
