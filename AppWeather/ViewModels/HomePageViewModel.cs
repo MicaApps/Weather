@@ -631,7 +631,7 @@ namespace AppWeather.ViewModels
                     {
                         //string ttime = DateTime.Now.AddDays(i).ToString("u");
                         //string tDate = ttime.Split(' ')[0];
-                        string weather = weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).FirstOrDefault().State;
+                        string weather = "";// weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).FirstOrDefault().State;
                         string img = "\uE9BD";
                         //if (weather.Equals("Clouds"))
                         //{
@@ -650,13 +650,13 @@ namespace AppWeather.ViewModels
                         //if(weather.Contains("雨")) img = "\uE9E2";
                         //else if(weather.Contains("晴朗")) img = "\uE9BD";
                         //else img = "\uE9BF";
-                        img = $"/WeatherIcons/{weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).FirstOrDefault().IconCode}.png";
+                        img = $"/WeatherIcons/0.png";// $"/WeatherIcons/{weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).FirstOrDefault().IconCode}.png";
 
-                        double tMinTemp = weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).Min(k => k.MinTemp);
-                        double tMaxTemp = weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).Max(k => k.MaxTemp);
+                        double tMinTemp = 0;// weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).Min(k => k.MinTemp);
+                        double tMaxTemp = 0;// weathers.Where(k => DateTime.Parse(k.Time).Date == (DateTime.Now.AddDays(i)).Date).Max(k => k.MaxTemp);
 
-                        tMinTemp = tMinTemps[i];
-                        tMaxTemp = tMaxTemps[i];
+                        tMinTemp = 0;// tMinTemps[i];
+                        tMaxTemp = 0;// tMaxTemps[i];
                         everyDayWeathers.Add(new EveryDayWeather { Img = img, Weather = weather, MinTemp = tMinTemp.ToString("0.0"), MaxTemp = tMaxTemp.ToString("0.0") });
                     }
 

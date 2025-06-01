@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using AppWeather.Views;
 using Windows.UI.Xaml;
+using Bogus;
+using System.Linq;
 namespace AppWeather.Models
 {
 
@@ -63,6 +65,64 @@ namespace AppWeather.Models
             return JsonConvert.DeserializeObject<RootV3Response>(responseString).v3wxobservationscurrent;
         }
 
+        static Faker<V3WxForecastHourly> fV3WxForecastHourly = new Faker<V3WxForecastHourly>()
+            .RuleFor<List<int>>(a=>a.cloudCover,b=>Enumerable.Range(0,240).Select(_=>b.Random.Number(1,10)).ToList())
+            .RuleFor<List<string>>(a => a.dayOfWeek, b => Enumerable.Range(0, 240).Select(_ =>DateTime.Now.DayOfWeek.ToString()).ToList())/////要改成星期，先这样用
+            .RuleFor<List<string>>(a => a.dayOrNight, b => Enumerable.Range(0, 240).Select(_ => b.Random.Bool()?"Day":"Night").ToList())
+            .RuleFor<List<int>>(a => a.expirationTimeUtc, b => Enumerable.Range(0, 240).Select(_ =>(int)DateTime.UtcNow.Ticks).ToList())
+            .RuleFor<List<int>>(a => a.iconCode, b => Enumerable.Range(0, 240).Select(_ => b.Random.Number(1, 31)).ToList())
+            .RuleFor<List<int>>(a => a.iconCodeExtend, b => Enumerable.Range(0, 240).Select(_ => b.Random.Number(1, 31)).ToList())
+            .RuleFor<List<int>>(a => a.precipChance, b => Enumerable.Range(0, 240).Select(_ => b.Random.Number(1, 31)).ToList())
+            .RuleFor<List<string>>(a => a.precipType, b => Enumerable.Range(0, 240).Select(_ => "").ToList())
+            .RuleFor<List<double>>(a => a.pressureMeanSeaLevel, b => Enumerable.Range(0, 240).Select(_ => b.Random.Double()).ToList())
+            .RuleFor<List<double>>(a => a.qpf, b => Enumerable.Range(0, 240).Select(_ => b.Random.Double()).ToList())
+            .RuleFor<List<double>>(a => a.qpfSnow, b => Enumerable.Range(0, 240).Select(_ => b.Random.Double()).ToList())
+            .RuleFor<List<int>>(a => a.relativeHumidity, b => Enumerable.Range(0, 240).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<int>>(a => a.temperature, b => Enumerable.Range(0, 240).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<int>>(a => a.temperatureDewPoint, b => Enumerable.Range(0, 240).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<int?>>(a => a.temperatureFeelsLike, b => Enumerable.Range(0, 240).Select(_ =>(int?) b.Random.Int()).ToList())
+            .RuleFor<List<int>>(a => a.temperatureHeatIndex, b => Enumerable.Range(0, 240).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<int>>(a => a.temperatureWindChill, b => Enumerable.Range(0, 240).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<string>>(a => a.uvDescription, b => Enumerable.Range(0, 240).Select(_ => "").ToList())
+            .RuleFor<List<int>>(a => a.uvIndex, b => Enumerable.Range(0, 240).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<DateTimeOffset>>(a => a.validTimeLocal, b => Enumerable.Range(0, 240).Select(_ => new DateTimeOffset()).ToList())
+            .RuleFor<List<int>>(a => a.validTimeUtc, b => Enumerable.Range(0, 240).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<double>>(a => a.visibility, b => Enumerable.Range(0, 240).Select(_ => b.Random.Double()).ToList())
+            .RuleFor<List<int>>(a => a.windDirection, b => Enumerable.Range(0, 240).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<string>>(a => a.windDirectionCardinal, b => Enumerable.Range(0, 240).Select(_ => "").ToList())
+            .RuleFor<List<int?>>(a => a.windGust, b => Enumerable.Range(0, 240).Select(_ => (int?)b.Random.Int()).ToList())
+            .RuleFor<List<int>>(a => a.windSpeed, b => Enumerable.Range(0, 240).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<string>>(a => a.wxPhraseLong, b => Enumerable.Range(0, 240).Select(_ => "").ToList())
+            .RuleFor<List<string>>(a => a.wxPhraseShort, b => Enumerable.Range(0, 240).Select(_ => "").ToList())
+            .RuleFor<List<int>>(a => a.windSpeed, b => Enumerable.Range(0, 240).Select(_ => b.Random.Int()).ToList())
+            ;
+
+        static Faker<V3WxForecastDaily> fV3WxForecastDaily = new Faker<V3WxForecastDaily>()
+            .RuleFor<List<int?>>(a => a.calendarDayTemperatureMax, b => Enumerable.Range(0, 10).Select(_ => (int?)b.Random.Int()).ToList())
+            .RuleFor<List<int>>(a => a.calendarDayTemperatureMin, b => Enumerable.Range(0, 10).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<string>>(a => a.dayOfWeek, b => Enumerable.Range(0, 10).Select(_ => DateTime.Now.DayOfWeek.ToString()).ToList())
+            .RuleFor<List<int>>(a => a.expirationTimeUtc, b => Enumerable.Range(0, 10).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<string>>(a => a.moonPhase, b => Enumerable.Range(0, 10).Select(_ => "").ToList())
+            .RuleFor<List<string>>(a => a.moonPhaseCode, b => Enumerable.Range(0, 10).Select(_ => "").ToList())
+            .RuleFor<List<int>>(a => a.moonPhaseDay, b => Enumerable.Range(0, 10).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<DateTimeOffset?>>(a => a.moonriseTimeLocal, b => Enumerable.Range(0, 10).Select(_ => new DateTimeOffset?()).ToList())
+            .RuleFor<List<int?>>(a => a.moonriseTimeUtc, b => Enumerable.Range(0, 10).Select(_ => (int?)b.Random.Int()).ToList())
+            .RuleFor<List<DateTimeOffset?>>(a => a.moonsetTimeLocal, b => Enumerable.Range(0, 10).Select(_ => new DateTimeOffset?()).ToList())
+            .RuleFor<List<int?>>(a => a.moonsetTimeUtc, b => Enumerable.Range(0, 10).Select(_ => (int?)b.Random.Int()).ToList())
+            .RuleFor<List<string>>(a => a.narrative, b => Enumerable.Range(0, 10).Select(_ => "").ToList())
+            .RuleFor<List<double?>>(a => a.qpf, b => Enumerable.Range(0, 240).Select(_ =>(double?) b.Random.Double()).ToList())
+            .RuleFor<List<double>>(a => a.qpfSnow, b => Enumerable.Range(0, 240).Select(_ => b.Random.Double()).ToList())
+            .RuleFor<List<DateTimeOffset?>>(a => a.sunriseTimeLocal, b => Enumerable.Range(0, 10).Select(_ => new DateTimeOffset?()).ToList())
+            .RuleFor<List<int?>>(a => a.sunriseTimeUtc, b => Enumerable.Range(0, 10).Select(_ => (int?)b.Random.Int()).ToList())
+            .RuleFor<List<DateTimeOffset?>>(a => a.sunsetTimeLocal, b => Enumerable.Range(0, 10).Select(_ => new DateTimeOffset?()).ToList())
+            .RuleFor<List<int?>>(a => a.sunsetTimeUtc, b => Enumerable.Range(0, 10).Select(_ => (int?)b.Random.Int()).ToList())
+            .RuleFor<List<int?>>(a => a.temperatureMax, b => Enumerable.Range(0, 10).Select(_ => (int?)b.Random.Int()).ToList())
+            .RuleFor<List<int>>(a => a.temperatureMin, b => Enumerable.Range(0, 10).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<DateTimeOffset>>(a => a.validTimeLocal, b => Enumerable.Range(0, 10).Select(_ => new DateTimeOffset()).ToList())
+            .RuleFor<List<int>>(a => a.validTimeUtc, b => Enumerable.Range(0, 10).Select(_ => b.Random.Int()).ToList())
+            .RuleFor<List<Daypart>>(a => a.daypart, b => Enumerable.Range(0, 10).Select(_ => new Daypart()).ToList())
+            ;
+
         public static RootV3Response GetWeater(string placeId)
         {
             _systemLanguage = CultureInfo.CurrentCulture.Name;
@@ -83,35 +143,46 @@ namespace AppWeather.Models
                 //throw;
             }
         }
-
+        static Faker<SimpleWeatherClass> fSimpleWeatherClass = new Faker<SimpleWeatherClass>()
+            .RuleFor<string>(a=>a.CityName,b=>"")
+            .RuleFor<string>(a=>a.State,b=>"")
+            .RuleFor<double>(a=>a.Temp,b=>b.Random.Double())
+            .RuleFor<double>(a=>a.MinTemp,b=>b.Random.Double())
+            .RuleFor<double>(a => a.MaxTemp, b => b.Random.Double())
+            .RuleFor<long>(a => a.TimeStamp, b => DateTime.Now.Ticks)
+            .RuleFor<string>(a => a.PlaceId, b => b.Random.Guid().ToString())
+            .RuleFor<string>(a=>a.IconImagePath,b=> $"/WeatherIcons/{b.Random.Int(1,31)}.png")
+            ;
         //获取简易天气数据
         public static SimpleWeatherClass GetSimpleWeater(string placeId)
         {
-            var v3Response = GetWeater(placeId);
+            //var v3Response = GetWeater(placeId);
             //v3Response.Dump();
             //v3Response.v3locationpoint.LocationV3.country +"-"+ v3Response.v3locationpoint.LocationV3.adminDistrict +"-"+ 
             //$"/WeatherIcons/{.IconImagePath}.png"
-            return new SimpleWeatherClass() { CityName = v3Response.v3locationpoint.LocationV3.displayName, Temp = v3Response.v3wxobservationscurrent.temperature, State = v3Response.v3wxobservationscurrent.wxPhraseLong,PlaceId =placeId ,IconImagePath= $"/WeatherIcons/{v3Response.v3wxobservationscurrent.iconCode}.png" };
+            //return new SimpleWeatherClass() { CityName = v3Response.v3locationpoint.LocationV3.displayName, Temp = v3Response.v3wxobservationscurrent.temperature, State = v3Response.v3wxobservationscurrent.wxPhraseLong,PlaceId =placeId ,IconImagePath= $"/WeatherIcons/{v3Response.v3wxobservationscurrent.iconCode}.png" };
+            return fSimpleWeatherClass.Generate();
         }
+        
 
         //获取详细天气数据
         public static List<WeatherClass> GetWeathers(string placeId)
         {
             List<WeatherClass> weathers = new List<WeatherClass>();
 
-            var v3 = GetWeater(placeId);
-            if (v3 == null) return null;
+            //var v3 = GetWeater(placeId);
+            //if (v3 == null) return null;
 
             //if (weatherInfo.cod.Equals("404")) return null;
 
-            var hourly = v3.v3wxforecasthourly10day;
-            var daily = v3.v3wxforecastdaily10day;
+            var hourly = fV3WxForecastHourly.Generate();//v3.v3wxforecasthourly10day;
+            var daily = fV3WxForecastDaily.Generate();// v3.v3wxforecastdaily10day;
             //这里要获取未来几天的天气
             for (int i = 0; i < hourly.temperature.Count; i++)
             {
-                var w=new WeatherClass(); 
+                var w=new WeatherClass();
                 //需要把天气状态转换为可以识别的字符串和图片ID--未完成
-                w.CityName = v3.v3locationpoint.LocationV3.displayName;//城市名称
+                w.CityName = "北京";// v3.v3locationpoint.LocationV3.displayName;//城市名称
                 w.State = hourly.wxPhraseLong[i];//天气状态
                 w.Temp = hourly.temperature[i].ToString();//温度
                 w.FeelsLike =(double) hourly.temperatureFeelsLike[i];//体感温度
@@ -125,20 +196,20 @@ namespace AppWeather.Models
                 w.Rainfall = hourly.qpf[i];//降雨概率
                 w.Time = hourly.validTimeLocal[i].ToString();//时间
                 w.TimeStamp = hourly.validTimeUtc[i];//时间戳
-                w.Sunrise =(long) v3.v3wxforecastdaily10day.sunriseTimeUtc[i/24];//日出时间
-                w.Sunset = (long)v3.v3wxforecastdaily10day.sunsetTimeUtc[i/24];//日落时间
-                w.UVDescription = daily.daypart[0].uvDescription[i/24+1]; 
+                w.Sunrise = (long) 0;//v3.v3wxforecastdaily10day.sunriseTimeUtc[i/24];//日出时间
+                w.Sunset = (long)0;//v3.v3wxforecastdaily10day.sunsetTimeUtc[i/24];//日落时间
+                w.UVDescription = "";// daily.daypart[0].uvDescription[i/24+1];
 
-                w.UvIndex = daily.daypart[0].uvIndex[i/24+0]??5;
+                w.UvIndex = 0;// daily.daypart[0].uvIndex[i/24+0]??5;
 
-                w.IconCode =daily.daypart[0].iconCode[i/24+1]??0;
+                w.IconCode = 26;// daily.daypart[0].iconCode[i/24+1]??0;
 
-                w.MoonPhase = daily.moonPhase[0];
+                w.MoonPhase = "";// daily.moonPhase[0];
 
-                w.MoonPhaseCode = daily.moonPhaseCode[0];
+                w.MoonPhaseCode = "";// daily.moonPhaseCode[0];
 
-                w.MoonPhaseDay = daily.moonPhaseDay[0];
-                w.DayOrNight = v3.v3wxobservationscurrent.dayOrNight.ToString();//"N"表示晚上，"D"表示白天
+                w.MoonPhaseDay = 0;// daily.moonPhaseDay[0];
+                w.DayOrNight =new Random(Guid.NewGuid().GetHashCode()).Next()%2==0?"D":"N" ;//v3.v3wxobservationscurrent.dayOrNight.ToString();//"N"表示晚上，"D"表示白天
 
                 weathers.Add(w);
 
@@ -148,12 +219,6 @@ namespace AppWeather.Models
                 //                                                "\nMaxTemp：" + (double.Parse(weatherInfo.list[i].main.temp_max) - 273.15).ToString() +
                 //                                                "\nTime：" + weatherInfo.list[i].dt_txt);
             }
-
-
-
-
-
-
                 return weathers;
         }
     }
